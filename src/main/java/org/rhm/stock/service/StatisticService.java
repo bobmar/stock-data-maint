@@ -1,0 +1,54 @@
+package org.rhm.stock.service;
+
+import java.util.List;
+
+import org.rhm.stock.domain.StatisticType;
+import org.rhm.stock.domain.StockStatistic;
+import org.rhm.stock.repository.StatisticRepo;
+import org.rhm.stock.repository.StatisticTypeRepo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.stereotype.Service;
+@Service
+public class StatisticService {
+	@Autowired
+	private StatisticRepo statRepo = null;
+	@Autowired
+	private StatisticTypeRepo statTypeRepo = null;
+	
+	private Logger logger = LoggerFactory.getLogger(StatisticService.class);
+	
+	public StockStatistic createStatistic(StockStatistic stat) {
+		return this.createStatistic(stat, false);
+	}
+	
+	public StockStatistic createStatistic(StockStatistic stat, boolean forceUpdate) {
+		StockStatistic newStat = null;
+		if (!statRepo.exists(Example.of(stat))) {
+			newStat = statRepo.save(stat);
+		}
+		else {
+			if (forceUpdate) {
+				newStat = statRepo.save(stat);
+			}
+			else {
+				logger.debug("createStatistic - " + stat.getPriceId() + " already exists and force update not specified; skipping");
+			}
+		}
+		return newStat;
+	}
+	
+	public List<StockStatistic> retrieveStatList(String tickerSymbol) {
+		return statRepo.findByTickerSymbol(tickerSymbol);
+	}
+	
+	public StatisticType createStatType(StatisticType statType) {
+		return statTypeRepo.save(statType);
+	}
+	
+	public List<StatisticType> retrieveStatTypeList() {
+		return statTypeRepo.findAll();
+	}
+}
