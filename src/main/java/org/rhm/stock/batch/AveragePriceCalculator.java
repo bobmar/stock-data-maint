@@ -47,8 +47,10 @@ public class AveragePriceCalculator implements BatchJob {
 	private boolean processPriceList(List<StockPrice> priceList) {
 		boolean success = false;
 		int[] days = {10, 50, 200};
+		StockPrice firstPrice = priceList.get(0);
 		StockAveragePrice avgPrice = new StockAveragePrice();
-		avgPrice.setPriceId(priceList.get(0).getPriceId());
+		avgPrice.setPriceId(firstPrice.getPriceId());
+		avgPrice.setTickerSymbol(firstPrice.getTickerSymbol());
 		List<AveragePrice> avgList = AvgPriceFactory.calculateAvgPrices(priceList, days);
 		avgPrice.setAvgList(avgList);
 		if (avgPriceSvc.createAveragePrice(avgPrice) != null) {

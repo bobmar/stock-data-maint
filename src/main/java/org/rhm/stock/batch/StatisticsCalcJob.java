@@ -9,6 +9,7 @@ import javax.annotation.PostConstruct;
 
 import org.rhm.stock.domain.StockPrice;
 import org.rhm.stock.domain.StockTicker;
+import org.rhm.stock.handler.stat.DailyPriceVsAvg;
 import org.rhm.stock.handler.stat.StatisticCalculator;
 import org.rhm.stock.handler.stat.StdDeviation;
 import org.rhm.stock.handler.stat.UpDownVolume;
@@ -42,6 +43,10 @@ public class StatisticsCalcJob implements BatchJob {
 	private StdDeviation stdDeviation = null;
 	
 	@Autowired
+	@Qualifier("dailyPriceVsAvg")
+	private DailyPriceVsAvg dailyPriceVsAvg = null;
+	
+	@Autowired
 	private PriceService priceSvc = null;
 	@Autowired
 	private TickerService tickerSvc = null;
@@ -60,6 +65,7 @@ public class StatisticsCalcJob implements BatchJob {
 		calcList.add(highLowPriceCalc);
 		calcList.add(upDownVolCalc);
 		calcList.add(stdDeviation);
+		calcList.add(dailyPriceVsAvg);
 		return calcList;
 	}
 

@@ -8,6 +8,7 @@ public class StockAveragePrice {
 	@Id
 	private String priceId = null;
 	private List<AveragePrice> avgList = null;
+	private String tickerSymbol = null;
 	public String getPriceId() {
 		return priceId;
 	}
@@ -43,5 +44,11 @@ public class StockAveragePrice {
 			}
 		}
 		return avgPrice;
+	}
+	public String getTickerSymbol() {
+		return tickerSymbol;
+	}
+	public void setTickerSymbol(String tickerSymbol) {
+		this.tickerSymbol = tickerSymbol;
 	}
 }
