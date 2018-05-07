@@ -43,7 +43,7 @@ public class UpDownVolume implements StatisticCalculator {
 		if (downVolume > 0) {
 			upDownRatio = upVolume / downVolume;
 			logger.debug("calcUpDownRatio - up/down ratio=" + upDownRatio);
-			statSvc.createStatistic(new StockStatistic(currPrice.getPriceId() + ":" + UP_DOWN_VOL_50, UP_DOWN_VOL_50, BigDecimal.valueOf(upDownRatio)));
+			statSvc.createStatistic(new StockStatistic(currPrice.getPriceId(), UP_DOWN_VOL_50, BigDecimal.valueOf(upDownRatio), currPrice.getTickerSymbol(), currPrice.getPriceDate()));
 		}
 	}
 	

@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Id;
 
 public class StockStatistic {
 	@Id
+	private String statId = null;
 	private String priceId = null;
 	private String statisticType = null;
 	private BigDecimal statisticValue = null;
@@ -17,10 +18,13 @@ public class StockStatistic {
 		
 	}
 	
-	public StockStatistic(String priceId, String statisticType, BigDecimal statisticValue) {
+	public StockStatistic(String priceId, String statisticType, BigDecimal statisticValue, String tickerSymbol, Date priceDate) {
 		this.priceId = priceId;
 		this.statisticType = statisticType;
+		this.statId = priceId + ":" + statisticType;
 		this.statisticValue = statisticValue;
+		this.tickerSymbol = tickerSymbol;
+		this.priceDate = priceDate;
 	}
 
 	public String getPriceId() {
@@ -52,5 +56,13 @@ public class StockStatistic {
 	}
 	public void setPriceDate(Date priceDate) {
 		this.priceDate = priceDate;
+	}
+
+	public String getStatId() {
+		return statId;
+	}
+
+	public void setStatId(String statId) {
+		this.statId = statId;
 	}
 }

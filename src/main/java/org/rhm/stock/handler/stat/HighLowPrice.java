@@ -39,7 +39,7 @@ public class HighLowPrice implements StatisticCalculator {
 				}
 			}
 		}
-		statSvc.createStatistic(new StockStatistic(highPrice.getPriceId() + ":" + statType, statType, highPrice.getHighPrice()));
+		statSvc.createStatistic(new StockStatistic(highPrice.getPriceId(), statType, highPrice.getHighPrice(), highPrice.getTickerSymbol(), highPrice.getPriceDate()));
 	}
 	
 	private void calcLow(List<StockPrice> priceSubList, String statType) {
@@ -56,7 +56,7 @@ public class HighLowPrice implements StatisticCalculator {
 				}
 			}
 		}
-		statSvc.createStatistic(new StockStatistic(lowPrice.getPriceId() + ":" + statType, statType, lowPrice.getLowPrice()));
+		statSvc.createStatistic(new StockStatistic(lowPrice.getPriceId(), statType, lowPrice.getLowPrice(), lowPrice.getTickerSymbol(), lowPrice.getPriceDate()));
 	}
 	
 	@Override

@@ -36,7 +36,7 @@ public class StdDeviation implements StatisticCalculator {
 		}
 		stdDev = Math.sqrt(sumDiffSquared / (priceList.size()-1));
 		logger.debug("calcStdDeviation - " + firstPrice.getTickerSymbol() + "| Standard deviation: " + stdDev);
-		statSvc.createStatistic(new StockStatistic(firstPrice.getPriceId() + ":" + statType, statType, BigDecimal.valueOf(stdDev)));
+		statSvc.createStatistic(new StockStatistic(firstPrice.getPriceId(), statType, BigDecimal.valueOf(stdDev), firstPrice.getTickerSymbol(), firstPrice.getPriceDate()));
 	}
 	
 	@Override

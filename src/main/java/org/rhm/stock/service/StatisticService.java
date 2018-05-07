@@ -44,6 +44,10 @@ public class StatisticService {
 		return statRepo.findByTickerSymbol(tickerSymbol);
 	}
 	
+	public List<StockStatistic> retrieveStatList(String tickerSymbol, String statisticType) {
+		return statRepo.findByTickerSymbolAndStatisticType(tickerSymbol, statisticType);
+	}
+	
 	public StatisticType createStatType(StatisticType statType) {
 		return statTypeRepo.save(statType);
 	}

@@ -31,8 +31,8 @@ public class PriceChg implements StatisticCalculator {
 		logger.debug("calcChange - " + currPrice.getPriceId() + " closing price=" + currPrice.getClosePrice());
 		double quotient = priceChg.doubleValue() / prevPrice.getClosePrice().doubleValue();
 		BigDecimal pctChg = BigDecimal.valueOf(quotient * 100);
-		statSvc.createStatistic(new StockStatistic(currPrice.getPriceId() + ":" + statPctChgCode, statPctChgCode, pctChg));
-		statSvc.createStatistic(new StockStatistic(currPrice.getPriceId() + ":" + statPrcChgCode, statPrcChgCode, priceChg));
+		statSvc.createStatistic(new StockStatistic(currPrice.getPriceId(), statPctChgCode, pctChg, currPrice.getTickerSymbol(), currPrice.getPriceDate()));
+		statSvc.createStatistic(new StockStatistic(currPrice.getPriceId(), statPrcChgCode, priceChg, currPrice.getTickerSymbol(), currPrice.getPriceDate()));
 	}
 	
 	@Override

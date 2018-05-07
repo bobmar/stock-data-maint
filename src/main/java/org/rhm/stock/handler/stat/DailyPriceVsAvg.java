@@ -70,7 +70,7 @@ public class DailyPriceVsAvg implements StatisticCalculator {
 			logger.debug("calcPriceVsAvg - average price " + avgPrice.getDaysCnt() + ":" + avgPrice.getAvgPrice());
 			double priceVsAvg = (price.getClosePrice().doubleValue() / avgPrice.getAvgPrice().doubleValue());
 			logger.debug("calcPriceVsAvg - " + price.getPriceId() + " price vs. " + days + " day average=" + priceVsAvg);
-			statSvc.createStatistic(new StockStatistic(price.getPriceId() + ":" + statType, statType, BigDecimal.valueOf(priceVsAvg)));
+			statSvc.createStatistic(new StockStatistic(price.getPriceId(), statType, BigDecimal.valueOf(priceVsAvg), price.getTickerSymbol(), price.getPriceDate()));
 		}
 		else {
 			logger.debug("calcPriceVsAvg - unable to find " + days + " average price for " + price.getPriceId());
