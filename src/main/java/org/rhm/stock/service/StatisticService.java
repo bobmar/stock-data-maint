@@ -1,6 +1,7 @@
 package org.rhm.stock.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.rhm.stock.domain.StatisticType;
 import org.rhm.stock.domain.StockStatistic;
@@ -21,20 +22,22 @@ public class StatisticService {
 	private Logger logger = LoggerFactory.getLogger(StatisticService.class);
 	
 	public StockStatistic createStatistic(StockStatistic stat) {
-		return this.createStatistic(stat, false);
+		return this.createStatistic(stat, true);
 	}
 	
 	public StockStatistic createStatistic(StockStatistic stat, boolean forceUpdate) {
 		StockStatistic newStat = null;
 		if (!statRepo.exists(Example.of(stat))) {
 			newStat = statRepo.save(stat);
+			logger.debug("createStatistic - " + stat.getStatId() + " doesn't exist; created new");
 		}
 		else {
 			if (forceUpdate) {
 				newStat = statRepo.save(stat);
+				logger.debug("createStatistic - " + stat.getStatId() + " already exists; updated");
 			}
 			else {
-				logger.debug("createStatistic - " + stat.getPriceId() + " already exists and force update not specified; skipping");
+				logger.debug("createStatistic - " + stat.getStatId() + " already exists and force update not specified; skipping");
 			}
 		}
 		return newStat;
@@ -45,7 +48,9 @@ public class StatisticService {
 	}
 	
 	public List<StockStatistic> retrieveStatList(String tickerSymbol, String statisticType) {
-		return statRepo.findByTickerSymbolAndStatisticType(tickerSymbol, statisticType);
+		return statRepo.findByTickerSymbolAndStatisticType(tickerSymbol, statisticType).stream()
+				.sorted((o1,o2)->
+				{return o1.getStatId().compareTo(o2.getStatId());}).collect(Collectors.toList());
 	}
 	
 	public StatisticType createStatType(StatisticType statType) {

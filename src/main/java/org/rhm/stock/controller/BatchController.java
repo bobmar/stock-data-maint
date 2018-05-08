@@ -28,6 +28,11 @@ public class BatchController {
 	@Autowired
 	@Qualifier("statsCalcJob")
 	private BatchJob statsCalcJob = null;
+	
+	@Autowired
+	@Qualifier("signalScan")
+	private BatchJob signalScanJob = null;
+	
 	private Logger logger = LoggerFactory.getLogger(BatchController.class);
 
 	@RequestMapping(value="/stocks/batch/price", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
@@ -60,6 +65,17 @@ public class BatchController {
 		response.setMessageText("Trigger the statistics calculator");
 		response.setMessageCode("200");
 		logger.debug("startStatsCalc - return response");
+		return response;
+	}
+	
+	@RequestMapping(value="/stocks/batch/signalscan", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
+	public GeneralResponse startSignalScan() {
+		GeneralResponse response = new GeneralResponse();
+		CompletableFuture<BatchStatus> status = signalScanJob.run();
+		response.setRequestDate(new Date());
+		response.setMessageText("Trigger the signal scanner");
+		response.setMessageCode("200");
+		logger.debug("startSignalScan - return response");
 		return response;
 	}
 }
