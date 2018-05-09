@@ -24,6 +24,9 @@ public class SignalScanJob implements BatchJob {
 	@Qualifier("priceBreakout")
 	private SignalScanner priceBreakout = null;
 	@Autowired
+	@Qualifier("priceGap")
+	private SignalScanner priceGap = null;
+	@Autowired
 	private TickerService tickerSvc = null;
 	private Logger logger = LoggerFactory.getLogger(SignalScanJob.class);
 	private List<SignalScanner> scannerList = null;
@@ -31,6 +34,7 @@ public class SignalScanJob implements BatchJob {
 	private List<SignalScanner> scannerList() {
 		List<SignalScanner> scannerList = new ArrayList<SignalScanner>();
 		scannerList.add(priceBreakout);
+		scannerList.add(priceGap);
 		logger.debug("scannerList - loaded " + scannerList.size() + " signal scanners");
 		return scannerList;
 	}
