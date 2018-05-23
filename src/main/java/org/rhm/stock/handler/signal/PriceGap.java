@@ -52,11 +52,11 @@ public class PriceGap implements SignalScanner {
 				+ "; previous high=" + prevPrice.getHighPrice() 
 				+ "; previous low=" + prevPrice.getLowPrice());
 			if (this.gapUp(currPrice, prevPrice)) {
-				signalSvc.createSignal(new StockSignal(currPrice.getPriceId(), GAP_UP_SIGNAL, currPrice.getTickerSymbol()));
+				signalSvc.createSignal(new StockSignal(currPrice.getPriceId(), GAP_UP_SIGNAL, currPrice.getTickerSymbol(), currPrice.getPriceDate()));
 			}
 			else {
 				if (this.gapDown(currPrice, prevPrice)) {
-					signalSvc.createSignal(new StockSignal(currPrice.getPriceId(), GAP_DN_SIGNAL, currPrice.getTickerSymbol()));
+					signalSvc.createSignal(new StockSignal(currPrice.getPriceId(), GAP_DN_SIGNAL, currPrice.getTickerSymbol(), currPrice.getPriceDate()));
 				}
 			}
 		}

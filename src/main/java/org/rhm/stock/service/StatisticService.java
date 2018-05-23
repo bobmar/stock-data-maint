@@ -44,13 +44,17 @@ public class StatisticService {
 	}
 	
 	public List<StockStatistic> retrieveStatList(String tickerSymbol) {
-		return statRepo.findByTickerSymbol(tickerSymbol);
+		return statRepo.findByTickerSymbol(tickerSymbol)
+				.stream()
+				.sorted((o1,o2)->{return o1.getStatId().compareTo(o2.getStatId()) * -1;})
+				.collect(Collectors.toList());
 	}
 	
 	public List<StockStatistic> retrieveStatList(String tickerSymbol, String statisticType) {
-		return statRepo.findByTickerSymbolAndStatisticType(tickerSymbol, statisticType).stream()
-				.sorted((o1,o2)->
-				{return o1.getStatId().compareTo(o2.getStatId());}).collect(Collectors.toList());
+		return statRepo.findByTickerSymbolAndStatisticType(tickerSymbol, statisticType)
+				.stream()
+				.sorted((o1,o2)->{return o1.getStatId().compareTo(o2.getStatId()) * -1;})
+				.collect(Collectors.toList());
 	}
 	
 	public StatisticType createStatType(StatisticType statType) {

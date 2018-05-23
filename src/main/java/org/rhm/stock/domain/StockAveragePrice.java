@@ -1,5 +1,6 @@
 package org.rhm.stock.domain;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -9,6 +10,7 @@ public class StockAveragePrice {
 	private String priceId = null;
 	private List<AveragePrice> avgList = null;
 	private String tickerSymbol = null;
+	private Date priceDate = null;
 	public String getPriceId() {
 		return priceId;
 	}
@@ -50,5 +52,11 @@ public class StockAveragePrice {
 	}
 	public void setTickerSymbol(String tickerSymbol) {
 		this.tickerSymbol = tickerSymbol;
+	}
+	public Date getPriceDate() {
+		return priceDate;
+	}
+	public void setPriceDate(Date priceDate) {
+		this.priceDate = priceDate;
 	}
 }

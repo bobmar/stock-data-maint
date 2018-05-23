@@ -51,7 +51,7 @@ public class PriceBreakout implements SignalScanner {
 					+ "|" + price.getLowPrice().doubleValue() 
 					+ "; 4 week high=" + stat.getStatisticValue() + " [" + stat.getStatId() + "]");
 			if (price.getHighPrice().doubleValue() > stat.getStatisticValue().doubleValue()) {
-				signalSvc.createSignal(new StockSignal(price.getPriceId(), FOUR_WK_BRK_SIG, price.getTickerSymbol()));
+				signalSvc.createSignal(new StockSignal(price.getPriceId(), FOUR_WK_BRK_SIG, price.getTickerSymbol(), price.getPriceDate()));
 				logger.debug("evaluatePrice - create new signal for " + price.getPriceId());
 			}
 		}

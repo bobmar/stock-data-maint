@@ -2,6 +2,7 @@ package org.rhm.stock.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.rhm.stock.domain.StockAveragePrice;
 import org.rhm.stock.repository.AveragePriceRepo;
@@ -24,7 +25,10 @@ public class AveragePriceService {
 	
 	public List<StockAveragePrice> findAvgPriceList(String tickerSymbol) {
 		List<StockAveragePrice> avgPriceList = null;
-		avgPriceList = avgPriceRepo.findByTickerSymbol(tickerSymbol);
+		avgPriceList = avgPriceRepo.findByTickerSymbol(tickerSymbol)
+				.stream()
+				.sorted((o1,o2)->{return o1.getPriceId().compareTo(o2.getPriceId()) * -1;})
+				.collect(Collectors.toList());
 		return avgPriceList;
 	}
 }

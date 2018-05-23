@@ -34,4 +34,8 @@ public class SignalService {
 		newSignal = signalRepo.save(signal);
 		return newSignal;
 	}
+	
+	public List<StockSignal> findSignals(String signalType) {
+		return signalRepo.findBySignalTypeOrderByPriceId(signalType);
+	}
 }

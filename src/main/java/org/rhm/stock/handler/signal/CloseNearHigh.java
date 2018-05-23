@@ -24,7 +24,7 @@ public class CloseNearHigh implements SignalScanner {
 	private void evaluatePrice(StockPrice price) {
 		double highCloseRange = price.getHighPrice().doubleValue() - price.getClosePrice().doubleValue();
 		if (highCloseRange / price.getHighLowRange().doubleValue() < .1) {
-			signalSvc.createSignal(new StockSignal(price.getPriceId(), CLOSE_NEAR_HIGH_SIGNAL, price.getTickerSymbol()));
+			signalSvc.createSignal(new StockSignal(price.getPriceId(), CLOSE_NEAR_HIGH_SIGNAL, price.getTickerSymbol(), price.getPriceDate()));
 			logger.debug("evaluatePrice - create close near high stat: high=" + price.getHighPrice() + "; low=" + price.getLowPrice() + "; close=" + price.getClosePrice());
 		}
 	}

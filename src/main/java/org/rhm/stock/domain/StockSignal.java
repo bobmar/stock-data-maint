@@ -14,11 +14,12 @@ public class StockSignal {
 	public StockSignal() {
 		
 	}
-	public StockSignal(String priceId, String signalType, String tickerSymbol) {
+	public StockSignal(String priceId, String signalType, String tickerSymbol, Date priceDate) {
 		this.priceId = priceId;
 		this.signalType = signalType;
 		this.signalId = priceId + ":" + signalType;
 		this.tickerSymbol = tickerSymbol;
+		this.priceDate = priceDate;
 	}
 	public String getPriceId() {
 		return priceId;
