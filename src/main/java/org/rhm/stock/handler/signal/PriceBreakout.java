@@ -32,9 +32,9 @@ public class PriceBreakout implements SignalScanner {
 		StockStatistic stockStat = null;
 		for (int i = 0; i < statList.size(); i++) {
 			if (statList.get(i).getStatId().equals(statId)) {
-				if (i > 0) {
-					stockStat = statList.get(i - 1);
-					logger.debug("findStat - found statistic for " + statId);
+				if (i < (statList.size() - 1)) {
+					stockStat = statList.get(i + 1);
+					logger.debug("findStat - compare to stat " + stockStat.getPriceId() + "/" + stockStat.getStatisticValue());
 				}
 				break;
 			}
@@ -60,7 +60,6 @@ public class PriceBreakout implements SignalScanner {
 		}
 	}
 	
-	@Async
 	@Override
 	public void scan(String tickerSymbol) {
 		List<StockStatistic> statList = statSvc.retrieveStatList(tickerSymbol, FOUR_WK_HIGH);

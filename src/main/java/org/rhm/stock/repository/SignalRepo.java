@@ -5,6 +5,6 @@ import java.util.List;
 import org.rhm.stock.domain.StockSignal;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-public interface SignalRepo extends MongoRepository<StockSignal, String> {
+public interface SignalRepo extends MongoRepository<StockSignal, String>, SignalCustomRepo {
 	public List<StockSignal> findBySignalTypeOrderByPriceId(String signalType);
 }

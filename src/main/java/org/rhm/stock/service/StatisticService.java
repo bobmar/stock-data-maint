@@ -1,6 +1,9 @@
 package org.rhm.stock.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.rhm.stock.domain.StatisticType;
@@ -46,7 +49,13 @@ public class StatisticService {
 	public List<StockStatistic> retrieveStatList(String tickerSymbol) {
 		return statRepo.findByTickerSymbol(tickerSymbol)
 				.stream()
-				.sorted((o1,o2)->{return o1.getStatId().compareTo(o2.getStatId()) * -1;})
+				.sorted((o1,o2)->{
+						int compare = o1.getPriceId().compareTo(o2.getPriceId()) * -1;
+						if (compare == 0) {
+							compare = o1.getStatisticType().compareTo(o2.getStatisticType());
+						}
+						return compare;
+					})
 				.collect(Collectors.toList());
 	}
 	
@@ -55,6 +64,20 @@ public class StatisticService {
 				.stream()
 				.sorted((o1,o2)->{return o1.getStatId().compareTo(o2.getStatId()) * -1;})
 				.collect(Collectors.toList());
+	}
+	
+	public Map<String, List<StockStatistic>> retrieveStatMap(String tickerSymbol) {
+		Map<String, List<StockStatistic>> statMap = new HashMap<String, List<StockStatistic>>();
+		List<StockStatistic> fullStatList = this.retrieveStatList(tickerSymbol), currStatList = null;
+		for (StockStatistic stat: fullStatList) {
+			currStatList = statMap.get(stat.getPriceId());
+			if (currStatList == null) {
+				currStatList = new ArrayList<StockStatistic>();
+				statMap.put(stat.getPriceId(), currStatList);
+			}
+			currStatList.add(stat);
+		}
+		return statMap;
 	}
 	
 	public StatisticType createStatType(StatisticType statType) {

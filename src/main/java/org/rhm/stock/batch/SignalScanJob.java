@@ -3,7 +3,6 @@ package org.rhm.stock.batch;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 import javax.annotation.PostConstruct;
 
@@ -14,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -53,7 +51,7 @@ public class SignalScanJob implements BatchJob {
 	}
 	
 	@Override
-	public CompletableFuture<BatchStatus> run() {
+	public BatchStatus run() {
 		List<StockTicker> tickerList = tickerSvc.retrieveTickerList();
 		BatchStatus batchStatus = new BatchStatus();
 		batchStatus.setStatusDate(new Date());
@@ -65,7 +63,7 @@ public class SignalScanJob implements BatchJob {
 				scanner.scan(ticker.getTickerSymbol());
 			}
 		}
-		return CompletableFuture.completedFuture(batchStatus);
+		return batchStatus;
 	}
 
 }

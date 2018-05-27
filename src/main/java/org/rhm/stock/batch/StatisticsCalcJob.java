@@ -3,8 +3,6 @@ package org.rhm.stock.batch;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
@@ -20,7 +18,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -86,9 +83,8 @@ public class StatisticsCalcJob implements BatchJob {
 		return 0;
 	}
 	
-	@Async
 	@Override
-	public CompletableFuture<BatchStatus> run() {
+	public BatchStatus run() {
 		BatchStatus status = new BatchStatus();
 		List<StockTicker> tickerList = this.tickerSvc.retrieveTickerList();
 		logger.debug("run - processing " + tickerList.size() + " tickers");
@@ -103,7 +99,7 @@ public class StatisticsCalcJob implements BatchJob {
 		status.setStatusDate(new Date());
 		status.setSuccess(true);
 		logger.debug("run - finished processing statistics");
-		return CompletableFuture.completedFuture(status);
+		return status;
 	}
 
 }

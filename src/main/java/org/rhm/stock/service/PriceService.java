@@ -4,13 +4,18 @@ import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.rhm.stock.domain.StockPrice;
+import org.rhm.stock.domain.StockSignal;
+import org.rhm.stock.dto.CompositePrice;
 import org.rhm.stock.dto.PriceBean;
 import org.rhm.stock.io.YahooPriceDownloader;
 import org.rhm.stock.repository.PriceRepo;
+import org.rhm.stock.repository.StatisticRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,4 +65,5 @@ public class PriceService {
 		logger.debug("saveStockPrice(List) - saved " + priceList.size() + " prices");
 		return savedPrices;
 	}
+	
 }

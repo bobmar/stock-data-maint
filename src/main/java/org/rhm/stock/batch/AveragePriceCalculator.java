@@ -1,9 +1,6 @@
 package org.rhm.stock.batch;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
-
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 import org.rhm.stock.domain.AveragePrice;
 import org.rhm.stock.domain.StockAveragePrice;
@@ -17,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 @Qualifier("avgPriceCalc")
@@ -75,13 +71,12 @@ public class AveragePriceCalculator implements BatchJob {
 		return success;
 	}
 	
-	@Async
 	@Override
-	public CompletableFuture<BatchStatus> run() {
+	public BatchStatus run() {
 		BatchStatus status = new BatchStatus();
 		List<StockTicker> tickerList = tickerSvc.retrieveTickerList();
 		this.processTickers(tickerList);
-		return CompletableFuture.completedFuture(status);
+		return status;
 	}
 
 }

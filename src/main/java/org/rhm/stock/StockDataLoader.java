@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.rhm.stock.batch.BatchJob;
+import org.rhm.stock.batch.BatchStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,6 @@ public class StockDataLoader implements CommandLineRunner {
 	private Logger logger = LoggerFactory.getLogger(StockDataLoader.class);
 	
 	public static void main(String...args) {
-//		SpringApplication.run(StockDataLoader.class, args);
 		SpringApplication app = new SpringApplication(StockDataLoader.class);
 		app.setWebApplicationType(WebApplicationType.NONE);
 		app.run(args);
@@ -57,7 +57,8 @@ public class StockDataLoader implements CommandLineRunner {
 		}
 		for (BatchJob job: jobList) {
 			logger.debug("run - batch job: " + job.getClass().getName());
-			job.run();
+			BatchStatus status = job.run();
+			logger.debug("run - batch job status: " + status.getCompletionMsg());
 		}
 	}
 }

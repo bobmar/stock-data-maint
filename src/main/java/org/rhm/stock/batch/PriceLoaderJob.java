@@ -1,7 +1,6 @@
 package org.rhm.stock.batch;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 import org.rhm.stock.domain.StockPrice;
 import org.rhm.stock.domain.StockTicker;
@@ -11,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -50,9 +48,8 @@ public class PriceLoaderJob implements BatchJob {
 		return status;
 	}
 	
-	@Async
 	@Override
-	public CompletableFuture<BatchStatus> run() {
+	public BatchStatus run() {
 		BatchStatus status = new BatchStatus();
 		List<StockTicker> tickerList = tickerSvc.retrieveTickerList();
 		logger.debug("run - processing " + tickerList.size() + " tickers");
@@ -64,7 +61,7 @@ public class PriceLoaderJob implements BatchJob {
 			status.setCompletionMsg("Price loading failed");
 			status.setSuccess(false);
 		}
-		return CompletableFuture.completedFuture(status);
+		return status;
 	}
 
 }

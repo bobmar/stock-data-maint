@@ -1,7 +1,6 @@
 package org.rhm.stock.controller;
 
 import java.util.Date;
-import java.util.concurrent.CompletableFuture;
 
 import org.rhm.stock.batch.BatchJob;
 import org.rhm.stock.batch.BatchStatus;
@@ -38,7 +37,7 @@ public class BatchController {
 	@RequestMapping(value="/stocks/batch/price", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
 	public GeneralResponse startPriceLoader() {
 		GeneralResponse response = new GeneralResponse();
-		CompletableFuture<BatchStatus> status = priceLoader.run();
+		BatchStatus status = priceLoader.run();
 		response.setRequestDate(new Date());
 		response.setMessageText("Trigger the price loader");
 		response.setMessageCode("200");
@@ -49,7 +48,7 @@ public class BatchController {
 	@RequestMapping(value="/stocks/batch/avgcalc", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
 	public GeneralResponse startAvgPriceCalc() {
 		GeneralResponse response = new GeneralResponse();
-		CompletableFuture<BatchStatus> status = avgPriceCalc.run();
+		BatchStatus status = avgPriceCalc.run();
 		response.setRequestDate(new Date());
 		response.setMessageText("Trigger the average price calculator");
 		response.setMessageCode("200");
@@ -60,7 +59,7 @@ public class BatchController {
 	@RequestMapping(value="/stocks/batch/statscalc", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
 	public GeneralResponse startStatsCalc() {
 		GeneralResponse response = new GeneralResponse();
-		CompletableFuture<BatchStatus> status = statsCalcJob.run();
+		BatchStatus status = statsCalcJob.run();
 		response.setRequestDate(new Date());
 		response.setMessageText("Trigger the statistics calculator");
 		response.setMessageCode("200");
@@ -71,7 +70,7 @@ public class BatchController {
 	@RequestMapping(value="/stocks/batch/signalscan", method=RequestMethod.POST, produces=MediaType.APPLICATION_JSON_VALUE)
 	public GeneralResponse startSignalScan() {
 		GeneralResponse response = new GeneralResponse();
-		CompletableFuture<BatchStatus> status = signalScanJob.run();
+		BatchStatus status = signalScanJob.run();
 		response.setRequestDate(new Date());
 		response.setMessageText("Trigger the signal scanner");
 		response.setMessageCode("200");
