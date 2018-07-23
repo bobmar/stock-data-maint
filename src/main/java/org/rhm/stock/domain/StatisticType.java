@@ -7,6 +7,7 @@ public class StatisticType {
 	private String statisticCode = null;
 	private String statisticDesc = null;
 	private String className = null;
+	private Boolean showInDashboard = false;
 	public String getStatisticCode() {
 		return statisticCode;
 	}
@@ -24,5 +25,11 @@ public class StatisticType {
 	}
 	public void setClassName(String className) {
 		this.className = className;
+	}
+	public Boolean getShowInDashboard() {
+		return showInDashboard;
+	}
+	public void setShowInDashboard(Boolean showInDashboard) {
+		this.showInDashboard = showInDashboard;
 	}
 }

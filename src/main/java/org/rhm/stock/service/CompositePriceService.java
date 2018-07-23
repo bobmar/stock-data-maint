@@ -20,6 +20,9 @@ public class CompositePriceService {
 	private PriceRepo priceRepo = null;
 	@Autowired
 	private SignalService signalSvc = null;
+	@Autowired
+	private AveragePriceService avgPriceSvc = null;
+	
 	private Map<String, List<StockSignal>> signalListToMap(List<StockSignal> signalList) {
 		Map<String, List<StockSignal>> signalMap = new HashMap<String, List<StockSignal>>();
 		List<StockSignal> currSignalList = null;
@@ -48,11 +51,33 @@ public class CompositePriceService {
 			cPrice.setPriceId(priceId);
 			cPrice.setPrice(priceRepo.findById(priceId).get());
 			cPrice.setSignalList(signalMap.get(priceId));
-			cPrice.setStatList(statRepo.findByPriceId(priceId));
-			cPrice.setTickerSymbol(cPrice.getStatList().get(0).getTickerSymbol());
+			cPrice.setStatisticList(statRepo.findByPriceId(priceId));
+			cPrice.setTickerSymbol(cPrice.getStatisticList().get(0).getTickerSymbol());
 			compPriceList.add(cPrice);
 		}
 		return compPriceList;
 	}
 
+	public List<CompositePrice> compositePriceFactory(List<String> priceIdList) {
+		List<CompositePrice> compPriceList = new ArrayList<CompositePrice>();
+		CompositePrice cPrice = null;
+		for (String priceId: priceIdList) {
+			cPrice = this.compositePriceFactory(priceId);
+			compPriceList.add(cPrice);
+		}
+		return compPriceList;
+	}
+	
+	public CompositePrice compositePriceFactory(String priceId) {
+		CompositePrice cPrice = null;
+		cPrice = new CompositePrice();
+		cPrice.setPriceId(priceId);
+		cPrice.setPrice(priceRepo.findById(priceId).get());
+		cPrice.setSignalList(signalSvc.findSignalsByPriceId(priceId));
+		cPrice.setStatisticList(statRepo.findByPriceId(priceId));
+		cPrice.setTickerSymbol(cPrice.getPrice().getTickerSymbol());
+		cPrice.setAvgPrices(avgPriceSvc.findRecentAvgPriceList(cPrice.getTickerSymbol()));
+		return cPrice;
+	}
+	
 }

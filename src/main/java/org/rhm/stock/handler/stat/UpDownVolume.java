@@ -24,7 +24,8 @@ public class UpDownVolume implements StatisticCalculator {
 		double upVolume = 0, downVolume = 0;
 		double upDownRatio = 0.0;
 		double priceDiff = 0.0;
-		StockPrice currPrice = null, prevPrice = null;
+		StockPrice currPrice = null, prevPrice = null, firstPrice = null;
+		firstPrice = priceList.get(0);
 		for (int i = 0; i < 49; i++) {
 			currPrice = priceList.get(i);
 			prevPrice = priceList.get(i+1);
@@ -43,7 +44,7 @@ public class UpDownVolume implements StatisticCalculator {
 		if (downVolume > 0) {
 			upDownRatio = upVolume / downVolume;
 			logger.debug("calcUpDownRatio - up/down ratio=" + upDownRatio);
-			statSvc.createStatistic(new StockStatistic(currPrice.getPriceId(), UP_DOWN_VOL_50, BigDecimal.valueOf(upDownRatio), currPrice.getTickerSymbol(), currPrice.getPriceDate()));
+			statSvc.createStatistic(new StockStatistic(firstPrice.getPriceId(), UP_DOWN_VOL_50, BigDecimal.valueOf(upDownRatio), firstPrice.getTickerSymbol(), firstPrice.getPriceDate()));
 		}
 	}
 	

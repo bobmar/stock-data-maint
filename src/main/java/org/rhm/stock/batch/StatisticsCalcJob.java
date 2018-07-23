@@ -85,7 +85,7 @@ public class StatisticsCalcJob implements BatchJob {
 	
 	@Override
 	public BatchStatus run() {
-		BatchStatus status = new BatchStatus();
+		BatchStatus status = new BatchStatus(this.getClass());
 		List<StockTicker> tickerList = this.tickerSvc.retrieveTickerList();
 		logger.debug("run - processing " + tickerList.size() + " tickers");
 		int processedCnt = 0;
@@ -97,8 +97,8 @@ public class StatisticsCalcJob implements BatchJob {
 		status.setCompletionMsg("Processed " + processedCnt + " tickers");
 		status.setJobClass(this.getClass().getName());
 		status.setStatusDate(new Date());
+		status.setFinishDate(new Date());
 		status.setSuccess(true);
-		logger.debug("run - finished processing statistics");
 		return status;
 	}
 

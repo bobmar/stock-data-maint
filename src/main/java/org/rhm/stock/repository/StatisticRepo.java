@@ -1,5 +1,6 @@
 package org.rhm.stock.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import org.rhm.stock.domain.StockStatistic;
@@ -9,4 +10,6 @@ public interface StatisticRepo extends MongoRepository<StockStatistic, String> {
 	public List<StockStatistic> findByTickerSymbol(String tickerSymbol);
 	public List<StockStatistic> findByTickerSymbolAndStatisticType(String tickerSymbol, String statisticType);
 	public List<StockStatistic> findByPriceId(String priceId);
+	public List<StockStatistic> findByStatisticTypeAndPriceDate(String statisticType, Date priceDate);
+	public StockStatistic findTopByOrderByPriceDateDesc();
 }

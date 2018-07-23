@@ -1,5 +1,7 @@
 package org.rhm.stock.service;
 
+import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -7,6 +9,7 @@ import org.rhm.stock.domain.SignalType;
 import org.rhm.stock.domain.StockSignal;
 import org.rhm.stock.repository.SignalRepo;
 import org.rhm.stock.repository.SignalTypeRepo;
+import org.rhm.stock.util.StockUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,8 +49,25 @@ public class SignalService {
 		return this.findSignalsByType(signalTypes, 7);
 	}
 	
+	public List<StockSignal> findSignalsByPriceId(String priceId) {
+		return signalRepo.findByPriceId(priceId);
+	}
+	
 	public List<StockSignal> findSignalsByType(List<String> signalTypes, int lookBackDays) {
 		logger.debug("findSignalsByType - signalTypes: " + signalTypes.toString() + "; lookBackDays: " + lookBackDays);
 		return signalRepo.findSignalsByType(signalTypes, lookBackDays);
+	}
+	
+	public StockSignal findMaxDate() {
+		return signalRepo.findTopByOrderByPriceDateDesc();
+	}
+	
+	public List<StockSignal> findSignalsByTypeAndDate(String signalType, String priceDate) {
+		return this.findSignalsByTypeAndDate(signalType, StockUtil.stringToDate(priceDate));
+	}
+	
+	public List<StockSignal> findSignalsByTypeAndDate(String signalType, Date priceDate) {
+		logger.debug("findSignalsByTypeAndDate - signalType:" + signalType + ";priceDate:" + priceDate);
+		return signalRepo.findBySignalTypeAndPriceDate(signalType, priceDate);
 	}
 }

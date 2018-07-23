@@ -53,9 +53,7 @@ public class SignalScanJob implements BatchJob {
 	@Override
 	public BatchStatus run() {
 		List<StockTicker> tickerList = tickerSvc.retrieveTickerList();
-		BatchStatus batchStatus = new BatchStatus();
-		batchStatus.setStatusDate(new Date());
-		batchStatus.setSuccess(true);
+		BatchStatus batchStatus = new BatchStatus(this.getClass());
 		batchStatus.setCompletionMsg("Triggered the signal scanner successfully");
 		for (StockTicker ticker: tickerList) {
 			for (SignalScanner scanner: scannerList) {
@@ -63,6 +61,9 @@ public class SignalScanJob implements BatchJob {
 				scanner.scan(ticker.getTickerSymbol());
 			}
 		}
+		batchStatus.setCompletionMsg("Successful completion");
+		batchStatus.setSuccess(true);
+		batchStatus.setFinishDate(new Date());
 		return batchStatus;
 	}
 

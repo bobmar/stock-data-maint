@@ -31,4 +31,13 @@ public class AveragePriceService {
 				.collect(Collectors.toList());
 		return avgPriceList;
 	}
+	
+	public List<StockAveragePrice> findRecentAvgPriceList(String tickerSymbol) {
+		List<StockAveragePrice> avgPriceList = null;
+		avgPriceList = avgPriceRepo.findTop10ByTickerSymbolOrderByPriceDateDesc(tickerSymbol)
+				.stream()
+				.sorted((o1,o2)->{return o1.getPriceId().compareTo(o2.getPriceId()) * -1;})
+				.collect(Collectors.toList());
+		return avgPriceList;
+	}
 }

@@ -1,11 +1,14 @@
 package org.rhm.stock.controller.dto;
 
+import java.util.Date;
 import java.util.List;
 
 public class SignalRequest {
 
 	private List<String> signalTypeList = null;
 	private Integer lookBackDays = null;
+	private String signalType = null;
+	private String signalDate = null;
 
 	public List<String> getSignalTypeList() {
 		return signalTypeList;
@@ -21,6 +24,22 @@ public class SignalRequest {
 
 	public void setLookBackDays(Integer lookBackDays) {
 		this.lookBackDays = lookBackDays;
+	}
+
+	public String getSignalType() {
+		return signalType;
+	}
+
+	public void setSignalType(String signalType) {
+		this.signalType = signalType;
+	}
+
+	public String getSignalDate() {
+		return signalDate;
+	}
+
+	public void setSignalDate(String priceDate) {
+		this.signalDate = priceDate;
 	}
 	
 

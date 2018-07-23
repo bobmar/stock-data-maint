@@ -8,4 +8,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 public interface AveragePriceRepo extends MongoRepository<StockAveragePrice, String> {
 
 	public List<StockAveragePrice> findByTickerSymbol(String tickerSymbol);
+	public List<StockAveragePrice> findTop10ByTickerSymbolOrderByPriceDateDesc(String tickerSymbol);
 }

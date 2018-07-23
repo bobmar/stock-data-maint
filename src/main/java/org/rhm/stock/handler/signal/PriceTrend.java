@@ -36,7 +36,9 @@ public class PriceTrend implements SignalScanner {
 	private void detectConsecutiveUpWeeks(List<StockStatistic> weeklyPriceChgList) {
 		int upCnt = 0;
 		StockStatistic firstStat = weeklyPriceChgList.get(0);
-		for (StockStatistic stat: weeklyPriceChgList) {
+		StockStatistic stat = null;
+		for (int i = 0; i < 25; i+=5) {
+			stat = weeklyPriceChgList.get(i);
 			if (stat.getStatisticValue().doubleValue() > 0) {
 				upCnt++;
 			}
@@ -104,8 +106,8 @@ public class PriceTrend implements SignalScanner {
 	@Override
 	public void scan(String tickerSymbol) {
 		List<StockStatistic> wkPrcChgList = statSvc.retrieveStatList(tickerSymbol, WEEKLY_CLOSE_STAT);
-		while (wkPrcChgList.size() > 5) {
-			this.detectConsecutiveUpWeeks(wkPrcChgList.subList(0, 5));
+		while (wkPrcChgList.size() > 25) {
+			this.detectConsecutiveUpWeeks(wkPrcChgList.subList(0, 25));
 			wkPrcChgList.remove(0);
 		}
 		List<StockAveragePrice> avgPriceList = avgPriceSvc.findAvgPriceList(tickerSymbol);

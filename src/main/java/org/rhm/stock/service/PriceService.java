@@ -26,6 +26,8 @@ public class PriceService {
 	@Autowired
 	private PriceRepo priceRepo = null;
 	@Autowired
+	private CompositePriceService cpSvc = null;
+	@Autowired
 	private YahooPriceDownloader priceDownloader = null;
 	private Logger logger = LoggerFactory.getLogger(PriceService.class);
 	private DateFormat dtFmt = new SimpleDateFormat("yyyy-MM-dd");
@@ -64,6 +66,12 @@ public class PriceService {
 		List<StockPrice> savedPrices = priceRepo.saveAll(priceList);
 		logger.debug("saveStockPrice(List) - saved " + priceList.size() + " prices");
 		return savedPrices;
+	}
+	
+	public CompositePrice retrieveCurrentPrice(String tickerSymbol) {
+		StockPrice price = priceRepo.findTopByTickerSymbolOrderByPriceDateDesc(tickerSymbol);
+		CompositePrice cPrice = cpSvc.compositePriceFactory(price.getPriceId());
+		return cPrice;
 	}
 	
 }

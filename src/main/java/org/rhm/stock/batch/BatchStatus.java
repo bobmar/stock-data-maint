@@ -7,6 +7,14 @@ public class BatchStatus {
 	private Boolean success = false;
 	private String completionMsg = null;
 	private Date statusDate = null;
+	private Date startDate = null;
+	private Date finishDate = null;
+	
+	public BatchStatus(Class cls) {
+		this.jobClass = cls.getName();
+		this.startDate = new Date();
+	}
+	
 	public String getJobClass() {
 		return jobClass;
 	}
@@ -30,5 +38,17 @@ public class BatchStatus {
 	}
 	public void setStatusDate(Date statusDate) {
 		this.statusDate = statusDate;
+	}
+	public Date getStartDate() {
+		return startDate;
+	}
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+	public Date getFinishDate() {
+		return finishDate;
+	}
+	public void setFinishDate(Date finishDate) {
+		this.finishDate = finishDate;
 	}
 }

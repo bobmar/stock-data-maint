@@ -1,5 +1,6 @@
 package org.rhm.stock.batch;
 
+import java.util.Date;
 import java.util.List;
 
 import org.rhm.stock.domain.StockPrice;
@@ -50,9 +51,10 @@ public class PriceLoaderJob implements BatchJob {
 	
 	@Override
 	public BatchStatus run() {
-		BatchStatus status = new BatchStatus();
+		BatchStatus status = new BatchStatus(this.getClass());
 		List<StockTicker> tickerList = tickerSvc.retrieveTickerList();
 		logger.debug("run - processing " + tickerList.size() + " tickers");
+		status.setFinishDate(new Date());
 		if (this.processTickers(tickerList) == 0) {
 			status.setCompletionMsg("Prices loaded successfully - " + tickerList.size() + " tickers processed");
 			status.setSuccess(true);

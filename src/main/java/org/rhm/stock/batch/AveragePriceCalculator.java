@@ -1,5 +1,6 @@
 package org.rhm.stock.batch;
 
+import java.util.Date;
 import java.util.List;
 
 import org.rhm.stock.domain.AveragePrice;
@@ -73,9 +74,10 @@ public class AveragePriceCalculator implements BatchJob {
 	
 	@Override
 	public BatchStatus run() {
-		BatchStatus status = new BatchStatus();
+		BatchStatus status = new BatchStatus(this.getClass());
 		List<StockTicker> tickerList = tickerSvc.retrieveTickerList();
 		this.processTickers(tickerList);
+		status.setFinishDate(new Date());
 		return status;
 	}
 

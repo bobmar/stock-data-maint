@@ -1,15 +1,22 @@
 package org.rhm.stock.service;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.stream.Collectors;
 
 import org.rhm.stock.domain.StatisticType;
 import org.rhm.stock.domain.StockStatistic;
 import org.rhm.stock.repository.StatisticRepo;
 import org.rhm.stock.repository.StatisticTypeRepo;
+import org.rhm.stock.util.StockUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,11 +87,70 @@ public class StatisticService {
 		return statMap;
 	}
 	
+	public Map<String,List<StockStatistic>> retrieveStatMap(Date priceDate, Integer days, String statType) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(priceDate);
+		cal.add(Calendar.DAY_OF_MONTH, days * -1);
+		Date toDate = priceDate, fromDate = cal.getTime();
+		return this.retrieveStatMap(fromDate, toDate, statType);
+	}
+	
+	public Map<String,List<StockStatistic>> retrieveStatMap(Date fromDate, Date toDate, String statType) {
+		List<StockStatistic> statList = null;
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		Map<String,List<StockStatistic>> statMap = new HashMap<String,List<StockStatistic>>();
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(fromDate);
+		cal.setTimeZone(TimeZone.getTimeZone("UTC"));
+		cal.set(Calendar.HOUR_OF_DAY, 7);
+		while (cal.getTime().compareTo(toDate) <= 0) {
+			if (cal.get(Calendar.DAY_OF_WEEK) > Calendar.SUNDAY && cal.get(Calendar.DAY_OF_WEEK) < Calendar.SATURDAY ) {
+				statList = statRepo.findByStatisticTypeAndPriceDate(statType, cal.getTime())
+						.stream()
+						.sorted((o1,o2)->{return o1.getStatisticValue().compareTo(o2.getStatisticValue());})
+						.collect(Collectors.toList());
+				statMap.put(df.format(cal.getTime()), statList);
+				logger.debug("retrieveStatMap - added " + cal.getTime() + " to map");
+			}
+			cal.add(Calendar.DAY_OF_MONTH, 1);
+		}
+		return statMap;
+	}
+	
+	public List<StockStatistic> retrieveStatList(Date statDate, String statType) {
+		Date mongoDate = null;
+		try {
+			mongoDate = StockUtil.toMongoDate(statDate);
+		} 
+		catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return statRepo.findByStatisticTypeAndPriceDate(statType, mongoDate)
+				.stream()
+				.sorted((o1,o2)->{return o1.getStatisticValue().compareTo(o2.getStatisticValue());})
+				.collect(Collectors.toList());
+	}
+	
+	public StockStatistic findMaxDate() {
+		return statRepo.findTopByOrderByPriceDateDesc();
+	}
+	
 	public StatisticType createStatType(StatisticType statType) {
 		return statTypeRepo.save(statType);
 	}
 	
 	public List<StatisticType> retrieveStatTypeList() {
-		return statTypeRepo.findAll();
+		return statTypeRepo.findAll()
+				.stream()
+				.sorted((o1,o2)->{return o1.getStatisticDesc().compareTo(o2.getStatisticDesc());})
+				.collect(Collectors.toList());
 	}
+	
+	public List<StatisticType> retrieveDashboardStatTypeList() {
+		return statTypeRepo.findByShowInDashboard(true)
+				.stream()
+				.sorted((o1,o2)->{return o1.getStatisticDesc().compareTo(o2.getStatisticDesc());})
+				.collect(Collectors.toList());
+	}
+	
 }
