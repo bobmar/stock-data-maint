@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.rhm.stock.controller.dto.GeneralResponse;
 import org.rhm.stock.controller.dto.StatListRequest;
@@ -81,11 +82,20 @@ public class StatisticsController {
 		List<StockStatistic> statList = statSvc.retrieveStatList(statDate, request.getStatCode());
 		Map<String,List<StockStatistic>> statMap = new HashMap<String,List<StockStatistic>>();
 		if (statList.size() > 24) {
-			statMap.put("bearishList", statList.subList(0, 12));
-			statMap.put("bullishList", statList.subList(statList.size() - 12, statList.size()));
+			statMap.put("bearishList", statList.subList(0, 12)
+					);
+			statMap.put("bullishList", statList.subList(statList.size() - 12, statList.size())
+					.stream()
+					.sorted((o1,o2)->{return o1.getStatisticValue().compareTo(o2.getStatisticValue()) * -1;})
+					.collect(Collectors.toList())
+					);
 		}
 		else {
-			statMap.put("bullishList", statList);
+			statMap.put("bullishList", statList
+					.stream()
+					.sorted((o1,o2)->{return o1.getStatisticValue().compareTo(o2.getStatisticValue()) * -1;})
+					.collect(Collectors.toList())
+					);
 			statMap.put("bearishList", statList);
 		}
 		return new ResponseEntity<Map<String,List<StockStatistic>>>(statMap, HttpStatus.OK);

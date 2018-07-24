@@ -68,6 +68,6 @@ public class SignalService {
 	
 	public List<StockSignal> findSignalsByTypeAndDate(String signalType, Date priceDate) {
 		logger.debug("findSignalsByTypeAndDate - signalType:" + signalType + ";priceDate:" + priceDate);
-		return signalRepo.findBySignalTypeAndPriceDate(signalType, priceDate);
+		return signalRepo.findBySignalTypeAndPriceDateOrderByTickerSymbol(signalType, priceDate);
 	}
 }
