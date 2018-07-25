@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.rhm.stock.controller.dto.GeneralResponse;
 import org.rhm.stock.controller.dto.StatListRequest;
+import org.rhm.stock.controller.dto.StatListResponse;
 import org.rhm.stock.controller.dto.StatMapRequest;
 import org.rhm.stock.domain.StatisticType;
 import org.rhm.stock.domain.StockStatistic;
@@ -63,13 +64,22 @@ public class StatisticsController {
 	}
 	
 	@PostMapping(value="/stocks/stat/list")
-	private List<StockStatistic> retrieveStatListByDate(@RequestBody StatListRequest request) {
+	private StatListResponse retrieveStatListByDate(@RequestBody StatListRequest request) {
 		Date statDate = request.getStatDate();
 		if (statDate == null) {
 			statDate = statSvc.findMaxDate().getPriceDate();
 		}
+		StatListResponse response = new StatListResponse();
 		List<StockStatistic> statList = statSvc.retrieveStatList(statDate, request.getStatCode());
-		return statList;
+		response.setStatList(statList);
+		response.setStatDate(statDate);
+		if (statList.size() > 0) {
+			response.setLowValue(statList.get(0).getStatisticValue().doubleValue());
+			if (statList.size() > 1) {
+				response.setHighValue(statList.get(statList.size() - 1).getStatisticValue().doubleValue());
+			}
+		}
+		return response;
 	}
 	
 	@PostMapping(value="/stocks/stat/bullbear/list")
