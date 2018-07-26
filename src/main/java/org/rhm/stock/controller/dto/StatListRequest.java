@@ -3,12 +3,15 @@ package org.rhm.stock.controller.dto;
 import java.util.Date;
 
 public class StatListRequest {
-	private Date statDate = null;
+	private String statDate = null;
 	private String statCode = null;
-	public Date getStatDate() {
+	private Integer maxResults = null;
+	private Double lowValue = null;
+	private Double highValue = null;
+	public String getStatDate() {
 		return statDate;
 	}
-	public void setStatDate(Date statDate) {
+	public void setStatDate(String statDate) {
 		this.statDate = statDate;
 	}
 	public String getStatCode() {
@@ -16,6 +19,24 @@ public class StatListRequest {
 	}
 	public void setStatCode(String statCode) {
 		this.statCode = statCode;
+	}
+	public Integer getMaxResults() {
+		return maxResults;
+	}
+	public void setMaxResults(Integer maxResults) {
+		this.maxResults = maxResults;
+	}
+	public Double getLowValue() {
+		return lowValue;
+	}
+	public void setLowValue(Double lowValue) {
+		this.lowValue = lowValue;
+	}
+	public Double getHighValue() {
+		return highValue;
+	}
+	public void setHighValue(Double highValue) {
+		this.highValue = highValue;
 	}
 	
 }

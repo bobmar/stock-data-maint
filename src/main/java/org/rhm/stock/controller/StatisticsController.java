@@ -13,6 +13,7 @@ import org.rhm.stock.controller.dto.StatMapRequest;
 import org.rhm.stock.domain.StatisticType;
 import org.rhm.stock.domain.StockStatistic;
 import org.rhm.stock.service.StatisticService;
+import org.rhm.stock.util.StockUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,18 +66,39 @@ public class StatisticsController {
 	
 	@PostMapping(value="/stocks/stat/list")
 	private StatListResponse retrieveStatListByDate(@RequestBody StatListRequest request) {
-		Date statDate = request.getStatDate();
-		if (statDate == null) {
+		Date statDate = null;
+		String searchDate = request.getStatDate();
+		if (searchDate == null) {
 			statDate = statSvc.findMaxDate().getPriceDate();
 		}
+		else {
+			statDate = StockUtil.stringToDate(searchDate);
+		}
+		logger.debug("retrieveStatListByDate - statDate=" + statDate.toString());
 		StatListResponse response = new StatListResponse();
 		List<StockStatistic> statList = statSvc.retrieveStatList(statDate, request.getStatCode());
-		response.setStatList(statList);
+		List<StockStatistic> returnList = null;
+		if (request.getLowValue() != null && request.getHighValue() != null) {
+			returnList = statList.stream().filter((stat)->{
+				return (stat.getStatisticValue().doubleValue() > request.getLowValue() 
+						&& stat.getStatisticValue().doubleValue() < request.getHighValue());})
+					.collect(Collectors.toList());
+
+		}
+		else {
+			returnList = statList;
+		}
+		if (request.getMaxResults() == null || request.getMaxResults() > returnList.size()) {
+			response.setStatList(returnList);
+		}
+		else {
+			response.setStatList(returnList.subList(0, request.getMaxResults()));
+		}
 		response.setStatDate(statDate);
-		if (statList.size() > 0) {
-			response.setLowValue(statList.get(0).getStatisticValue().doubleValue());
-			if (statList.size() > 1) {
-				response.setHighValue(statList.get(statList.size() - 1).getStatisticValue().doubleValue());
+		if (returnList.size() > 0) {
+			response.setLowValue(returnList.get(0).getStatisticValue().doubleValue());
+			if (returnList.size() > 1) {
+				response.setHighValue(returnList.get(returnList.size() - 1).getStatisticValue().doubleValue());
 			}
 		}
 		return response;
@@ -84,9 +106,13 @@ public class StatisticsController {
 	
 	@PostMapping(value="/stocks/stat/bullbear/list")
 	private ResponseEntity<Map<String,List<StockStatistic>>> retrieveBullBearStatList(@RequestBody StatListRequest request) {
-		Date statDate = request.getStatDate();
-		if (statDate == null) {
+		String searchDate = request.getStatDate();
+		Date statDate = null;
+		if (searchDate == null) {
 			statDate = statSvc.findMaxDate().getPriceDate();
+		}
+		else {
+			statDate = StockUtil.stringToDate(searchDate);
 		}
 		logger.debug("retrieveBullBearStatList - " + statDate.toString() + "/" + request.getStatCode());
 		List<StockStatistic> statList = statSvc.retrieveStatList(statDate, request.getStatCode());
