@@ -74,4 +74,9 @@ public class PriceService {
 		return cPrice;
 	}
 	
+	public StockPrice findStockPrice(String priceId) {
+		return priceRepo.findById(priceId).get();
+				
+	}
+	
 }

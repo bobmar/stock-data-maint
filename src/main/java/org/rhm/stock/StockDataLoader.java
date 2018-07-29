@@ -56,11 +56,11 @@ public class StockDataLoader implements CommandLineRunner {
 			}
 		}
 		for (BatchJob job: jobList) {
-			logger.debug("run - batch job: " + job.getClass().getName());
+			logger.info("run - batch job: " + job.getClass().getName());
 			BatchStatus status = job.run();
-			logger.debug("run - batch job status: " + status.getCompletionMsg());
-			logger.debug("run - batch job start: " + status.getStartDate());
-			logger.debug("run - batch job finish: " + status.getFinishDate());
+			logger.info("run - batch job status: " + status.getCompletionMsg());
+			logger.info("run - batch job start: " + status.getStartDate());
+			logger.info("run - batch job finish: " + status.getFinishDate());
 		}
 	}
 }

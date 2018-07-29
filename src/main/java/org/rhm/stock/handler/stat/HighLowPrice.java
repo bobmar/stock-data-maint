@@ -39,7 +39,9 @@ public class HighLowPrice implements StatisticCalculator {
 				}
 			}
 		}
-		statSvc.createStatistic(new StockStatistic(firstPrice.getPriceId(), statType, highPrice.getHighPrice(), firstPrice.getTickerSymbol(), firstPrice.getPriceDate()));
+		statSvc.createStatistic(
+				new StockStatistic(firstPrice.getPriceId(), statType, highPrice.getHighPrice(), firstPrice.getTickerSymbol(), firstPrice.getPriceDate())
+				,false);
 	}
 	
 	private void calcLow(List<StockPrice> priceSubList, String statType) {
@@ -56,11 +58,14 @@ public class HighLowPrice implements StatisticCalculator {
 				}
 			}
 		}
-		statSvc.createStatistic(new StockStatistic(firstPrice.getPriceId(), statType, lowPrice.getLowPrice(), firstPrice.getTickerSymbol(), firstPrice.getPriceDate()));
+		statSvc.createStatistic(
+				new StockStatistic(firstPrice.getPriceId(), statType, lowPrice.getLowPrice(), firstPrice.getTickerSymbol(), firstPrice.getPriceDate())
+				,false);
 	}
 	
 	@Override
 	public void calculate(List<StockPrice> priceList) {
+		logger.info("calculate - processing " + priceList.size() + " prices for " + priceList.get(0).getTickerSymbol());
 		while (priceList.size() > 20) {
 			this.calcHigh(priceList.subList(0, 19), HIGH_PRICE_4WK);
 			this.calcHigh(priceList.subList(0,9), HIGH_PRICE_2WK);

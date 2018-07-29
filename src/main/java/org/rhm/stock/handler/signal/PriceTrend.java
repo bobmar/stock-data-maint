@@ -1,13 +1,14 @@
 package org.rhm.stock.handler.signal;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.rhm.stock.domain.AveragePrice;
 import org.rhm.stock.domain.StockAveragePrice;
+import org.rhm.stock.domain.StockPrice;
 import org.rhm.stock.domain.StockSignal;
 import org.rhm.stock.domain.StockStatistic;
 import org.rhm.stock.service.AveragePriceService;
+import org.rhm.stock.service.PriceService;
 import org.rhm.stock.service.SignalService;
 import org.rhm.stock.service.StatisticService;
 import org.slf4j.Logger;
@@ -25,6 +26,8 @@ public class PriceTrend implements SignalScanner {
 	private SignalService signalSvc = null;
 	@Autowired
 	private AveragePriceService avgPriceSvc = null;
+	@Autowired
+	private PriceService priceSvc = null;
 	
 	private static final String WEEKLY_CLOSE_STAT = "WKCLSPCT";
 	private static final String UP_4_WEEKS_SIGNAL = "4WKUP";
@@ -37,6 +40,7 @@ public class PriceTrend implements SignalScanner {
 		int upCnt = 0;
 		StockStatistic firstStat = weeklyPriceChgList.get(0);
 		StockStatistic stat = null;
+		StockPrice price = null;
 		for (int i = 0; i < 25; i+=5) {
 			stat = weeklyPriceChgList.get(i);
 			if (stat.getStatisticValue().doubleValue() > 0) {
@@ -47,12 +51,14 @@ public class PriceTrend implements SignalScanner {
 			}
 		}
 		if (upCnt == 4) {
-			signalSvc.createSignal(new StockSignal(firstStat.getPriceId(), UP_4_WEEKS_SIGNAL, firstStat.getTickerSymbol(), firstStat.getPriceDate()));
+			price = priceSvc.findStockPrice(firstStat.getPriceId());
+			signalSvc.createSignal(new StockSignal(price, UP_4_WEEKS_SIGNAL));
 			logger.debug("detectConsecutiveUpWeeks - 4 consecutive weeks up");
 		}
 		else {
 			if (upCnt == 5) {
-				signalSvc.createSignal(new StockSignal(firstStat.getPriceId(), UP_5_WEEKS_SIGNAL, firstStat.getTickerSymbol(), firstStat.getPriceDate()));
+				price = priceSvc.findStockPrice(firstStat.getPriceId());
+				signalSvc.createSignal(new StockSignal(price, UP_5_WEEKS_SIGNAL));
 				logger.debug("detectConsecutiveUpWeeks - 5 consecutive weeks up");
 			}
 		}
@@ -61,7 +67,8 @@ public class PriceTrend implements SignalScanner {
 	private void detectTrend(StockAveragePrice avgPrice, String trendDirection) {
  		boolean trend = false;
  		int avgPriceCnt = 0;
- 		double ap10Day = 0, ap50Day = 0, ap200Day = 0; 
+ 		double ap10Day = 0, ap50Day = 0, ap200Day = 0;
+ 		StockPrice price = null;
 		for (AveragePrice ap: avgPrice.getAvgList()) {
 			switch (ap.getDaysCnt()) {
 			case 10:
@@ -98,7 +105,8 @@ public class PriceTrend implements SignalScanner {
 			}
 		}
  		if (trend) {
- 			signalSvc.createSignal(new StockSignal(avgPrice.getPriceId(), trendDirection, avgPrice.getTickerSymbol(), avgPrice.getPriceDate()));
+ 			price = priceSvc.findStockPrice(avgPrice.getPriceId());
+ 			signalSvc.createSignal(new StockSignal(price, trendDirection));
  			logger.debug("detectTrend - created signal " + trendDirection + " for " + avgPrice.getPriceId());
  		}
 	}
@@ -106,6 +114,7 @@ public class PriceTrend implements SignalScanner {
 	@Override
 	public void scan(String tickerSymbol) {
 		List<StockStatistic> wkPrcChgList = statSvc.retrieveStatList(tickerSymbol, WEEKLY_CLOSE_STAT);
+		logger.info("scan - found " + wkPrcChgList.size() + " statistics for " + tickerSymbol);
 		while (wkPrcChgList.size() > 25) {
 			this.detectConsecutiveUpWeeks(wkPrcChgList.subList(0, 25));
 			wkPrcChgList.remove(0);

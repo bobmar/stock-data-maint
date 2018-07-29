@@ -7,25 +7,16 @@ import org.springframework.data.annotation.Id;
 public class StockSignal {
 	@Id
 	private String signalId = null;
-	private String priceId = null;
 	private String signalType = null;
-	private Date priceDate = null;
-	private String tickerSymbol = null;
+	private StockPrice price = null;
+	
 	public StockSignal() {
 		
 	}
-	public StockSignal(String priceId, String signalType, String tickerSymbol, Date priceDate) {
-		this.priceId = priceId;
+	public StockSignal(StockPrice price, String signalType) {
+		this.price = price;
 		this.signalType = signalType;
-		this.signalId = priceId + ":" + signalType;
-		this.tickerSymbol = tickerSymbol;
-		this.priceDate = priceDate;
-	}
-	public String getPriceId() {
-		return priceId;
-	}
-	public void setPriceId(String priceId) {
-		this.priceId = priceId;
+		this.signalId = price.getPriceId() + ":" + signalType;
 	}
 	public String getSignalType() {
 		return signalType;
@@ -33,22 +24,16 @@ public class StockSignal {
 	public void setSignalType(String signalType) {
 		this.signalType = signalType;
 	}
-	public Date getPriceDate() {
-		return priceDate;
-	}
-	public void setPriceDate(Date priceDate) {
-		this.priceDate = priceDate;
-	}
-	public String getTickerSymbol() {
-		return tickerSymbol;
-	}
-	public void setTickerSymbol(String tickerSymbol) {
-		this.tickerSymbol = tickerSymbol;
-	}
 	public String getSignalId() {
 		return signalId;
 	}
 	public void setSignalId(String signalId) {
 		this.signalId = signalId;
+	}
+	public StockPrice getPrice() {
+		return price;
+	}
+	public void setPrice(StockPrice price) {
+		this.price = price;
 	}
 }

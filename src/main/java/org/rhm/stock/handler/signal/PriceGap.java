@@ -52,11 +52,11 @@ public class PriceGap implements SignalScanner {
 				+ "; previous high=" + prevPrice.getHighPrice() 
 				+ "; previous low=" + prevPrice.getLowPrice());
 			if (this.gapUp(currPrice, prevPrice)) {
-				signalSvc.createSignal(new StockSignal(currPrice.getPriceId(), GAP_UP_SIGNAL, currPrice.getTickerSymbol(), currPrice.getPriceDate()));
+				signalSvc.createSignal(new StockSignal(currPrice, GAP_UP_SIGNAL));
 			}
 			else {
 				if (this.gapDown(currPrice, prevPrice)) {
-					signalSvc.createSignal(new StockSignal(currPrice.getPriceId(), GAP_DN_SIGNAL, currPrice.getTickerSymbol(), currPrice.getPriceDate()));
+					signalSvc.createSignal(new StockSignal(currPrice, GAP_DN_SIGNAL));
 				}
 			}
 		}
@@ -65,7 +65,7 @@ public class PriceGap implements SignalScanner {
 	@Override
 	public void scan(String tickerSymbol) {
 		List<StockPrice> priceList = priceSvc.retrievePrices(tickerSymbol);
-		logger.debug("scan - found " + priceList.size() + " prices for " + tickerSymbol);
+		logger.info("scan - found " + priceList.size() + " prices for " + tickerSymbol);
 		while (priceList.size() >= 2) {
 			this.detectPriceGap(priceList.subList(0, 2));
 			priceList.remove(0);

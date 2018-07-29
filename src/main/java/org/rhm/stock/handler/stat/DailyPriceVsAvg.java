@@ -71,7 +71,8 @@ public class DailyPriceVsAvg implements StatisticCalculator {
 			double priceVsAvg = (price.getClosePrice().doubleValue() / avgPrice.getAvgPrice().doubleValue());
 			logger.debug("calcPriceVsAvg - " + price.getPriceId() + " price vs. " + days + " day average=" + priceVsAvg);
 			statSvc.createStatistic(
-				new StockStatistic(price.getPriceId(), statType, BigDecimal.valueOf(priceVsAvg), price.getTickerSymbol(), price.getPriceDate()));
+				new StockStatistic(price.getPriceId(), statType, BigDecimal.valueOf(priceVsAvg), price.getTickerSymbol(), price.getPriceDate())
+				,false);
 		}
 		else {
 			logger.debug("calcPriceVsAvg - unable to find " + days + " average price for " + price.getPriceId());
@@ -82,6 +83,7 @@ public class DailyPriceVsAvg implements StatisticCalculator {
 	public void calculate(List<StockPrice> priceList) {
 		StockPrice firstPrice = priceList.get(0);
 		this.init(firstPrice.getTickerSymbol());
+		logger.info("calculate - processing " + priceList.size() + " prices for " + firstPrice.getTickerSymbol());
 		for (StockPrice price: priceList) {
 			this.calcPriceVsAvg(price, 50, DLY_PRC_VS_50_DAY_AVG);
 			this.calcPriceVsAvg(price, 200, DLY_PRC_VS_200_DAY_AVG);

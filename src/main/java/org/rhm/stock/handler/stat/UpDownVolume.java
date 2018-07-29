@@ -44,12 +44,15 @@ public class UpDownVolume implements StatisticCalculator {
 		if (downVolume > 0) {
 			upDownRatio = upVolume / downVolume;
 			logger.debug("calcUpDownRatio - up/down ratio=" + upDownRatio);
-			statSvc.createStatistic(new StockStatistic(firstPrice.getPriceId(), UP_DOWN_VOL_50, BigDecimal.valueOf(upDownRatio), firstPrice.getTickerSymbol(), firstPrice.getPriceDate()));
+			statSvc.createStatistic(
+				new StockStatistic(firstPrice.getPriceId(), UP_DOWN_VOL_50, BigDecimal.valueOf(upDownRatio), firstPrice.getTickerSymbol(), firstPrice.getPriceDate())
+				,false);
 		}
 	}
 	
 	@Override
 	public void calculate(List<StockPrice> priceList) {
+		logger.info("calculate - processing " + priceList.size() + " prices for " + priceList.get(0).getTickerSymbol());
 		while (priceList.size() > 51) {
 			logger.debug("calculate - price list contains " + priceList.size() + " entries");
 			this.calcUpDownRatio(priceList.subList(0, 50));

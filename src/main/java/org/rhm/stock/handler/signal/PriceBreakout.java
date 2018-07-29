@@ -51,7 +51,7 @@ public class PriceBreakout implements SignalScanner {
 					+ "|" + price.getLowPrice().doubleValue() 
 					+ "; 4 week high=" + stat.getStatisticValue() + " [" + stat.getStatId() + "]");
 			if (price.getHighPrice().doubleValue() > stat.getStatisticValue().doubleValue()) {
-				signalSvc.createSignal(new StockSignal(price.getPriceId(), FOUR_WK_BRK_SIG, price.getTickerSymbol(), price.getPriceDate()));
+				signalSvc.createSignal(new StockSignal(price, FOUR_WK_BRK_SIG));
 				logger.debug("evaluatePrice - create new signal for " + price.getPriceId());
 			}
 		}
@@ -63,7 +63,7 @@ public class PriceBreakout implements SignalScanner {
 	@Override
 	public void scan(String tickerSymbol) {
 		List<StockStatistic> statList = statSvc.retrieveStatList(tickerSymbol, FOUR_WK_HIGH);
-		logger.debug("scan - found " + statList.size() + " statistics for " + tickerSymbol);
+		logger.info("scan - found " + statList.size() + " statistics for " + tickerSymbol);
 		List<StockPrice> priceList = priceSvc.retrievePrices(tickerSymbol);
 		for (StockPrice price: priceList) {
 			this.evaluatePrice(price, statList);

@@ -3,6 +3,7 @@ package org.rhm.stock.controller;
 import java.util.Date;
 import java.util.List;
 
+import org.rhm.stock.controller.dto.CompositePriceRequest;
 import org.rhm.stock.controller.dto.GeneralResponse;
 import org.rhm.stock.controller.dto.SignalRequest;
 import org.rhm.stock.domain.SignalType;
@@ -53,7 +54,7 @@ public class SignalController {
 	public List<StockSignal> findSignalsByDateAndType(@RequestBody SignalRequest request) {
 		String signalDate = request.getSignalDate();
 		if (signalDate == null) {
-			signalDate = StockUtil.dateToString(sigSvc.findMaxDate().getPriceDate());
+			signalDate = StockUtil.dateToString(sigSvc.findMaxDate().getPrice().getPriceDate());
 		}
 		else {
 			logger.debug(request.getSignalDate().toString());
@@ -67,6 +68,13 @@ public class SignalController {
 		return cPriceSvc.transformSignalList(signalList);
 	}
 
+	@PostMapping(value="/stocks/signal/cprice")
+	public CompositePrice findCompositPrice(CompositePriceRequest request) {
+		CompositePrice cPrice = null;
+		cPrice = cPriceSvc.compositePriceFactory(request.getPriceId());
+		return cPrice;
+	}
+	
 	@GetMapping(value="/stocks/signal/type")
 	public List<SignalType> signalTypeList() {
 		List<SignalType> signalTypeList = null;

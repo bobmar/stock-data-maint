@@ -27,10 +27,10 @@ public class CompositePriceService {
 		Map<String, List<StockSignal>> signalMap = new HashMap<String, List<StockSignal>>();
 		List<StockSignal> currSignalList = null;
 		for (StockSignal signal: signalList) {
-			currSignalList = signalMap.get(signal.getPriceId());
+			currSignalList = signalMap.get(signal.getPrice().getPriceId());
 			if (currSignalList == null) {
 				currSignalList = new ArrayList<StockSignal>();
-				signalMap.put(signal.getPriceId(), currSignalList);
+				signalMap.put(signal.getPrice().getPriceId(), currSignalList);
 			}
 			currSignalList.add(signal);
 		}

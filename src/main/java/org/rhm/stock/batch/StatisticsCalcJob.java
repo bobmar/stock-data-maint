@@ -87,12 +87,12 @@ public class StatisticsCalcJob implements BatchJob {
 	public BatchStatus run() {
 		BatchStatus status = new BatchStatus(this.getClass());
 		List<StockTicker> tickerList = this.tickerSvc.retrieveTickerList();
-		logger.debug("run - processing " + tickerList.size() + " tickers");
+		logger.info("run - processing " + tickerList.size() + " tickers");
 		int processedCnt = 0;
 		for (StockTicker ticker: tickerList) {
 			this.processTicker(ticker.getTickerSymbol());
 			processedCnt++;
-			logger.debug("run - " + processedCnt + ") " + ticker.getTickerSymbol() + " processed" );
+			logger.info("run - " + processedCnt + ") " + ticker.getTickerSymbol() + " processed" );
 		}
 		status.setCompletionMsg("Processed " + processedCnt + " tickers");
 		status.setJobClass(this.getClass().getName());

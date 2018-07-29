@@ -34,14 +34,19 @@ public class PriceChg implements StatisticCalculator {
 		logger.debug("calcChange - " + currPrice.getPriceId() + " closing price=" + currPrice.getClosePrice());
 		double quotient = priceChg.doubleValue() / prevPrice.getClosePrice().doubleValue();
 		BigDecimal pctChg = BigDecimal.valueOf(quotient * 100);
-		statSvc.createStatistic(new StockStatistic(currPrice.getPriceId(), statPctChgCode, pctChg, currPrice.getTickerSymbol(), currPrice.getPriceDate()));
+		statSvc.createStatistic(
+			new StockStatistic(currPrice.getPriceId(), statPctChgCode, pctChg, currPrice.getTickerSymbol(), currPrice.getPriceDate())
+			,false);
 		if (statPrcChgCode != null) {
-			statSvc.createStatistic(new StockStatistic(currPrice.getPriceId(), statPrcChgCode, priceChg, currPrice.getTickerSymbol(), currPrice.getPriceDate()));
+			statSvc.createStatistic(
+				new StockStatistic(currPrice.getPriceId(), statPrcChgCode, priceChg, currPrice.getTickerSymbol(), currPrice.getPriceDate())
+				,false);
 		}
 	}
 	
 	@Override
 	public void calculate(List<StockPrice> priceList) {
+		logger.info("calculate - processing " + priceList.size() + " prices for " + priceList.get(0).getTickerSymbol());
 		while (priceList.size() > 2) {
 			this.calcChange(priceList.get(0), priceList.get(1), STAT_DLY_PCT_CHG, STAT_DLY_PRC_CHG);
 			if (priceList.size() > 5) {
