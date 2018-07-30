@@ -54,7 +54,7 @@ public class SignalController {
 	public List<StockSignal> findSignalsByDateAndType(@RequestBody SignalRequest request) {
 		String signalDate = request.getSignalDate();
 		if (signalDate == null) {
-			signalDate = StockUtil.dateToString(sigSvc.findMaxDate().getPrice().getPriceDate());
+			signalDate = StockUtil.dateToString(sigSvc.findMaxDate().getPriceDate());
 		}
 		else {
 			logger.debug(request.getSignalDate().toString());
