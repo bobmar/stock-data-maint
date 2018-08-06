@@ -58,6 +58,7 @@ public class PriceTrend implements SignalScanner {
 		else {
 			if (upCnt == 5) {
 				price = priceSvc.findStockPrice(firstStat.getPriceId());
+				signalSvc.createSignal(new StockSignal(price, UP_4_WEEKS_SIGNAL));
 				signalSvc.createSignal(new StockSignal(price, UP_5_WEEKS_SIGNAL));
 				logger.debug("detectConsecutiveUpWeeks - 5 consecutive weeks up");
 			}

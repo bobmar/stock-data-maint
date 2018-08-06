@@ -20,8 +20,8 @@ public class CompositePriceService {
 	private PriceRepo priceRepo = null;
 	@Autowired
 	private SignalService signalSvc = null;
-//	@Autowired
-//	private AveragePriceService avgPriceSvc = null;
+	@Autowired
+	private AveragePriceService avgPriceSvc = null;
 	
 	private Map<String, List<StockSignal>> signalListToMap(List<StockSignal> signalList) {
 		Map<String, List<StockSignal>> signalMap = new HashMap<String, List<StockSignal>>();
@@ -76,7 +76,7 @@ public class CompositePriceService {
 		cPrice.setSignalList(signalSvc.findSignalsByPriceId(priceId));
 		cPrice.setStatisticList(statRepo.findByPriceId(priceId));
 		cPrice.setTickerSymbol(cPrice.getPrice().getTickerSymbol());
-//		cPrice.setAvgPrices(avgPriceSvc.findRecentAvgPriceList(cPrice.getTickerSymbol()));
+		cPrice.setAvgPrices(avgPriceSvc.findRecentAvgPriceList(cPrice.getTickerSymbol()));
 		return cPrice;
 	}
 	

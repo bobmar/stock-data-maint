@@ -21,6 +21,20 @@ public class StockSignal {
 	public StockSignal() {
 		
 	}
+	
+	public StockSignal(StockSignal signal) {
+		this.signalId = signal.getSignalId();
+		this.signalType = signal.getSignalType();
+		this.priceId = signal.getPriceId();
+		this.tickerSymbol = signal.getTickerSymbol();
+		this.priceDate = signal.getPriceDate();
+		this.closePrice = signal.getClosePrice();
+		this.openPrice = signal.getOpenPrice();
+		this.lowPrice = signal.getLowPrice();
+		this.highPrice = signal.getHighPrice();
+		this.volume = signal.getVolume();
+	}
+	
 	public StockSignal(StockPrice price, String signalType) {
 		this.priceId = price.getPriceId();
 		this.tickerSymbol = price.getTickerSymbol();
@@ -93,4 +107,5 @@ public class StockSignal {
 	public void setVolume(Long volume) {
 		this.volume = volume;
 	}
+	
 }

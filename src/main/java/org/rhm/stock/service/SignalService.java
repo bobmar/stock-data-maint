@@ -1,12 +1,14 @@
 package org.rhm.stock.service;
 
-import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.rhm.stock.domain.SignalType;
 import org.rhm.stock.domain.StockSignal;
+import org.rhm.stock.dto.StockSignalDisplay;
 import org.rhm.stock.repository.SignalRepo;
 import org.rhm.stock.repository.SignalTypeRepo;
 import org.rhm.stock.util.StockUtil;
@@ -64,6 +66,37 @@ public class SignalService {
 	
 	public List<StockSignal> findSignalsByTypeAndDate(String signalType, String priceDate) {
 		return this.findSignalsByTypeAndDate(signalType, StockUtil.stringToDate(priceDate));
+	}
+	
+	private List<String> extractTickerFromSignal(List<StockSignal> signalList) {
+		List<String> tickerList = new ArrayList<String>();
+		for (StockSignal signal: signalList) {
+			tickerList.add(signal.getTickerSymbol());
+		}
+		logger.debug("extractTickerFromSignal - " + tickerList.toString());
+		return tickerList;
+	}
+	
+	public List<StockSignalDisplay> findSignalsByTypeAndDate(String signalType, String overlaySignalType, String priceDate) {
+		logger.debug("findSignalsByTypeAndDate - signalType=" + signalType + "; overlaySignalType=" + overlaySignalType + "; priceDate=" + priceDate);
+		List<StockSignal> baseSignalList = this.findSignalsByTypeAndDate(signalType, StockUtil.stringToDate(priceDate));
+		List<String> overlayTickerList = 
+				this.extractTickerFromSignal(this.findSignalsByTypeAndDate(overlaySignalType, StockUtil.stringToDate(priceDate)));
+		logger.debug("findSignalsByTypeAndDate - " + overlayTickerList.size() + " tickers found for " + overlaySignalType + " signals");
+		List<StockSignalDisplay> mergedSignalList = new ArrayList<StockSignalDisplay>();
+		StockSignalDisplay signalDisplay = null;
+		for (StockSignal signal: baseSignalList) {
+			signalDisplay = new StockSignalDisplay(signal);
+			if (overlayTickerList.contains(signalDisplay.getTickerSymbol())) {
+				signalDisplay.setMultiList(true);
+				logger.debug("findSignalsByTypeAndDate - multiList set to true");
+			}
+			else {
+				signalDisplay.setMultiList(false);
+			}
+			mergedSignalList.add(signalDisplay);
+		}
+		return mergedSignalList;
 	}
 	
 	public List<StockSignal> findSignalsByTypeAndDate(String signalType, Date priceDate) {

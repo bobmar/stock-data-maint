@@ -54,7 +54,6 @@ public class PriceLoaderJob implements BatchJob {
 		BatchStatus status = new BatchStatus(this.getClass());
 		List<StockTicker> tickerList = tickerSvc.retrieveTickerList();
 		logger.debug("run - processing " + tickerList.size() + " tickers");
-		status.setFinishDate(new Date());
 		if (this.processTickers(tickerList) == 0) {
 			status.setCompletionMsg("Prices loaded successfully - " + tickerList.size() + " tickers processed");
 			status.setSuccess(true);
@@ -63,6 +62,7 @@ public class PriceLoaderJob implements BatchJob {
 			status.setCompletionMsg("Price loading failed");
 			status.setSuccess(false);
 		}
+		status.setFinishDate(new Date());
 		return status;
 	}
 

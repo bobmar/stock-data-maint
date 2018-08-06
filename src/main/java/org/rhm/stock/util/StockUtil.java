@@ -6,19 +6,15 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class StockUtil {
-	private static final DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-	
+	private static final String YYYY_MM_DD = "yyyy-MM-dd";
 	public static Date toMongoDate(Date inDate) throws ParseException {
-//		Calendar cal = Calendar.getInstance();
-//		cal.setTime(inDate);
-//		cal.setTimeZone(TimeZone.getTimeZone("UTC"));
-//		cal.set(Calendar.HOUR_OF_DAY, 0);
-//		return cal.getTime();
+		DateFormat df = new SimpleDateFormat(YYYY_MM_DD);
 		String dateStr = df.format(inDate);
 		return df.parse(dateStr);
 	}
 	
 	public static Date stringToDate(String dateStr) {
+		DateFormat df = new SimpleDateFormat(YYYY_MM_DD);
 		Date dateObj = null;
 		try {
 			dateObj = df.parse(dateStr);
@@ -30,6 +26,7 @@ public class StockUtil {
 	}
 	
 	public static String dateToString(Date date) {
+		DateFormat df = new SimpleDateFormat(YYYY_MM_DD);
 		String dateStr = null;
 		dateStr = df.format(date);
 		return dateStr;

@@ -9,6 +9,7 @@ import org.rhm.stock.controller.dto.SignalRequest;
 import org.rhm.stock.domain.SignalType;
 import org.rhm.stock.domain.StockSignal;
 import org.rhm.stock.dto.CompositePrice;
+import org.rhm.stock.dto.StockSignalDisplay;
 import org.rhm.stock.service.CompositePriceService;
 import org.rhm.stock.service.SignalService;
 import org.rhm.stock.util.StockUtil;
@@ -60,6 +61,11 @@ public class SignalController {
 			logger.debug(request.getSignalDate().toString());
 		}
 		return sigSvc.findSignalsByTypeAndDate(request.getSignalType(), signalDate);
+	}
+	
+	@PostMapping(value="/stocks/signal/datetype/merged")
+	public List<StockSignalDisplay> findMergedSignalsByDateAndType(@RequestBody SignalRequest request) {
+		return sigSvc.findSignalsByTypeAndDate(request.getSignalType(), request.getOverlaySignalType(), request.getSignalDate());
 	}
 	
 	@RequestMapping(value="/stocks/signal/list/multi", method=RequestMethod.POST, consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)

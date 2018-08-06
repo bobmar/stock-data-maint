@@ -1,6 +1,5 @@
 package org.rhm.stock.controller.dto;
 
-import java.util.Date;
 import java.util.List;
 
 public class SignalRequest {
@@ -9,6 +8,7 @@ public class SignalRequest {
 	private Integer lookBackDays = null;
 	private String signalType = null;
 	private String signalDate = null;
+	private String overlaySignalType = null;
 
 	public List<String> getSignalTypeList() {
 		return signalTypeList;
@@ -40,6 +40,14 @@ public class SignalRequest {
 
 	public void setSignalDate(String priceDate) {
 		this.signalDate = priceDate;
+	}
+
+	public String getOverlaySignalType() {
+		return overlaySignalType;
+	}
+
+	public void setOverlaySignalType(String overlaySignalType) {
+		this.overlaySignalType = overlaySignalType;
 	}
 	
 
