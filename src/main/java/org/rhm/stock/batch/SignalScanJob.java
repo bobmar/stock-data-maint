@@ -7,6 +7,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 
 import org.rhm.stock.domain.StockTicker;
+import org.rhm.stock.handler.signal.DailyVsAvgScanner;
 import org.rhm.stock.handler.signal.SignalScanner;
 import org.rhm.stock.service.TickerService;
 import org.slf4j.Logger;
@@ -34,6 +35,9 @@ public class SignalScanJob implements BatchJob {
 	@Qualifier("stdDeviation")
 	private SignalScanner stdDeviation = null;
 	@Autowired
+	@Qualifier("dailyVsAvgCrossover")
+	private SignalScanner dlyVsAvgCrossover = null;
+	@Autowired
 	private TickerService tickerSvc = null;
 	private Logger logger = LoggerFactory.getLogger(SignalScanJob.class);
 	private List<SignalScanner> scannerList = null;
@@ -45,6 +49,7 @@ public class SignalScanJob implements BatchJob {
 		scannerList.add(closeNearHigh);
 		scannerList.add(priceTrend);
 		scannerList.add(stdDeviation);
+		scannerList.add(dlyVsAvgCrossover);
 		logger.debug("scannerList - loaded " + scannerList.size() + " signal scanners");
 		return scannerList;
 	}
