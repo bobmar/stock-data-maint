@@ -104,7 +104,11 @@ public class SignalService {
 		return signalRepo.findBySignalTypeAndPriceDateOrderByTickerSymbol(signalType, priceDate);
 	}
 	
-	public int deleteSignalsBefore(Date deleteBefore) {
-		return signalRepo.deleteSignalOlderThan(deleteBefore);
+	public List<StockSignal> findSignalsByTickerAndDate(String tickerSymbol, Date priceDate) {
+		return signalRepo.findByTickerSymbolAndPriceDateOrderBySignalType(tickerSymbol, priceDate);
+	}
+	
+	public long deleteOlderThan(Date deleteBefore) {
+		return signalRepo.deleteOlderThan(deleteBefore);
 	}
 }

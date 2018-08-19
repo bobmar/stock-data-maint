@@ -153,4 +153,8 @@ public class StatisticService {
 				.collect(Collectors.toList());
 	}
 	
+	public long deleteOlderThan(Date deleteBefore) {
+		return statRepo.deleteOlderThan(deleteBefore);
+	}
+	
 }

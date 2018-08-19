@@ -31,10 +31,10 @@ public class SignalCustomRepoImpl implements SignalCustomRepo {
 	}
 	
 	@Override
-	public int deleteSignalOlderThan(Date deleteBefore) {
+	public long deleteOlderThan(Date deleteBefore) {
 		CriteriaDefinition crit = Criteria.where("priceDate").lt(deleteBefore);
-		DeleteResult result = mongoTemplate.remove(Query.query(crit));
-		return (int)result.getDeletedCount();
+		DeleteResult result = mongoTemplate.remove(Query.query(crit), StockSignal.class);
+		return result.getDeletedCount();
 	}
 
 }

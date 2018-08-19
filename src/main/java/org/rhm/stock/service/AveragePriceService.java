@@ -1,5 +1,6 @@
 package org.rhm.stock.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -39,5 +40,9 @@ public class AveragePriceService {
 				.sorted((o1,o2)->{return o1.getPriceId().compareTo(o2.getPriceId()) * -1;})
 				.collect(Collectors.toList());
 		return avgPriceList;
+	}
+	
+	public long deleteOlderThan(Date deleteBefore) {
+		return avgPriceRepo.deleteOlderThan(deleteBefore);
 	}
 }

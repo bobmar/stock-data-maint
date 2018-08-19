@@ -10,5 +10,6 @@ public interface SignalRepo extends MongoRepository<StockSignal, String>, Signal
 	public List<StockSignal> findBySignalTypeOrderByPriceId(String signalType);
 	public StockSignal findTopByOrderByPriceDateDesc();
 	public List<StockSignal> findBySignalTypeAndPriceDateOrderByTickerSymbol(String signalType, Date priceDate);
+	public List<StockSignal> findByTickerSymbolAndPriceDateOrderBySignalType(String tickerSymbol, Date priceDate);
 	public List<StockSignal> findByPriceId(String priceId);
 }

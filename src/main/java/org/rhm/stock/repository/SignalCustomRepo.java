@@ -7,5 +7,5 @@ import org.rhm.stock.domain.StockSignal;
 
 public interface SignalCustomRepo {
 	public List<StockSignal> findSignalsByType(List<String> signalTypeList, int lookBackDays);
-	public int deleteSignalOlderThan(Date deleteBefore);
+	public long deleteOlderThan(Date deleteBefore);
 }

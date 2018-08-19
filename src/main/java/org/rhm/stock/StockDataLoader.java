@@ -28,6 +28,10 @@ public class StockDataLoader implements CommandLineRunner {
 	@Autowired
 	@Qualifier("statsCalcJob")
 	private BatchJob statCalc = null;
+	@Autowired
+	@Qualifier("pruner")
+	private BatchJob pruner = null;
+
 	private Logger logger = LoggerFactory.getLogger(StockDataLoader.class);
 	
 	public static void main(String...args) {
@@ -52,6 +56,9 @@ public class StockDataLoader implements CommandLineRunner {
 				break;
 			case "STATSCALC":
 				jobList.add(statCalc);
+				break;
+			case "PRUNER":
+				jobList.add(pruner);
 				break;
 			}
 		}
