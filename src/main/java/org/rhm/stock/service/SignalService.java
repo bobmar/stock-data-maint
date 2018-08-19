@@ -103,4 +103,8 @@ public class SignalService {
 		logger.debug("findSignalsByTypeAndDate - signalType:" + signalType + ";priceDate:" + priceDate);
 		return signalRepo.findBySignalTypeAndPriceDateOrderByTickerSymbol(signalType, priceDate);
 	}
+	
+	public int deleteSignalsBefore(Date deleteBefore) {
+		return signalRepo.deleteSignalOlderThan(deleteBefore);
+	}
 }

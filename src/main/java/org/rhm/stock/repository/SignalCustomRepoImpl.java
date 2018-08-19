@@ -1,6 +1,7 @@
 package org.rhm.stock.repository;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.rhm.stock.domain.StockSignal;
@@ -11,6 +12,8 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.CriteriaDefinition;
 import org.springframework.data.mongodb.core.query.Query;
+
+import com.mongodb.client.result.DeleteResult;
 
 public class SignalCustomRepoImpl implements SignalCustomRepo {
 	@Autowired
@@ -25,6 +28,13 @@ public class SignalCustomRepoImpl implements SignalCustomRepo {
 		logger.debug("findSignalsByType - " + crit.getCriteriaObject().toJson());
 		List<StockSignal> signalList = mongoTemplate.find(Query.query(crit), StockSignal.class);
 		return signalList;
+	}
+	
+	@Override
+	public int deleteSignalOlderThan(Date deleteBefore) {
+		CriteriaDefinition crit = Criteria.where("priceDate").lt(deleteBefore);
+		DeleteResult result = mongoTemplate.remove(Query.query(crit));
+		return (int)result.getDeletedCount();
 	}
 
 }

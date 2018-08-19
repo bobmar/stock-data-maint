@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
-@Qualifier("prunePrice")
-public class PrunePrice implements MaintHandler {
+@Qualifier("pruneAvgPrice")
+public class PruneAvgPrice implements MaintHandler {
 
 	@Override
 	public void prune(Date deleteBefore) {
