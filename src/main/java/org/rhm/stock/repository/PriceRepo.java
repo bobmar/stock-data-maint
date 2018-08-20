@@ -8,4 +8,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 public interface PriceRepo extends MongoRepository<StockPrice, String>, PriceCustomRepo {
 	public List<StockPrice> findByTickerSymbol(String tickerSymbol);
 	public StockPrice findTopByTickerSymbolOrderByPriceDateDesc(String tickerSymbol);
+	public List<StockPrice> findTop60ByTickerSymbolOrderByPriceDateDesc(String tickerSymbol);
 }

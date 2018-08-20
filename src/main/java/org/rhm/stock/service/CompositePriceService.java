@@ -1,10 +1,13 @@
 package org.rhm.stock.service;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.rhm.stock.domain.StockPrice;
 import org.rhm.stock.domain.StockSignal;
 import org.rhm.stock.dto.CompositePrice;
 import org.rhm.stock.repository.PriceRepo;
@@ -77,7 +80,25 @@ public class CompositePriceService {
 		cPrice.setStatisticList(statRepo.findByPriceId(priceId));
 		cPrice.setTickerSymbol(cPrice.getPrice().getTickerSymbol());
 		cPrice.setAvgPrices(avgPriceSvc.findRecentAvgPriceList(cPrice.getTickerSymbol()));
+		cPrice.setHistSignals(this.historicalSignalMap(cPrice.getPrice()));
 		return cPrice;
+	}
+	
+	private Map<String,List<StockSignal>> historicalSignalMap(StockPrice price) {
+		Map<String,List<StockSignal>> histSignalMap = new HashMap<String,List<StockSignal>>();
+		List<StockPrice> histPriceList = priceRepo.findTop60ByTickerSymbolOrderByPriceDateDesc(price.getTickerSymbol());
+		StockPrice workingPrice = null;
+		List<StockSignal> workingSignals = null;
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		Integer[] lookbackDays = {20,40,60};
+		for (Integer lookbackDay: lookbackDays) {
+			if (histPriceList.size() >= lookbackDay) {
+				workingPrice = histPriceList.get(lookbackDay - 1);
+				workingSignals = signalSvc.findSignalsByPriceId(workingPrice.getPriceId());
+				histSignalMap.put(df.format(workingPrice.getPriceDate()), workingSignals);
+			}
+		}
+		return histSignalMap;
 	}
 	
 }
