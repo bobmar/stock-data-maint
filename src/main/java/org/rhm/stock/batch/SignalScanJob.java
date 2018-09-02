@@ -38,6 +38,9 @@ public class SignalScanJob implements BatchJob {
 	@Qualifier("dailyVsAvgCrossover")
 	private SignalScanner dlyVsAvgCrossover = null;
 	@Autowired
+	@Qualifier("deMark")
+	private SignalScanner deMark = null;
+	@Autowired
 	private TickerService tickerSvc = null;
 	private Logger logger = LoggerFactory.getLogger(SignalScanJob.class);
 	private List<SignalScanner> scannerList = null;
@@ -50,6 +53,7 @@ public class SignalScanJob implements BatchJob {
 		scannerList.add(priceTrend);
 		scannerList.add(stdDeviation);
 		scannerList.add(dlyVsAvgCrossover);
+		scannerList.add(deMark);
 		logger.debug("scannerList - loaded " + scannerList.size() + " signal scanners");
 		return scannerList;
 	}

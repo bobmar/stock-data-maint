@@ -91,11 +91,23 @@ public class CompositePriceService {
 		List<StockSignal> workingSignals = null;
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		Integer[] lookbackDays = {20,40,60};
+		String mapKey = null;
 		for (Integer lookbackDay: lookbackDays) {
 			if (histPriceList.size() >= lookbackDay) {
 				workingPrice = histPriceList.get(lookbackDay - 1);
 				workingSignals = signalSvc.findSignalsByPriceId(workingPrice.getPriceId());
-				histSignalMap.put(df.format(workingPrice.getPriceDate()), workingSignals);
+				switch (lookbackDay) {
+				case 20:
+					mapKey = "fourWeek";
+					break;
+				case 40:
+					mapKey = "eightWeek";
+					break;
+				case 60:
+					mapKey = "twelveWeek";
+					break;
+				}
+				histSignalMap.put(mapKey, workingSignals);
 			}
 		}
 		return histSignalMap;

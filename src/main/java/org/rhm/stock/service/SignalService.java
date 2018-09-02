@@ -1,5 +1,6 @@
 package org.rhm.stock.service;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -65,7 +66,14 @@ public class SignalService {
 	}
 	
 	public List<StockSignal> findSignalsByTypeAndDate(String signalType, String priceDate) {
-		return this.findSignalsByTypeAndDate(signalType, StockUtil.stringToDate(priceDate));
+		List<StockSignal> signalList = null;
+		try {
+			signalList = this.findSignalsByTypeAndDate(signalType, StockUtil.stringToDate(priceDate));
+		} 
+		catch (ParseException e) {
+			logger.warn("findSignalsByTypeAndDate - " + e.getMessage());
+		}
+		return signalList;
 	}
 	
 	private List<String> extractTickerFromSignal(List<StockSignal> signalList) {
@@ -79,9 +87,20 @@ public class SignalService {
 	
 	public List<StockSignalDisplay> findSignalsByTypeAndDate(String signalType, String overlaySignalType, String priceDate) {
 		logger.debug("findSignalsByTypeAndDate - signalType=" + signalType + "; overlaySignalType=" + overlaySignalType + "; priceDate=" + priceDate);
-		List<StockSignal> baseSignalList = this.findSignalsByTypeAndDate(signalType, StockUtil.stringToDate(priceDate));
-		List<String> overlayTickerList = 
-				this.extractTickerFromSignal(this.findSignalsByTypeAndDate(overlaySignalType, StockUtil.stringToDate(priceDate)));
+		List<StockSignal> baseSignalList = null;
+		try {
+			baseSignalList = this.findSignalsByTypeAndDate(signalType, StockUtil.stringToDate(priceDate));
+		} 
+		catch (ParseException e) {
+			logger.warn("findSignalsByTypeAndDate (base) - " + e.getMessage());
+		}
+		List<String> overlayTickerList = null;
+		try {
+			overlayTickerList =	this.extractTickerFromSignal(this.findSignalsByTypeAndDate(overlaySignalType, StockUtil.stringToDate(priceDate)));
+		} 
+		catch (ParseException e) {
+			logger.warn("findSignalsByTypeAndDate (overlay) - " + e.getMessage());
+		}
 		logger.debug("findSignalsByTypeAndDate - " + overlayTickerList.size() + " tickers found for " + overlaySignalType + " signals");
 		List<StockSignalDisplay> mergedSignalList = new ArrayList<StockSignalDisplay>();
 		StockSignalDisplay signalDisplay = null;

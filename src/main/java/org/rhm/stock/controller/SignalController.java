@@ -75,7 +75,7 @@ public class SignalController {
 	}
 
 	@PostMapping(value="/stocks/signal/cprice")
-	public CompositePrice findCompositPrice(CompositePriceRequest request) {
+	public CompositePrice findCompositPrice(@RequestBody CompositePriceRequest request) {
 		CompositePrice cPrice = null;
 		cPrice = cPriceSvc.compositePriceFactory(request.getPriceId());
 		return cPrice;
