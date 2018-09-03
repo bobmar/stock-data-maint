@@ -130,4 +130,8 @@ public class SignalService {
 	public long deleteOlderThan(Date deleteBefore) {
 		return signalRepo.deleteOlderThan(deleteBefore);
 	}
+	
+	public List<StockSignal> findSignalsByTicker(String tickerSymbol) {
+		return signalRepo.findByTickerSymbolOrderByPriceDateDesc(tickerSymbol);
+	}
 }

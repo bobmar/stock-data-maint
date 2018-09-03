@@ -41,6 +41,9 @@ public class SignalScanJob implements BatchJob {
 	@Qualifier("deMark")
 	private SignalScanner deMark = null;
 	@Autowired
+	@Qualifier("signalCombo")
+	private SignalScanner signalCombo = null;
+	@Autowired
 	private TickerService tickerSvc = null;
 	private Logger logger = LoggerFactory.getLogger(SignalScanJob.class);
 	private List<SignalScanner> scannerList = null;
@@ -54,6 +57,7 @@ public class SignalScanJob implements BatchJob {
 		scannerList.add(stdDeviation);
 		scannerList.add(dlyVsAvgCrossover);
 		scannerList.add(deMark);
+		scannerList.add(signalCombo);
 		logger.debug("scannerList - loaded " + scannerList.size() + " signal scanners");
 		return scannerList;
 	}
