@@ -22,6 +22,7 @@ public class DeMark implements SignalScanner {
 	private Logger logger = LoggerFactory.getLogger(DeMark.class);
 	private static final String BEARISH_PRICE_FLIP = "BEARFLIP";
 	private static final String BUY_SETUP = "BUYSETUP";
+	private static final String PERFECTED_BUY_SETUP = "PBUYSETUP";
 	
 	private boolean bearishPriceFlip(List<StockPrice> priceList) {
 		int conditionFound = 0, currIdx = 0, earlierIdx = 4;
@@ -58,13 +59,37 @@ public class DeMark implements SignalScanner {
 		
 		return conditionFound == 9;
 	}
-	 
+	
+	private boolean perfectedBuySetup(List<StockPrice> priceList) {
+		int conditionFound = 0;
+		StockPrice currPrice = null, earlierPrice = null;
+		for (int i = 0; i < 2; i++) {
+			currPrice = priceList.get(i);
+			earlierPrice = priceList.get(2);
+			if (currPrice.getLowPrice().compareTo(earlierPrice.getLowPrice()) == -1) {
+				conditionFound++;
+			}
+			earlierPrice = priceList.get(3);
+			if (currPrice.getLowPrice().compareTo(earlierPrice.getLowPrice()) == -1) {
+				conditionFound++;
+			}
+			
+		}
+		
+		return conditionFound == 4;
+	}
+	
 	private void detectDeMarkIndicators(List<StockPrice> priceList) {
 		if (this.bearishPriceFlip(priceList)) {
 			this.signalSvc.createSignal(new StockSignal(priceList.get(0), BEARISH_PRICE_FLIP));
 		}
 		if (this.buySetup(priceList)) {
-			this.signalSvc.createSignal(new StockSignal(priceList.get(0), BUY_SETUP));
+			if (this.perfectedBuySetup(priceList)) {
+				this.signalSvc.createSignal(new StockSignal(priceList.get(0), PERFECTED_BUY_SETUP));
+			}
+			else {
+				this.signalSvc.createSignal(new StockSignal(priceList.get(0), BUY_SETUP));
+			}
 		}
 	}
 	
