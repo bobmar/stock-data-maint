@@ -23,7 +23,8 @@ public class DailyVsAvgScanner implements SignalScanner {
 	private SignalService signalSvc = null;
 	@Autowired
 	private PriceService priceSvc = null;
-	private static final String SIGNAL_DLYV50X = "DYV50X";
+	private static final String SIGNAL_DLYV50X_UP = "DYV50XUP";
+	private static final String SIGNAL_DLYV50X_DN = "DYV50XDN";
 	private static final String STAT_DYV50 = "DYPRCV50A";
 	private Logger logger = LoggerFactory.getLogger(DailyVsAvgScanner.class);
 	
@@ -43,12 +44,28 @@ public class DailyVsAvgScanner implements SignalScanner {
 		}
 	}
 	
+	private void evaluateCrossDown(List<StockStatistic> statList, String signalType) {
+		StockPrice price = null;
+		StockSignal signal = null;
+		if (statList.size() == 4) {
+			if (statList.get(0).getStatisticValue().doubleValue() < 1 && statList.get(1).getStatisticValue().doubleValue() < 1) {
+				if (statList.get(2).getStatisticValue().doubleValue() > 1 && statList.get(3).getStatisticValue().doubleValue() > 1) {
+					price = priceSvc.findStockPrice(statList.get(1).getPriceId());
+					signal = new StockSignal(price, signalType);
+					signalSvc.createSignal(signal);
+					logger.debug("processStats - created " + signalType + " signal for " + signal.getPriceId());
+				}
+			}
+		}
+	}
+
 	@Override
 	public void scan(String tickerSymbol) {
 		List<StockStatistic> statList = statSvc.retrieveStatList(tickerSymbol, STAT_DYV50);
 		logger.info("scan - found " + statList.size() + " stats for " + tickerSymbol);
 		while (statList.size() > 4) {
-			this.evaluateCrossUp(statList.subList(0, 4), SIGNAL_DLYV50X);
+			this.evaluateCrossUp(statList.subList(0, 4), SIGNAL_DLYV50X_UP);
+			this.evaluateCrossDown(statList.subList(0, 4), SIGNAL_DLYV50X_DN);
 			statList.remove(0);
 		}
 	}

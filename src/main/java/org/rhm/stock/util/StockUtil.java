@@ -13,15 +13,10 @@ public class StockUtil {
 		return df.parse(dateStr);
 	}
 	
-	public static Date stringToDate(String dateStr) {
+	public static Date stringToDate(String dateStr) throws ParseException {
 		DateFormat df = new SimpleDateFormat(YYYY_MM_DD);
 		Date dateObj = null;
-		try {
-			dateObj = df.parse(dateStr);
-		} 
-		catch (ParseException e) {
-			e.printStackTrace();
-		}
+		dateObj = df.parse(dateStr);
 		return dateObj;
 	}
 	

@@ -1,6 +1,7 @@
 package org.rhm.stock.handler.signal;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.rhm.stock.domain.AveragePrice;
 import org.rhm.stock.domain.StockAveragePrice;
@@ -34,6 +35,7 @@ public class PriceTrend implements SignalScanner {
 	private static final String UP_5_WEEKS_SIGNAL = "5WKUP";
 	private static final String PRICE_UPTREND_SIGNAL = "UPTREND";
 	private static final String PRICE_DNTREND_SIGNAL = "DNTREND";
+	private static final String VOL_UPTREND_SIGNAL = "VOLUPTREND";
 	private Logger logger = LoggerFactory.getLogger(PriceTrend.class);
 	
 	private void detectConsecutiveUpWeeks(List<StockStatistic> weeklyPriceChgList) {
@@ -69,19 +71,23 @@ public class PriceTrend implements SignalScanner {
  		boolean trend = false;
  		int avgPriceCnt = 0;
  		double ap10Day = 0, ap50Day = 0, ap200Day = 0;
+ 		int av10Day = 0, av50Day = 0, av200Day = 0;
  		StockPrice price = null;
 		for (AveragePrice ap: avgPrice.getAvgList()) {
 			switch (ap.getDaysCnt()) {
 			case 10:
 				ap10Day = ap.getAvgPrice().doubleValue();
+				av10Day = ap.getAvgVolume().intValue();
 				avgPriceCnt++;
 				break;
 			case 50:
 				ap50Day = ap.getAvgPrice().doubleValue();
+				av50Day = ap.getAvgVolume().intValue();
 				avgPriceCnt++;
 				break;
 			case 200:
 				ap200Day = ap.getAvgPrice().doubleValue();
+				av200Day = ap.getAvgVolume().intValue();
 				avgPriceCnt++;
 				break;
 			}
@@ -109,6 +115,22 @@ public class PriceTrend implements SignalScanner {
  			price = priceSvc.findStockPrice(avgPrice.getPriceId());
  			signalSvc.createSignal(new StockSignal(price, trendDirection));
  			logger.debug("detectTrend - created signal " + trendDirection + " for " + avgPrice.getPriceId());
+ 		}
+ 		if (trendDirection.equals(PRICE_UPTREND_SIGNAL)) {
+ 	 		if (av10Day > av50Day && av50Day > av200Day) {
+ 	 			if (price == null) {
+ 	 				logger.debug("detectTrend - looking for price: " + avgPrice.getPriceId());
+ 	 				try {
+ 	 	 				price = priceSvc.findStockPrice(avgPrice.getPriceId());
+ 	 				}
+ 	 				catch (NoSuchElementException e) {
+ 	 					logger.error("detectTrend - " + avgPrice.getPriceId() + " " + e.getMessage());
+ 	 				}
+ 	 			}
+ 	 			if (price != null) {
+ 	 	 			signalSvc.createSignal(new StockSignal(price, VOL_UPTREND_SIGNAL));
+ 	 			}
+ 	 		}
  		}
 	}
 	

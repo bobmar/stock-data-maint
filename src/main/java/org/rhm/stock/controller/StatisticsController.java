@@ -1,5 +1,6 @@
 package org.rhm.stock.controller;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -72,7 +73,12 @@ public class StatisticsController {
 			statDate = statSvc.findMaxDate().getPriceDate();
 		}
 		else {
-			statDate = StockUtil.stringToDate(searchDate);
+			try {
+				statDate = StockUtil.stringToDate(searchDate);
+			} 
+			catch (ParseException e) {
+				logger.warn("retrieveStatListByDate - " + e.getMessage());
+			}
 		}
 		logger.debug("retrieveStatListByDate - statDate=" + statDate.toString());
 		StatListResponse response = new StatListResponse();
@@ -112,7 +118,12 @@ public class StatisticsController {
 			statDate = statSvc.findMaxDate().getPriceDate();
 		}
 		else {
-			statDate = StockUtil.stringToDate(searchDate);
+			try {
+				statDate = StockUtil.stringToDate(searchDate);
+			} 
+			catch (ParseException e) {
+				logger.warn("retrieveBullBearStatList - " + e.getMessage());
+			}
 		}
 		logger.debug("retrieveBullBearStatList - " + statDate.toString() + "/" + request.getStatCode());
 		List<StockStatistic> statList = statSvc.retrieveStatList(statDate, request.getStatCode());
