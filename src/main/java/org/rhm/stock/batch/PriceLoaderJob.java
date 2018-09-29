@@ -24,7 +24,7 @@ public class PriceLoaderJob implements BatchJob {
 	
 	private boolean processTicker(String tickerSymbol) {
 		boolean success = false;
-		List<StockPrice> priceList = priceSvc.retrieveSourcePrices(tickerSymbol, 365);
+		List<StockPrice> priceList = priceSvc.retrieveSourcePrices(tickerSymbol, 30);
 		logger.debug("processTicker - found " + priceList.size() + " prices for " + tickerSymbol);
 		if (priceList != null && priceList.size() > 0) {
 			if (priceSvc.saveStockPrice(priceList) != null) {

@@ -38,14 +38,14 @@ public class TickerController {
 		response.setRequestDate(new Date());
 		return response;
 	}
-	
+
 	@CrossOrigin
 	@PostMapping(value="/stocks/ticker/upload")
 	public TickerUploadResponse uploadTickers(@RequestBody FileContent file) {
 		TickerUploadResponse response = new TickerUploadResponse();
 		logger.info("uploadTickers - " + file.getFileContent().substring(0, 50));
-		String encodedStr = file.getFileContent().substring(13);
-		byte[] decodedStr = Base64.getDecoder().decode(encodedStr);
+		String[] uploadPart = file.getFileContent().split(",");
+		byte[] decodedStr = Base64.getDecoder().decode(uploadPart[1]);
 		List<TickerInfo> tickerInfoList = tickerSvc.retrieveTickerInfo(decodedStr);
 		List<TickerInfo> keepList = new ArrayList<TickerInfo>();
 		List<TickerInfo> discardList = new ArrayList<TickerInfo>();
