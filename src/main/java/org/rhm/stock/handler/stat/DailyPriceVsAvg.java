@@ -21,6 +21,7 @@ public class DailyPriceVsAvg implements StatisticCalculator {
 
 	private static final String DLY_PRC_VS_50_DAY_AVG = "DYPRCV50A";
 	private static final String DLY_PRC_VS_200_DAY_AVG = "DYPRCV200A";
+	private static final String NET_ABV_BLW_50_DAY_AVG = "NETABVBLW50";
 
 	@Autowired
 	private AveragePriceService avgSvc = null;
@@ -79,6 +80,34 @@ public class DailyPriceVsAvg implements StatisticCalculator {
 		}
 	}
 	
+	private void netAvbBlwStat(List<StockStatistic> statList) {
+		long daysAbove = 0, daysBelow = 0;
+		StockStatistic firstStat = statList.get(0);
+		for (StockStatistic stat: statList) {
+			if (stat.getStatisticValue().doubleValue() < 1) {
+				daysBelow++;
+			}
+			else {
+				daysAbove++;
+			}
+		}
+		statSvc.createStatistic(new StockStatistic(
+			firstStat.getPriceId()
+			, NET_ABV_BLW_50_DAY_AVG
+			, BigDecimal.valueOf(daysAbove - daysBelow)
+			, firstStat.getTickerSymbol()
+			, firstStat.getPriceDate())
+		);
+	}
+	
+	private void calcNetAbvBlw(String tickerSymbol) {
+		List<StockStatistic> statList = statSvc.retrieveStatList(tickerSymbol, DLY_PRC_VS_50_DAY_AVG);
+		while (statList.size() > 50) {
+			this.netAvbBlwStat(statList.subList(0, 50));
+			statList.remove(0);
+		}
+	}
+	
 	@Override
 	public void calculate(List<StockPrice> priceList) {
 		StockPrice firstPrice = priceList.get(0);
@@ -88,6 +117,7 @@ public class DailyPriceVsAvg implements StatisticCalculator {
 			this.calcPriceVsAvg(price, 50, DLY_PRC_VS_50_DAY_AVG);
 			this.calcPriceVsAvg(price, 200, DLY_PRC_VS_200_DAY_AVG);
 		}
+		this.calcNetAbvBlw(firstPrice.getTickerSymbol());
 	}
 
 }

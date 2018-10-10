@@ -10,6 +10,10 @@ buildscript {
 	}
 }
 
+bootJar {
+	mainClassName : "org.rhm.stock.StockDataMaintApplication"
+}
+
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'

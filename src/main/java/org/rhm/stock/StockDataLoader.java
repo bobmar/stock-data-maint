@@ -1,5 +1,6 @@
 package org.rhm.stock;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,6 +63,7 @@ public class StockDataLoader implements CommandLineRunner {
 				break;
 			}
 		}
+		LocalDateTime startTime = LocalDateTime.now();
 		for (BatchJob job: jobList) {
 			logger.info("run - batch job: " + job.getClass().getName());
 			BatchStatus status = job.run();
@@ -69,5 +71,8 @@ public class StockDataLoader implements CommandLineRunner {
 			logger.info("run - batch job start: " + status.getStartDate());
 			logger.info("run - batch job finish: " + status.getFinishDate());
 		}
+		LocalDateTime finishTime = LocalDateTime.now();
+		logger.info("run - batch start: " + startTime.toString());
+		logger.info("run - batch finish: " + finishTime.toString());
 	}
 }
