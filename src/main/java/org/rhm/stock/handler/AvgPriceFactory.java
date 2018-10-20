@@ -27,7 +27,7 @@ public class AvgPriceFactory {
 	public static AveragePrice calculateAvgPrice(List<StockPrice> priceList, int days) {
 		AveragePrice avgPrice = null;
 		int totalVolume = 0;
-		double totalPrice = 0.0;
+		double totalPrice = 0.0, totalHighLowRange = 0.0, totalOpenCloseRange = 0.0;
 		int priceCnt = 0;
 		if (priceList.size() > days) {
 			avgPrice = new AveragePrice();
@@ -35,12 +35,16 @@ public class AvgPriceFactory {
 			for (StockPrice price: priceList) {
 				totalVolume += price.getVolume();
 				totalPrice += price.getClosePrice().doubleValue();
+				totalHighLowRange += price.getHighLowRange().doubleValue();
+				totalOpenCloseRange += price.getOpenCloseRange().doubleValue();
 				if (++priceCnt > days) {
 					break;
 				}
 			}
 			avgPrice.setAvgPrice(BigDecimal.valueOf(totalPrice / days));
 			avgPrice.setAvgVolume(Integer.valueOf(totalVolume) / days);
+			avgPrice.setAvgHighLowRange(BigDecimal.valueOf(totalHighLowRange / days));
+			avgPrice.setAvgOpenCloseRange(BigDecimal.valueOf(totalOpenCloseRange / days));
 			logger.debug("calculateAvgPrice - " + days + " average price/volume=" + avgPrice.getAvgPrice() + "/" + avgPrice.getAvgVolume());
 		}
 		else {

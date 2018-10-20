@@ -6,6 +6,8 @@ public class AveragePrice {
 	private Integer daysCnt = null;
 	private Integer avgVolume = null;
 	private BigDecimal avgPrice = null;
+	private BigDecimal avgHighLowRange = null;
+	private BigDecimal avgOpenCloseRange = null;
 	public Integer getDaysCnt() {
 		return daysCnt;
 	}
@@ -23,5 +25,17 @@ public class AveragePrice {
 	}
 	public void setAvgPrice(BigDecimal avgPrice) {
 		this.avgPrice = avgPrice;
+	}
+	public BigDecimal getAvgHighLowRange() {
+		return avgHighLowRange;
+	}
+	public void setAvgHighLowRange(BigDecimal avgHighLowRange) {
+		this.avgHighLowRange = avgHighLowRange;
+	}
+	public BigDecimal getAvgOpenCloseRange() {
+		return avgOpenCloseRange;
+	}
+	public void setAvgOpenCloseRange(BigDecimal avgOpenCloseRange) {
+		this.avgOpenCloseRange = avgOpenCloseRange;
 	}
 }
