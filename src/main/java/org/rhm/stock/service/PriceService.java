@@ -16,6 +16,7 @@ import org.rhm.stock.repository.PriceRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -78,6 +79,17 @@ public class PriceService {
 	
 	public long deleteOlderThan(Date deleteBefore) {
 		return priceRepo.deleteOlderThan(deleteBefore);
+	}
+	
+	public List<StockPrice> findByTickerAndPriceDate(String tickerSymbol, Date priceDate) {
+		return priceRepo.findTop30ByTickerSymbolAndPriceDateGreaterThanOrderByPriceDateDesc(tickerSymbol, priceDate);
+	}
+	
+	public long priceCount(String tickerSymbol) {
+		StockPrice price = new StockPrice();
+		price.setTickerSymbol(tickerSymbol);
+		Example<StockPrice> example = Example.of(price);
+		return priceRepo.count(example);
 	}
 	
 }

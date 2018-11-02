@@ -24,12 +24,17 @@ public class PriceLoaderJob implements BatchJob {
 	
 	private boolean processTicker(String tickerSymbol) {
 		boolean success = false;
-		List<StockPrice> priceList = priceSvc.retrieveSourcePrices(tickerSymbol, 30);
+		int days = 90;
+		long cnt = priceSvc.priceCount(tickerSymbol);
+		if (cnt < days) {
+			days = 365;
+		}
+		List<StockPrice> priceList = priceSvc.retrieveSourcePrices(tickerSymbol, days);
 		logger.debug("processTicker - found " + priceList.size() + " prices for " + tickerSymbol);
 		if (priceList != null && priceList.size() > 0) {
 			if (priceSvc.saveStockPrice(priceList) != null) {
 				success = true;
-				logger.debug("processTicker - saved " + priceList.size() + " prices");
+				logger.info("processTicker - " + tickerSymbol + " saved " + priceList.size() + " prices");
 			}
 		}
 		return success;

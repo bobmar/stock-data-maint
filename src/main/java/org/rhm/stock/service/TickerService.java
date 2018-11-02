@@ -6,10 +6,15 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.rhm.stock.controller.dto.TickerInfo;
+import org.rhm.stock.domain.IbdStatistic;
+import org.rhm.stock.domain.StockPrice;
 import org.rhm.stock.domain.StockTicker;
 import org.rhm.stock.dto.FinanceProfile;
 import org.rhm.stock.handler.ticker.ExcelTransformer;
+import org.rhm.stock.handler.ticker.ExcelTransformerResponse;
 import org.rhm.stock.io.YahooDownload;
+import org.rhm.stock.repository.IbdStatisticRepo;
+import org.rhm.stock.repository.PriceRepo;
 import org.rhm.stock.repository.TickerRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +35,11 @@ public class TickerService {
 	private YahooDownload download = null;
 	@Autowired
 	private ExcelTransformer excel = null;
+	@Autowired
+	private IbdStatisticRepo ibdRepo = null;
+	@Autowired
+	private PriceRepo priceRepo = null;
+	
 	private Logger logger = LoggerFactory.getLogger(TickerService.class);
 	public String createTicker(String tickerSymbol) {
 		StockTicker stockTicker = null;
@@ -80,7 +90,8 @@ public class TickerService {
 	
 	public List<TickerInfo> retrieveTickerInfo(byte[] workbookBytes) {
 		List<TickerInfo> tickerInfoList = new ArrayList<TickerInfo>();
-		List<String> tickerList = excel.extractTickerSymbols(workbookBytes);
+		ExcelTransformerResponse response = excel.extractTickerSymbols(workbookBytes);
+		List<String> tickerList = response.getTickerSymbols();
 		FinanceProfile profile = null;
 		TickerInfo ticker = null;
 		for (String tickerSymbol: tickerList) {
@@ -102,9 +113,22 @@ public class TickerService {
 			tickerInfoList.add(ticker);
 			logger.info("retrieveTickerInfo - " + ticker.getTickerSymbol() + ":" + ticker.getStatus());
 		}
+		this.loadIbdStatistics(response.getIbdStatList());
 		return tickerInfoList.stream()
 				.sorted((o1,o2)->{return o1.getTickerSymbol().compareTo(o2.getTickerSymbol());})
 				.collect(Collectors.toList());
+	}
+	
+	private void loadIbdStatistics(List<IbdStatistic> ibdStatList) {
+		StockPrice price = null;
+		for (IbdStatistic ibdStat: ibdStatList) {
+			price = priceRepo.findTopByTickerSymbolOrderByPriceDateDesc(ibdStat.getTickerSymbol());
+			if (price != null) {
+				ibdStat.setStatId(price.getPriceId());
+				ibdStat.setPriceDate(price.getPriceDate());
+				ibdRepo.save(ibdStat);
+			}
+		}
 	}
 	
 	public boolean tickerExists(String tickerSymbol) {

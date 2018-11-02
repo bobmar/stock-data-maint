@@ -57,10 +57,14 @@ public class PriceBean {
 					dataLoaded = true;
 				} 
 				catch (ParseException e) {
-					logger.error(e.getMessage());
+					if (!priceData.startsWith("Date,Open,High,Low,Close")) {
+						logger.error(e.getMessage());
+					}
 				}
 				catch (NumberFormatException e) {
-					logger.error(e.getMessage());
+					if (!priceData.startsWith("Date,Open,High,Low,Close")) {
+						logger.error(e.getMessage());
+					}
 				}
 			}
 			else {

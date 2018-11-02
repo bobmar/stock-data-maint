@@ -97,7 +97,10 @@ public class YahooPriceDownloader {
 					priceDataList.add(priceData);
 				}
 				else {
-					logger.warn("downloadPrices - unable to parse: " + s);
+					if (!s.startsWith("Date,Open,High,Low,Close")) {
+						logger.warn("downloadPrices - unable to parse: " + s);
+					}
+
 				}
 			}
 			in.close();

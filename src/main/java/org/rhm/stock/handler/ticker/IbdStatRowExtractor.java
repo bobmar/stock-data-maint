@@ -21,24 +21,38 @@ public class IbdStatRowExtractor {
 	
 	private int columnIndex(List<String> columnNames, String columnName) {
 		int col = -1;
-		for (String colName: columnNames) {
-			col++;
-			if (colName.equals(columnName)) {
+		for (int i = 0; i < columnNames.size(); i++) {
+			if (columnNames.get(i).equalsIgnoreCase(columnName)) {
+				col = i;
 				break;
 			}
 		}
 		return col;
 	}
 	
+	private boolean foundColumnNames(List<String> columnNames) {
+		int foundCnt = 0;
+		foundCnt += (this.columnIndex(columnNames, STAT_ACC_DIS) > -1)?1:0;
+		foundCnt += (this.columnIndex(columnNames, STAT_COMPOSITE) > -1)?1:0;
+		foundCnt += (this.columnIndex(columnNames, STAT_EPS) > -1)?1:0;
+		foundCnt += (this.columnIndex(columnNames, STAT_GRP) > -1)?1:0;
+		foundCnt += (this.columnIndex(columnNames, STAT_RS) > -1)?1:0;
+		foundCnt += (this.columnIndex(columnNames, STAT_SMR) > -1)?1:0;
+		return foundCnt == 6;
+	}
+	
 	public IbdStatistic transformRow(Row row, List<String> columnNames) {
-		IbdStatistic ibdStat = new IbdStatistic();
-		ibdStat.setAccumDist(row.getCell(columnIndex(columnNames, STAT_ACC_DIS)).getStringCellValue());
-		ibdStat.setCompositeRating(row.getCell(columnIndex(columnNames, STAT_COMPOSITE)).getStringCellValue());
-		ibdStat.setEpsRating(row.getCell(columnIndex(columnNames, STAT_EPS)).getStringCellValue());
-		ibdStat.setGroupStrength(row.getCell(columnIndex(columnNames, STAT_GRP)).getStringCellValue());
-		ibdStat.setRelativeStrength(row.getCell(columnIndex(columnNames, STAT_RS)).getStringCellValue());
-		ibdStat.setSalesMarginRoe(row.getCell(columnIndex(columnNames, STAT_SMR)).getStringCellValue());
-		ibdStat.setTickerSymbol(row.getCell(columnIndex(columnNames, STAT_SYMBOL)).getStringCellValue());
+		IbdStatistic ibdStat = null;
+		if (this.foundColumnNames(columnNames)) {
+			ibdStat = new IbdStatistic();
+			ibdStat.setAccumDist(row.getCell(columnIndex(columnNames, STAT_ACC_DIS)).getStringCellValue());
+			ibdStat.setCompositeRating(row.getCell(columnIndex(columnNames, STAT_COMPOSITE)).getStringCellValue());
+			ibdStat.setEpsRating(row.getCell(columnIndex(columnNames, STAT_EPS)).getStringCellValue());
+			ibdStat.setGroupStrength(row.getCell(columnIndex(columnNames, STAT_GRP)).getStringCellValue());
+			ibdStat.setRelativeStrength(row.getCell(columnIndex(columnNames, STAT_RS)).getStringCellValue());
+			ibdStat.setSalesMarginRoe(row.getCell(columnIndex(columnNames, STAT_SMR)).getStringCellValue());
+			ibdStat.setTickerSymbol(row.getCell(columnIndex(columnNames, STAT_SYMBOL)).getStringCellValue());
+		}
 		return ibdStat;
 	}
 }

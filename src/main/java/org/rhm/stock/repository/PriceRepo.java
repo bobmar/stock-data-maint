@@ -1,5 +1,6 @@
 package org.rhm.stock.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import org.rhm.stock.domain.StockPrice;
@@ -9,4 +10,5 @@ public interface PriceRepo extends MongoRepository<StockPrice, String>, PriceCus
 	public List<StockPrice> findByTickerSymbol(String tickerSymbol);
 	public StockPrice findTopByTickerSymbolOrderByPriceDateDesc(String tickerSymbol);
 	public List<StockPrice> findTop60ByTickerSymbolOrderByPriceDateDesc(String tickerSymbol);
+	public List<StockPrice> findTop30ByTickerSymbolAndPriceDateGreaterThanOrderByPriceDateDesc(String tickerSymbol, Date priceDate);
 }

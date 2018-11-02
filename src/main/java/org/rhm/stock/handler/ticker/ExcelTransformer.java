@@ -20,13 +20,17 @@ import org.springframework.stereotype.Component;
 public class ExcelTransformer {
 
 	private Logger logger = LoggerFactory.getLogger(ExcelTransformer.class);
-	public List<String> extractTickerSymbols(byte[] workbookBytes) {
+	public ExcelTransformerResponse extractTickerSymbols(byte[] workbookBytes) {
 		List<String> tickerSymbols = new ArrayList<String>();
+		List<IbdStatistic> ibdStatList = new ArrayList<IbdStatistic>();
 		Workbook workbook = this.transformBytes(workbookBytes);
 		Sheet sheet = workbook.getSheetAt(0);
 		logger.info("extractTickerSymbols - first row=" + sheet.getFirstRowNum() + "; last row=" + sheet.getLastRowNum());
-		this.processIbdRows(tickerSymbols, sheet);
-		return tickerSymbols;
+		this.processIbdRows(tickerSymbols, ibdStatList, sheet);
+		ExcelTransformerResponse response = new ExcelTransformerResponse();
+		response.setIbdStatList(ibdStatList);
+		response.setTickerSymbols(tickerSymbols);
+		return response;
 	}
 
 	private Workbook transformBytes(byte[] workbookBytes) {
@@ -41,7 +45,7 @@ public class ExcelTransformer {
 		return workbook;
 	}
 	
-	private void processIbdRows(List<String> tickerList, Sheet sheet) {
+	private void processIbdRows(List<String> tickerList, List<IbdStatistic> ibdStatList, Sheet sheet) {
 		Row row = null;
 		IbdStatRowExtractor extractor = new IbdStatRowExtractor();
 		IbdStatistic ibd = null;
@@ -58,7 +62,10 @@ public class ExcelTransformer {
 						tickerList.add(tickerSymbol);
 					}
 					ibd = extractor.transformRow(row, columnNames);
-					logger.info("processIbdRows - " + ibd.toString());
+					if (ibd != null) {
+						ibdStatList.add(ibd);
+						logger.info("processIbdRows - " + ibd.toString());
+					}
 				}
 				else {
 					if (row.getCell(0).getStringCellValue().equals("Symbol")) {

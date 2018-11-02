@@ -33,6 +33,8 @@ public class PriceTrend implements SignalScanner {
 	private static final String WEEKLY_CLOSE_STAT = "WKCLSPCT";
 	private static final String UP_4_WEEKS_SIGNAL = "4WKUP";
 	private static final String UP_5_WEEKS_SIGNAL = "5WKUP";
+	private static final String DN_4_WEEKS_SIGNAL = "4WKDN";
+	private static final String DN_5_WEEKS_SIGNAL = "5WKDN";
 	private static final String PRICE_UPTREND_SIGNAL = "UPTREND";
 	private static final String PRICE_DNTREND_SIGNAL = "DNTREND";
 	private static final String VOL_UPTREND_SIGNAL = "VOLUPTREND";
@@ -66,7 +68,36 @@ public class PriceTrend implements SignalScanner {
 			}
 		}
 	}
-	
+
+	private void detectConsecutiveDownWeeks(List<StockStatistic> weeklyPriceChgList) {
+		int downCnt = 0;
+		StockStatistic firstStat = weeklyPriceChgList.get(0);
+		StockStatistic stat = null;
+		StockPrice price = null;
+		for (int i = 0; i < 25; i+=5) {
+			stat = weeklyPriceChgList.get(i);
+			if (stat.getStatisticValue().doubleValue() < 0) {
+				downCnt++;
+			}
+			else {
+				break;
+			}
+		}
+		if (downCnt == 4) {
+			price = priceSvc.findStockPrice(firstStat.getPriceId());
+			signalSvc.createSignal(new StockSignal(price, DN_4_WEEKS_SIGNAL));
+			logger.debug("detectConsecutiveDownWeeks - 4 consecutive weeks down");
+		}
+		else {
+			if (downCnt == 5) {
+				price = priceSvc.findStockPrice(firstStat.getPriceId());
+				signalSvc.createSignal(new StockSignal(price, DN_4_WEEKS_SIGNAL));
+				signalSvc.createSignal(new StockSignal(price, DN_5_WEEKS_SIGNAL));
+				logger.debug("detectConsecutiveDownWeeks - 5 consecutive weeks down");
+			}
+		}
+	}
+
 	private void detectTrend(StockAveragePrice avgPrice, String trendDirection) {
  		boolean trend = false;
  		int avgPriceCnt = 0;
@@ -133,13 +164,14 @@ public class PriceTrend implements SignalScanner {
  	 		}
  		}
 	}
-	
+
 	@Override
 	public void scan(String tickerSymbol) {
 		List<StockStatistic> wkPrcChgList = statSvc.retrieveStatList(tickerSymbol, WEEKLY_CLOSE_STAT);
 		logger.info("scan - found " + wkPrcChgList.size() + " statistics for " + tickerSymbol);
 		while (wkPrcChgList.size() > 25) {
 			this.detectConsecutiveUpWeeks(wkPrcChgList.subList(0, 25));
+			this.detectConsecutiveDownWeeks(wkPrcChgList.subList(0, 25));
 			wkPrcChgList.remove(0);
 		}
 		List<StockAveragePrice> avgPriceList = avgPriceSvc.findAvgPriceList(tickerSymbol);
