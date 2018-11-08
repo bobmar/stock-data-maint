@@ -37,6 +37,10 @@ public class PriceLoaderJob implements BatchJob {
 				logger.info("processTicker - " + tickerSymbol + " saved " + priceList.size() + " prices");
 			}
 		}
+		else {
+			logger.error("processTicker - " + tickerSymbol + " error during price download");
+			tickerSvc.deleteTicker(tickerSymbol);
+		}
 		return success;
 	}
 	

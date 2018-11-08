@@ -152,4 +152,8 @@ public class TickerService {
 		return tickerRepo.findAll(pageReq);
 	}
 	
+	public void deleteTicker(String tickerSymbol) {
+		tickerRepo.deleteById(tickerSymbol);
+	}
+	
 }
