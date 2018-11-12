@@ -10,6 +10,7 @@ import java.util.Map;
 import org.rhm.stock.domain.StockPrice;
 import org.rhm.stock.domain.StockSignal;
 import org.rhm.stock.dto.CompositePrice;
+import org.rhm.stock.repository.IbdStatisticRepo;
 import org.rhm.stock.repository.PriceRepo;
 import org.rhm.stock.repository.StatisticRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,8 @@ public class CompositePriceService {
 	private SignalService signalSvc = null;
 	@Autowired
 	private AveragePriceService avgPriceSvc = null;
+	@Autowired
+	private IbdStatisticRepo ibdRepo = null;
 	
 	private Map<String, List<StockSignal>> signalListToMap(List<StockSignal> signalList) {
 		Map<String, List<StockSignal>> signalMap = new HashMap<String, List<StockSignal>>();
@@ -49,13 +52,15 @@ public class CompositePriceService {
 		List<CompositePrice> compPriceList = new ArrayList<CompositePrice>();
 		Map<String, List<StockSignal>> signalMap = this.signalListToMap(signalList);
 		CompositePrice cPrice = null;
+		String tickerSymbol = null;
 		for (String priceId: signalMap.keySet()) {
 			cPrice = new CompositePrice();
 			cPrice.setPriceId(priceId);
 			cPrice.setPrice(priceRepo.findById(priceId).get());
 			cPrice.setSignalList(signalMap.get(priceId));
 			cPrice.setStatisticList(statRepo.findByPriceId(priceId));
-			cPrice.setTickerSymbol(cPrice.getStatisticList().get(0).getTickerSymbol());
+			tickerSymbol = cPrice.getStatisticList().get(0).getTickerSymbol();
+			cPrice.setTickerSymbol(tickerSymbol);
 			compPriceList.add(cPrice);
 		}
 		return compPriceList;
@@ -79,6 +84,7 @@ public class CompositePriceService {
 		cPrice.setSignalList(signalSvc.findSignalsByPriceId(priceId));
 		cPrice.setStatisticList(statRepo.findByPriceId(priceId));
 		cPrice.setTickerSymbol(cPrice.getPrice().getTickerSymbol());
+		cPrice.setIbdStatList(ibdRepo.findByTickerSymbol(cPrice.getPrice().getTickerSymbol()));
 		cPrice.setAvgPrices(avgPriceSvc.findRecentAvgPriceList(cPrice.getTickerSymbol()));
 		cPrice.setHistSignals(this.historicalSignalMap(cPrice.getPrice()));
 		return cPrice;

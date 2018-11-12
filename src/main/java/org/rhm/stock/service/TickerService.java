@@ -156,4 +156,10 @@ public class TickerService {
 		tickerRepo.deleteById(tickerSymbol);
 	}
 	
+	public List<IbdStatistic> findIbdStats(String tickerSymbol) {
+		List<IbdStatistic> ibdList = null;
+		ibdList = this.ibdRepo.findByTickerSymbol(tickerSymbol);
+		return ibdList;
+	}
+	
 }

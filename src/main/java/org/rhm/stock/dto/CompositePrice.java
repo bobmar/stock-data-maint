@@ -3,6 +3,7 @@ package org.rhm.stock.dto;
 import java.util.List;
 import java.util.Map;
 
+import org.rhm.stock.domain.IbdStatistic;
 import org.rhm.stock.domain.StockAveragePrice;
 import org.rhm.stock.domain.StockPrice;
 import org.rhm.stock.domain.StockSignal;
@@ -15,6 +16,7 @@ public class CompositePrice {
 	private List<StockStatistic> statisticList = null;
 	private List<StockSignal> signalList = null;
 	private List<StockAveragePrice> avgPrices = null;
+	private List<IbdStatistic> ibdStatList = null;
 	private Map<String,List<StockSignal>> histSignals = null;
 	
 	public String getPriceId() {
@@ -58,5 +60,11 @@ public class CompositePrice {
 	}
 	public void setHistSignals(Map<String, List<StockSignal>> histSignals) {
 		this.histSignals = histSignals;
+	}
+	public List<IbdStatistic> getIbdStatList() {
+		return ibdStatList;
+	}
+	public void setIbdStatList(List<IbdStatistic> ibdStatList) {
+		this.ibdStatList = ibdStatList;
 	}
 }

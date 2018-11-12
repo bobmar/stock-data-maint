@@ -52,7 +52,7 @@ public class AveragePriceCalculator implements BatchJob {
 		List<AveragePrice> avgList = AvgPriceFactory.calculateAvgPrices(priceList, days);
 		avgPrice.setAvgList(avgList);
 		if (avgPriceSvc.createAveragePrice(avgPrice) != null) {
-			logger.debug("processPriceList - saved average prices for " + avgPrice.getPriceId());
+			logger.info("processPriceList - saved average prices for " + avgPrice.getPriceId());
 			success = true;
 		}
 		return success;

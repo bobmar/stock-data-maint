@@ -21,6 +21,21 @@ public class PriceLoaderJob implements BatchJob {
 	@Autowired
 	private PriceService priceSvc = null;
 	private Logger logger = LoggerFactory.getLogger(PriceLoaderJob.class);
+
+	private Date findMostRecentPriceDate(List<StockPrice> priceList) {
+		Date priceDate = null;
+		for (StockPrice price: priceList) {
+			if (priceDate == null) {
+				priceDate = price.getPriceDate();
+			}
+			else {
+				if (price.getPriceDate().compareTo(priceDate) == 1) {
+					priceDate = price.getPriceDate();
+				}
+			}
+		}
+		return priceDate;
+	}
 	
 	private boolean processTicker(String tickerSymbol) {
 		boolean success = false;
@@ -31,10 +46,13 @@ public class PriceLoaderJob implements BatchJob {
 		}
 		List<StockPrice> priceList = priceSvc.retrieveSourcePrices(tickerSymbol, days);
 		logger.debug("processTicker - found " + priceList.size() + " prices for " + tickerSymbol);
+		Date mostRecentPriceDate = null;
 		if (priceList != null && priceList.size() > 0) {
 			if (priceSvc.saveStockPrice(priceList) != null) {
 				success = true;
+				mostRecentPriceDate = findMostRecentPriceDate(priceList);
 				logger.info("processTicker - " + tickerSymbol + " saved " + priceList.size() + " prices");
+				logger.info("processTicker - " + tickerSymbol + " latest price date: " + mostRecentPriceDate);
 			}
 		}
 		else {

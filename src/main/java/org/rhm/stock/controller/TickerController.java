@@ -9,6 +9,7 @@ import org.rhm.stock.controller.dto.FileContent;
 import org.rhm.stock.controller.dto.GeneralResponse;
 import org.rhm.stock.controller.dto.TickerInfo;
 import org.rhm.stock.controller.dto.TickerUploadResponse;
+import org.rhm.stock.domain.IbdStatistic;
 import org.rhm.stock.domain.StockTicker;
 import org.rhm.stock.service.TickerService;
 import org.slf4j.Logger;
@@ -81,6 +82,10 @@ public class TickerController {
 		Page<StockTicker> tickerPage = tickerSvc.findPage(pageable);
 		logger.debug("retrieveTickerPage - " + pageable.getClass().getName());
 		return tickerPage;
-		
+	}
+	
+	@GetMapping(value="/stocks/ibdstat/{tickerSymbol}")
+	public List<IbdStatistic> retrieveIbdStat(@PathVariable String tickerSymbol) {
+		return tickerSvc.findIbdStats(tickerSymbol.toUpperCase());
 	}
 }
