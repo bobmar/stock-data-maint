@@ -4,9 +4,11 @@ import java.util.Date;
 import java.util.List;
 
 import org.rhm.stock.domain.StockPrice;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface PriceRepo extends MongoRepository<StockPrice, String>, PriceCustomRepo {
+	@Cacheable("priceCache")
 	public List<StockPrice> findByTickerSymbol(String tickerSymbol);
 	public StockPrice findTopByTickerSymbolOrderByPriceDateDesc(String tickerSymbol);
 	public List<StockPrice> findTop60ByTickerSymbolOrderByPriceDateDesc(String tickerSymbol);

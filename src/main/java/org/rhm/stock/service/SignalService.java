@@ -48,6 +48,10 @@ public class SignalService {
 		return signalRepo.findBySignalTypeOrderByPriceId(signalType);
 	}
 	
+	public List<StockSignal> findSignalsUnsorted(String signalType) {
+		return signalRepo.findBySignalType(signalType);
+	}
+	
 	public List<StockSignal> findSignalsByType(List<String> signalTypes) {
 		return this.findSignalsByType(signalTypes, 7);
 	}

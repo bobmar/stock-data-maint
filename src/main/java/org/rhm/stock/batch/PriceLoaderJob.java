@@ -1,5 +1,7 @@
 package org.rhm.stock.batch;
 
+import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -21,7 +23,13 @@ public class PriceLoaderJob implements BatchJob {
 	@Autowired
 	private PriceService priceSvc = null;
 	private Logger logger = LoggerFactory.getLogger(PriceLoaderJob.class);
-
+	private Date oldestAcceptableDate = null;
+	public PriceLoaderJob() {
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.DAY_OF_MONTH, -30);
+		oldestAcceptableDate = cal.getTime();
+	}
+	
 	private Date findMostRecentPriceDate(List<StockPrice> priceList) {
 		Date priceDate = null;
 		for (StockPrice price: priceList) {
@@ -44,6 +52,7 @@ public class PriceLoaderJob implements BatchJob {
 		if (cnt < days) {
 			days = 365;
 		}
+		logger.info("processTicker - retrieve prices for " + tickerSymbol);
 		List<StockPrice> priceList = priceSvc.retrieveSourcePrices(tickerSymbol, days);
 		logger.debug("processTicker - found " + priceList.size() + " prices for " + tickerSymbol);
 		Date mostRecentPriceDate = null;
@@ -53,6 +62,10 @@ public class PriceLoaderJob implements BatchJob {
 				mostRecentPriceDate = findMostRecentPriceDate(priceList);
 				logger.info("processTicker - " + tickerSymbol + " saved " + priceList.size() + " prices");
 				logger.info("processTicker - " + tickerSymbol + " latest price date: " + mostRecentPriceDate);
+			}
+			if (oldestAcceptableDate.compareTo(mostRecentPriceDate) == 1) {
+				logger.warn("processTicker - ** most recent price is " + mostRecentPriceDate + "/oldest acceptable is " + oldestAcceptableDate + "; will delete ticker");
+				tickerSvc.deleteTicker(tickerSymbol);
 			}
 		}
 		else {

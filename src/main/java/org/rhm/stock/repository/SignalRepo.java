@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface SignalRepo extends MongoRepository<StockSignal, String>, SignalCustomRepo {
 	public List<StockSignal> findBySignalTypeOrderByPriceId(String signalType);
+	public List<StockSignal> findBySignalType(String signalType);
 	public StockSignal findTopByOrderByPriceDateDesc();
 	public List<StockSignal> findBySignalTypeAndPriceDateOrderByTickerSymbol(String signalType, Date priceDate);
 	public List<StockSignal> findByTickerSymbolAndPriceDateOrderBySignalType(String tickerSymbol, Date priceDate);

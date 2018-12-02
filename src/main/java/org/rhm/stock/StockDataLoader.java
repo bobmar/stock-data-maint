@@ -14,8 +14,10 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 
 @SpringBootApplication
+@EnableCaching
 public class StockDataLoader implements CommandLineRunner {
 	@Autowired
 	@Qualifier("avgPriceCalc")
@@ -32,7 +34,10 @@ public class StockDataLoader implements CommandLineRunner {
 	@Autowired
 	@Qualifier("pruner")
 	private BatchJob pruner = null;
-
+	@Autowired
+	@Qualifier("signalCount")
+	private BatchJob signalCount = null;
+	
 	private Logger logger = LoggerFactory.getLogger(StockDataLoader.class);
 	
 	public static void main(String...args) {
@@ -60,6 +65,9 @@ public class StockDataLoader implements CommandLineRunner {
 				break;
 			case "PRUNER":
 				jobList.add(pruner);
+				break;
+			case "SIGNALCNT":
+				jobList.add(signalCount);
 				break;
 			}
 		}

@@ -98,7 +98,7 @@ public class YahooPriceDownloader {
 				}
 				else {
 					if (!s.startsWith("Date,Open,High,Low,Close")) {
-						logger.warn("downloadPrices - unable to parse: " + s);
+						logger.warn("downloadPrices - [" + tickerSymbol + "] unable to parse: " + s);
 					}
 
 				}
