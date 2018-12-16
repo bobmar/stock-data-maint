@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.rhm.stock.domain.SignalType;
 import org.rhm.stock.domain.SignalTypeCount;
@@ -59,6 +60,7 @@ public class CountSignals {
 	}
 	
 	private void saveSignalCounts() {
+		signalSvc.saveSignalCounts(stCountMap.values().stream().collect(Collectors.toList()));
 		for (SignalTypeCount stc: stCountMap.values()) {
 			logger.info("saveSignalCounts - " + stc.getSignalCountKey() + "|" + stc.getSignalDesc() + ": " + stc.getSignalCount());
 		}

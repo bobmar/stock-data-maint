@@ -4,13 +4,14 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.rhm.stock.domain.SignalType;
+import org.rhm.stock.domain.SignalTypeCount;
 import org.rhm.stock.domain.StockSignal;
 import org.rhm.stock.dto.StockSignalDisplay;
 import org.rhm.stock.repository.SignalRepo;
+import org.rhm.stock.repository.SignalTypeCountRepo;
 import org.rhm.stock.repository.SignalTypeRepo;
 import org.rhm.stock.util.StockUtil;
 import org.slf4j.Logger;
@@ -24,6 +25,8 @@ public class SignalService {
 	private SignalTypeRepo signalTypeRepo = null;
 	@Autowired
 	private SignalRepo signalRepo = null;
+	@Autowired
+	private SignalTypeCountRepo sigCntRepo = null;
 	private Logger logger = LoggerFactory.getLogger(SignalService.class);
 	
 	public SignalType createSignalType(SignalType signalType) {
@@ -137,5 +140,13 @@ public class SignalService {
 	
 	public List<StockSignal> findSignalsByTicker(String tickerSymbol) {
 		return signalRepo.findByTickerSymbolOrderByPriceDateDesc(tickerSymbol);
+	}
+	
+	public void saveSignalCounts(List<SignalTypeCount> sigCntList) {
+		sigCntRepo.saveAll(sigCntList);
+	}
+	
+	public List<SignalTypeCount> findSignalCounts() {
+		return sigCntRepo.findAll();
 	}
 }

@@ -7,6 +7,7 @@ import org.rhm.stock.controller.dto.CompositePriceRequest;
 import org.rhm.stock.controller.dto.GeneralResponse;
 import org.rhm.stock.controller.dto.SignalRequest;
 import org.rhm.stock.domain.SignalType;
+import org.rhm.stock.domain.SignalTypeCount;
 import org.rhm.stock.domain.StockSignal;
 import org.rhm.stock.dto.CompositePrice;
 import org.rhm.stock.dto.StockSignalDisplay;
@@ -86,6 +87,15 @@ public class SignalController {
 		List<SignalType> signalTypeList = null;
 		signalTypeList = sigSvc.signalTypes();
 		return signalTypeList;
+	}
+	
+	@GetMapping(value="/stocks/signal/counts")
+	public List<SignalTypeCount> signalTypeCounts() {
+		List<SignalTypeCount> stcList = sigSvc.findSignalCounts();
+		if (stcList != null) {
+			stcList.sort((o1,o2)->{return o1.getSignalDate().compareTo(o2.getSignalDate());});
+		}
+		return stcList;
 	}
 	
 }
