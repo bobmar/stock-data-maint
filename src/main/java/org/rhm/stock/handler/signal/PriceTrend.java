@@ -38,6 +38,8 @@ public class PriceTrend implements SignalScanner {
 	private static final String PRICE_UPTREND_SIGNAL = "UPTREND";
 	private static final String PRICE_DNTREND_SIGNAL = "DNTREND";
 	private static final String VOL_UPTREND_SIGNAL = "VOLUPTREND";
+	private static final String RR_TRACKS = "RRTRK";
+
 	private Logger logger = LoggerFactory.getLogger(PriceTrend.class);
 	
 	private void detectConsecutiveUpWeeks(List<StockStatistic> weeklyPriceChgList) {
@@ -95,6 +97,16 @@ public class PriceTrend implements SignalScanner {
 				signalSvc.createSignal(new StockSignal(price, DN_5_WEEKS_SIGNAL));
 				logger.debug("detectConsecutiveDownWeeks - 5 consecutive weeks down");
 			}
+		}
+	}
+	
+	private void detectRailroadTracks(List<StockStatistic> weeklyPriceChgList) {
+		StockStatistic currStat = weeklyPriceChgList.get(0), prevStat = weeklyPriceChgList.get(4);
+		StockPrice price = null;
+		double diff = currStat.getStatisticValue().doubleValue() - prevStat.getStatisticValue().doubleValue();
+		if (diff > -.015 && diff < .015) {
+			price = priceSvc.findStockPrice(currStat.getPriceId());
+			signalSvc.createSignal(new StockSignal(price, RR_TRACKS));
 		}
 	}
 
@@ -172,6 +184,7 @@ public class PriceTrend implements SignalScanner {
 		while (wkPrcChgList.size() > 25) {
 			this.detectConsecutiveUpWeeks(wkPrcChgList.subList(0, 25));
 			this.detectConsecutiveDownWeeks(wkPrcChgList.subList(0, 25));
+			this.detectRailroadTracks(wkPrcChgList.subList(0, 5));
 			wkPrcChgList.remove(0);
 		}
 		List<StockAveragePrice> avgPriceList = avgPriceSvc.findAvgPriceList(tickerSymbol);

@@ -17,6 +17,7 @@ import org.rhm.stock.util.StockUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -43,7 +44,13 @@ public class SignalService {
 	
 	public StockSignal createSignal(StockSignal signal) {
 		StockSignal newSignal = null;
-		newSignal = signalRepo.save(signal);
+		Example<StockSignal> example = Example.of(signal);
+		if (!signalRepo.exists(example)) {
+			newSignal = signalRepo.save(signal);
+		}
+		else {
+			logger.debug("createSignal - signal " + signal.getSignalId() + " already exists");
+		}
 		return newSignal;
 	}
 	
