@@ -106,6 +106,8 @@ public class HighLowScan implements SignalScanner {
 	public void scan(String tickerSymbol) {
 		List<StockPrice> priceList = priceSvc.retrievePrices(tickerSymbol);
 		List<StockStatistic> statList = statSvc.retrieveStatList(tickerSymbol, "DYPCTCHG");
+		logger.info("scan - found " + priceList.size() + " prices for " + tickerSymbol);
+		logger.info("scan - found " + statList.size() + " DYPCTCHG stats for " + tickerSymbol);
 		while (priceList.size() > 4) {
 			this.detectHigherHighHigherLow(priceList.subList(0, 4), statList);
 			this.detectLowerLowLowerHigh(priceList.subList(0, 4), statList);

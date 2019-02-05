@@ -26,6 +26,7 @@ public class YahooDownload {
 	private String profileSuffix = "?formatted=true&lang=en-US&region=US&modules=assetProfile%2Cprice&corsDomain=finance.yahoo.com";
 	private String keyStatPrefix = "/quoteSummary/";
 	private String keyStatSuffix = "?formatted=true&lang=en-US&region=US&modules=defaultKeyStatistics%2CfinancialData%2CcalendarEvents&corsDomain=finance.yahoo.com";
+	private final static String COOKIE = "B=6b5igrdaho2o2&b=4&d=_09VHXZpYEJmYiUgG46_2HOCqgEawdWqgjrGyg--&s=j5&i=F5H4S1XlplLIhHPo3DwT";
 
 	private Logger logger = LoggerFactory.getLogger(YahooDownload.class);
 	//https://query2.finance.yahoo.com/v10/finance/quoteSummary/WFC?formatted=true&crumb=%2FsTY4E5V.U%2F&lang=en-US&region=US&modules=defaultKeyStatistics%2CfinancialData%2CcalendarEvents&corsDomain=finance.yahoo.com
@@ -136,6 +137,7 @@ public class YahooDownload {
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		byte[] chunk = new byte[1024*256];
 		try {
+			urlConn.addRequestProperty("Cookie", COOKIE);
 			is = urlConn.getInputStream();
 			int bytesRead = -1;
 			while ((bytesRead = is.read(chunk)) != -1) {
@@ -162,13 +164,14 @@ public class YahooDownload {
 		return is;
 	}
 	
-	private Map<String,Object> jsonToMap(String jsonStr) {
+	private Map<String,Object> jsonToMap(String jsonStr) throws JsonParseException {
+		logger.info("jsonToMap - \n" + jsonStr);
 		ObjectMapper mapper = new ObjectMapper();
 		Map<String,Object> map = null;
 		try {
 			map = mapper.readValue(jsonStr, new TypeReference<Map<String, Object>>(){});
 		} catch (JsonParseException e) {
-			e.printStackTrace();
+			throw e;
 		} catch (JsonMappingException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -199,8 +202,15 @@ public class YahooDownload {
 		Map<String,Object> profile = null;
 		String urlStr = this.profileUrl(tickerSymbol);
 		InputStream is = this.retrieveStream(this.createConnection(urlStr));
+		logger.info("retrieveProfile - URL: " + urlStr);
 		if (is != null) {
-			profile = this.jsonToMap(this.streamToJsonStr(is));
+			try {
+				profile = this.jsonToMap(this.streamToJsonStr(is));
+			}
+			catch (JsonParseException e) {
+				logger.error("retrieveProfile - " + e.getMessage());
+				profile = null;
+			}
 		}
 		return profile;
 	}
@@ -210,7 +220,12 @@ public class YahooDownload {
 		String urlStr = this.keyStatUrl(tickerSymbol);
 		InputStream is = this.retrieveStream(this.createConnection(urlStr));
 		if (is != null) {
-			keyStat = jsonToMap(this.streamToJsonStr(is));
+			try {
+				keyStat = jsonToMap(this.streamToJsonStr(is));
+			}
+			catch (JsonParseException e) {
+				logger.error("retrieveKeyStat - " + e.getMessage());
+			}
 		}
 		return keyStat;
 	}
@@ -223,7 +238,12 @@ public class YahooDownload {
 		}
 		InputStream is = this.retrieveStream(this.createConnection(urlStr));
 		if (is != null) {
-			optionChain = jsonToMap(this.streamToJsonStr(is));
+			try {
+				optionChain = jsonToMap(this.streamToJsonStr(is));
+			}
+			catch (JsonParseException e) {
+				logger.error("retrieveOptionChain - " + e.getMessage());
+			}
 		}
 		return optionChain;
 	}

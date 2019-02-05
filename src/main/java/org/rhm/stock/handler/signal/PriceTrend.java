@@ -180,7 +180,7 @@ public class PriceTrend implements SignalScanner {
 	@Override
 	public void scan(String tickerSymbol) {
 		List<StockStatistic> wkPrcChgList = statSvc.retrieveStatList(tickerSymbol, WEEKLY_CLOSE_STAT);
-		logger.info("scan - found " + wkPrcChgList.size() + " statistics for " + tickerSymbol);
+		logger.info("scan - found " + wkPrcChgList.size() + " " + WEEKLY_CLOSE_STAT + " statistics for " + tickerSymbol);
 		while (wkPrcChgList.size() > 25) {
 			this.detectConsecutiveUpWeeks(wkPrcChgList.subList(0, 25));
 			this.detectConsecutiveDownWeeks(wkPrcChgList.subList(0, 25));

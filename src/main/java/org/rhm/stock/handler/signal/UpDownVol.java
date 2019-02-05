@@ -7,7 +7,8 @@ import org.rhm.stock.domain.StockStatistic;
 import org.rhm.stock.service.PriceService;
 import org.rhm.stock.service.SignalService;
 import org.rhm.stock.service.StatisticService;
-import org.rhm.stock.service.TickerService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -21,7 +22,7 @@ public class UpDownVol implements SignalScanner {
 	private StatisticService statSvc = null;
 	@Autowired
 	private PriceService priceSvc = null;
-	
+	private Logger logger = LoggerFactory.getLogger(UpDownVol.class);
 	private static final String UPDN_INC_SIGNAL = "UPDNVOLINCR";
 	private static final String UPD_3_4_SIGNAL = "UPDNVOL3_4";
 	private static final String UPD_4_5_SIGNAL = "UPDNVOL4_5";
@@ -62,6 +63,7 @@ public class UpDownVol implements SignalScanner {
 	@Override
 	public void scan(String tickerSymbol) {
 		List<StockStatistic> statList = statSvc.retrieveStatList(tickerSymbol, "UPDNVOL50");
+		logger.info("scan - found " + statList.size() + " UPDNVOL50 stats for " + tickerSymbol);
 		while (statList.size() > 2) {
 			this.detectIncrease(statList);
 			statList.remove(0);

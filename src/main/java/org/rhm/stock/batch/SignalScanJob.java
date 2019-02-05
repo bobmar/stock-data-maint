@@ -50,6 +50,9 @@ public class SignalScanJob implements BatchJob {
 	@Qualifier("highLowScan")
 	private SignalScanner highLowScan = null;
 	@Autowired
+	@Qualifier("ibdScanner")
+	private SignalScanner ibdScanner = null;
+	@Autowired
 	private TickerService tickerSvc = null;
 	private Logger logger = LoggerFactory.getLogger(SignalScanJob.class);
 	private List<SignalScanner> scannerList = null;
@@ -65,6 +68,7 @@ public class SignalScanJob implements BatchJob {
 		scannerList.add(deMark);
 		scannerList.add(upDownVol);
 		scannerList.add(highLowScan);
+		scannerList.add(ibdScanner);
 		scannerList.add(signalCombo);
 		logger.debug("scannerList - loaded " + scannerList.size() + " signal scanners");
 		return scannerList;

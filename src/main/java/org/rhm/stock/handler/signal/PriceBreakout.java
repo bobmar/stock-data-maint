@@ -63,7 +63,7 @@ public class PriceBreakout implements SignalScanner {
 	@Override
 	public void scan(String tickerSymbol) {
 		List<StockStatistic> statList = statSvc.retrieveStatList(tickerSymbol, FOUR_WK_HIGH);
-		logger.info("scan - found " + statList.size() + " statistics for " + tickerSymbol);
+		logger.info("scan - found " + statList.size() + FOUR_WK_HIGH + " statistics for " + tickerSymbol);
 		List<StockPrice> priceList = priceSvc.retrievePrices(tickerSymbol);
 		for (StockPrice price: priceList) {
 			this.evaluatePrice(price, statList);

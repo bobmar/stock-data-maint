@@ -9,6 +9,7 @@ public class IbdStatistic {
 	@Id
 	private String statId = null;
 	private String tickerSymbol = null;
+	private String companyName = null;
 	private Date priceDate = null;
 	private String compositeRating = null;
 	private String epsRating = null;
@@ -81,12 +82,19 @@ public class IbdStatistic {
 	
 	public String toString() {
 		return this.tickerSymbol
+				+ "|" + this.companyName
 				+ "|C-" + this.compositeRating
 				+ "|E-" + this.epsRating
 				+ "|R-" + this.relativeStrength
 				+ "|G-" + this.groupStrength
 				+ "|AD-" + this.getAccumDist()
 				+ "|S-" + this.getSalesMarginRoe();
+	}
+	public String getCompanyName() {
+		return companyName;
+	}
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
 	}
 	
 }
