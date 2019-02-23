@@ -25,7 +25,9 @@ public class PriceBreakout implements SignalScanner {
 	@Autowired
 	private SignalService signalSvc = null;
 	private static final String FOUR_WK_HIGH = "HIPR4WK";
+	private static final String ELEVEN_WK_HIGH = "HIPR11WK";
 	private static final String FOUR_WK_BRK_SIG = "4WKBRK";
+	private static final String ELEVEN_WK_BRK_SIG = "11WKBRK";
 	private Logger logger = LoggerFactory.getLogger(PriceBreakout.class);
 	
 	private StockStatistic findStat(String statId, List<StockStatistic> statList) {
@@ -42,16 +44,12 @@ public class PriceBreakout implements SignalScanner {
 		return stockStat;
 	}
 	
-	private void evaluatePrice(StockPrice price, List<StockStatistic> statList) {
-		String statId = price.getPriceId() + ":" + FOUR_WK_HIGH;
+	private void evaluatePrice(StockPrice price, List<StockStatistic> statList, String statCode, String signalCode) {
+		String statId = price.getPriceId() + ":" + statCode;
 		StockStatistic stat = this.findStat(statId, statList);
 		if (stat != null) {
-			logger.debug("evaluatePrice - OHL prices=" + price.getOpenPrice().doubleValue() 
-					+ "|" + price.getHighPrice().doubleValue() 
-					+ "|" + price.getLowPrice().doubleValue() 
-					+ "; 4 week high=" + stat.getStatisticValue() + " [" + stat.getStatId() + "]");
 			if (price.getHighPrice().doubleValue() > stat.getStatisticValue().doubleValue()) {
-				signalSvc.createSignal(new StockSignal(price, FOUR_WK_BRK_SIG));
+				signalSvc.createSignal(new StockSignal(price, signalCode));
 				logger.debug("evaluatePrice - create new signal for " + price.getPriceId());
 			}
 		}
@@ -66,7 +64,12 @@ public class PriceBreakout implements SignalScanner {
 		logger.info("scan - found " + statList.size() + FOUR_WK_HIGH + " statistics for " + tickerSymbol);
 		List<StockPrice> priceList = priceSvc.retrievePrices(tickerSymbol);
 		for (StockPrice price: priceList) {
-			this.evaluatePrice(price, statList);
+			this.evaluatePrice(price, statList, FOUR_WK_HIGH, FOUR_WK_BRK_SIG);
+		}
+		statList = statSvc.retrieveStatList(tickerSymbol, ELEVEN_WK_HIGH);
+		logger.info("scan - found " + statList.size() + ELEVEN_WK_HIGH + " statistics for " + tickerSymbol);
+		for (StockPrice price: priceList) {
+			this.evaluatePrice(price, statList, ELEVEN_WK_HIGH, ELEVEN_WK_BRK_SIG);
 		}
 	}
 

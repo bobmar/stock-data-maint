@@ -15,8 +15,10 @@ import org.springframework.stereotype.Component;
 @Qualifier("highLowPriceCalc")
 public class HighLowPrice implements StatisticCalculator {
 
+	private static final String HIGH_PRICE_11WK = "HIPR11WK";
 	private static final String HIGH_PRICE_4WK = "HIPR4WK";
 	private static final String HIGH_PRICE_2WK = "HIPR2WK";
+	private static final String LOW_PRICE_11WK = "LOPR11WK";
 	private static final String LOW_PRICE_4WK = "LOPR4WK";
 	private static final String LOW_PRICE_2WK = "LOPR2WK";
 	private static final int GREATER_THAN = 1;
@@ -66,9 +68,11 @@ public class HighLowPrice implements StatisticCalculator {
 	@Override
 	public void calculate(List<StockPrice> priceList) {
 		logger.info("calculate - processing " + priceList.size() + " prices for " + priceList.get(0).getTickerSymbol());
-		while (priceList.size() > 20) {
+		while (priceList.size() > 55) {
+			this.calcHigh(priceList.subList(0, 54), HIGH_PRICE_11WK);
 			this.calcHigh(priceList.subList(0, 19), HIGH_PRICE_4WK);
 			this.calcHigh(priceList.subList(0,9), HIGH_PRICE_2WK);
+			this.calcLow(priceList.subList(0, 54), LOW_PRICE_11WK);
 			this.calcLow(priceList.subList(0, 19), LOW_PRICE_4WK);
 			this.calcLow(priceList.subList(0,9), LOW_PRICE_2WK);
 			priceList.remove(0);
