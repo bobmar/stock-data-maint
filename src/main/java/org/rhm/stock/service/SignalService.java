@@ -3,13 +3,19 @@ package org.rhm.stock.service;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.rhm.stock.domain.IbdStatistic;
 import org.rhm.stock.domain.SignalType;
 import org.rhm.stock.domain.SignalTypeCount;
+import org.rhm.stock.domain.StockAveragePrice;
 import org.rhm.stock.domain.StockSignal;
 import org.rhm.stock.dto.StockSignalDisplay;
+import org.rhm.stock.repository.AveragePriceRepo;
+import org.rhm.stock.repository.IbdStatisticRepo;
 import org.rhm.stock.repository.SignalRepo;
 import org.rhm.stock.repository.SignalTypeCountRepo;
 import org.rhm.stock.repository.SignalTypeRepo;
@@ -28,6 +34,11 @@ public class SignalService {
 	private SignalRepo signalRepo = null;
 	@Autowired
 	private SignalTypeCountRepo sigCntRepo = null;
+	@Autowired
+	private IbdStatisticRepo ibdRepo = null;
+	@Autowired
+	private AveragePriceRepo avgPriceRepo = null;
+
 	private Logger logger = LoggerFactory.getLogger(SignalService.class);
 	
 	public SignalType createSignalType(SignalType signalType) {
@@ -99,22 +110,41 @@ public class SignalService {
 		return tickerList;
 	}
 	
-	public List<StockSignalDisplay> findSignalsByTypeAndDate(String signalType, String overlaySignalType, String priceDate) {
-		logger.debug("findSignalsByTypeAndDate - signalType=" + signalType + "; overlaySignalType=" + overlaySignalType + "; priceDate=" + priceDate);
+	private Map<String, IbdStatistic> latestIbdStats() {
+		Map<String, IbdStatistic> ibdStatMap = new HashMap<String, IbdStatistic>();
+		IbdStatistic latestStat = ibdRepo.findTopByOrderByPriceDateDesc();
+		List<IbdStatistic> latestStats = null;
+		if (latestStat != null) {
+			latestStats = ibdRepo.findByPriceDate(latestStat.getPriceDate());
+			latestStats.forEach((stat)->{ibdStatMap.put(stat.getTickerSymbol(), stat);});
+		}
+		return ibdStatMap;
+	}
+	
+	private Map<String, StockAveragePrice> avgPricesByDate(Date priceDate) {
+		Map<String, StockAveragePrice> avgPriceMap = new HashMap<String, StockAveragePrice>();
+		List<StockAveragePrice> avgPrices = avgPriceRepo.findByPriceDate(priceDate);
+		if (avgPrices != null) {
+			avgPrices.forEach((avgPrice)->{avgPriceMap.put(avgPrice.getTickerSymbol(), avgPrice);});
+		}
+		return avgPriceMap;
+	}
+	
+	public List<StockSignalDisplay> findSignalsByTypeAndDate(String signalType, String overlaySignalType, String priceDateParam) {
+		logger.debug("findSignalsByTypeAndDate - signalType=" + signalType + "; overlaySignalType=" + overlaySignalType + "; priceDate=" + priceDateParam);
 		List<StockSignal> baseSignalList = null;
+		Date priceDate = null;
 		try {
-			baseSignalList = this.findSignalsByTypeAndDate(signalType, StockUtil.stringToDate(priceDate));
+			priceDate = StockUtil.stringToDate(priceDateParam);
 		} 
 		catch (ParseException e) {
-			logger.warn("findSignalsByTypeAndDate (base) - " + e.getMessage());
+			logger.warn("findSignalsByTypeAndDate - parse price date: " + e.getMessage());
 		}
+		Map<String, IbdStatistic> ibdStatMap = this.latestIbdStats();
+		Map<String, StockAveragePrice> avgPriceMap = this.avgPricesByDate(priceDate);
+		baseSignalList = this.findSignalsByTypeAndDate(signalType, priceDate);
 		List<String> overlayTickerList = null;
-		try {
-			overlayTickerList =	this.extractTickerFromSignal(this.findSignalsByTypeAndDate(overlaySignalType, StockUtil.stringToDate(priceDate)));
-		} 
-		catch (ParseException e) {
-			logger.warn("findSignalsByTypeAndDate (overlay) - " + e.getMessage());
-		}
+		overlayTickerList =	this.extractTickerFromSignal(this.findSignalsByTypeAndDate(overlaySignalType, priceDate));
 		logger.debug("findSignalsByTypeAndDate - " + overlayTickerList.size() + " tickers found for " + overlaySignalType + " signals");
 		List<StockSignalDisplay> mergedSignalList = new ArrayList<StockSignalDisplay>();
 		StockSignalDisplay signalDisplay = null;
@@ -127,6 +157,8 @@ public class SignalService {
 			else {
 				signalDisplay.setMultiList(false);
 			}
+			signalDisplay.setAvgPrice(avgPriceMap.get(signal.getTickerSymbol()));
+			signalDisplay.setIbdLatestStat(ibdStatMap.get(signal.getTickerSymbol()));
 			mergedSignalList.add(signalDisplay);
 		}
 		return mergedSignalList;

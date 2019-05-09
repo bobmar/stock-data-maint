@@ -1,5 +1,6 @@
 package org.rhm.stock.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import org.rhm.stock.domain.StockAveragePrice;
@@ -9,4 +10,5 @@ public interface AveragePriceRepo extends MongoRepository<StockAveragePrice, Str
 
 	public List<StockAveragePrice> findByTickerSymbol(String tickerSymbol);
 	public List<StockAveragePrice> findTop10ByTickerSymbolOrderByPriceDateDesc(String tickerSymbol);
+	public List<StockAveragePrice> findByPriceDate(Date priceDate);
 }
