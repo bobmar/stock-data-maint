@@ -90,15 +90,29 @@ public class SignalService {
 		return signalRepo.findTopByOrderByPriceDateDesc();
 	}
 	
-	public List<StockSignal> findSignalsByTypeAndDate(String signalType, String priceDate) {
+	public List<StockSignalDisplay> findSignalsByTypeAndDate(String signalType, String priceDateStr) {
 		List<StockSignal> signalList = null;
+		List<StockSignalDisplay> sigDisplayList = new ArrayList<StockSignalDisplay>();
+		Date priceDate = null;
 		try {
-			signalList = this.findSignalsByTypeAndDate(signalType, StockUtil.stringToDate(priceDate));
+			priceDate = StockUtil.stringToDate(priceDateStr);
 		} 
 		catch (ParseException e) {
 			logger.warn("findSignalsByTypeAndDate - " + e.getMessage());
 		}
-		return signalList;
+		Map<String, IbdStatistic> ibdStatMap = this.latestIbdStats();
+		Map<String, StockAveragePrice> avgPriceMap = this.avgPricesByDate(priceDate);
+		signalList = this.findSignalsByTypeAndDate(signalType, priceDate);
+		if (avgPriceMap != null) {
+			signalList.forEach((signal)->{
+				StockSignalDisplay sigDisp = new StockSignalDisplay(signal);
+				sigDisp.setAvgPrice(avgPriceMap.get(signal.getTickerSymbol()));
+				sigDisp.setIbdLatestStat(ibdStatMap.get(signal.getTickerSymbol()));
+				sigDisplayList.add(sigDisp);
+				
+			});
+		}
+		return sigDisplayList;
 	}
 	
 	private List<String> extractTickerFromSignal(List<StockSignal> signalList) {

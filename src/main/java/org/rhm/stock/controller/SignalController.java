@@ -53,7 +53,7 @@ public class SignalController {
 	}
 	
 	@PostMapping(value="/stocks/signal/datetype/list")
-	public List<StockSignal> findSignalsByDateAndType(@RequestBody SignalRequest request) {
+	public List<StockSignalDisplay> findSignalsByDateAndType(@RequestBody SignalRequest request) {
 		String signalDate = request.getSignalDate();
 		if (signalDate == null) {
 			signalDate = StockUtil.dateToString(sigSvc.findMaxDate().getPriceDate());
