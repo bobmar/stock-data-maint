@@ -98,4 +98,8 @@ public class SignalController {
 		return stcList;
 	}
 	
+	@GetMapping(value="/stocks/signal/counts/{signalCode}")
+	public List<SignalTypeCount> signalTypeCountsBySignalCode(@PathVariable String signalCode) {
+		return sigSvc.findSignalCounts(signalCode);
+	}
 }

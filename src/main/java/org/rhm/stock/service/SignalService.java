@@ -202,4 +202,8 @@ public class SignalService {
 	public List<SignalTypeCount> findSignalCounts() {
 		return sigCntRepo.findAll();
 	}
+	
+	public List<SignalTypeCount> findSignalCounts(String signalCode) {
+		return sigCntRepo.findBySignalCodeOrderBySignalDateDesc(signalCode);
+	}
 }
