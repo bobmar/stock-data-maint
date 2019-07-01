@@ -1,10 +1,12 @@
 package org.rhm.stock.controller;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
 import org.rhm.stock.controller.dto.CompositePriceRequest;
 import org.rhm.stock.controller.dto.GeneralResponse;
+import org.rhm.stock.controller.dto.SignalHistRequest;
 import org.rhm.stock.controller.dto.SignalRequest;
 import org.rhm.stock.domain.SignalType;
 import org.rhm.stock.domain.SignalTypeCount;
@@ -76,7 +78,7 @@ public class SignalController {
 	}
 
 	@PostMapping(value="/stocks/signal/cprice")
-	public CompositePrice findCompositPrice(@RequestBody CompositePriceRequest request) {
+	public CompositePrice findCompositePrice(@RequestBody CompositePriceRequest request) {
 		CompositePrice cPrice = null;
 		cPrice = cPriceSvc.compositePriceFactory(request.getPriceId());
 		return cPrice;
@@ -101,5 +103,17 @@ public class SignalController {
 	@GetMapping(value="/stocks/signal/counts/{signalCode}")
 	public List<SignalTypeCount> signalTypeCountsBySignalCode(@PathVariable String signalCode) {
 		return sigSvc.findSignalCounts(signalCode);
+	}
+	
+	@PostMapping(value="/stocks/signal/hist/counts")
+	public List<StockSignal> findHistoricSignals(@RequestBody SignalHistRequest request) {
+		Date priceDate = null;
+		try {
+			priceDate = StockUtil.stringToDate(request.getPriceDate());
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		List<StockSignal> signals = sigSvc.findSignalsByTicker(request.getTickerSymbol(), priceDate);
+		return signals;
 	}
 }

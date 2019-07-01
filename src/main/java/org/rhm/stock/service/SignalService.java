@@ -2,6 +2,7 @@ package org.rhm.stock.service;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -205,5 +206,28 @@ public class SignalService {
 	
 	public List<SignalTypeCount> findSignalCounts(String signalCode) {
 		return sigCntRepo.findBySignalCodeOrderBySignalDateDesc(signalCode);
+	}
+
+	private Date calcDate(Date priceDate, Integer offset) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(priceDate);
+		cal.add(Calendar.DAY_OF_MONTH, offset);
+		if (cal.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+			cal.add(Calendar.DAY_OF_MONTH, offset>0?2:-2);
+		}
+		else {
+			if (cal.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+				cal.add(Calendar.DAY_OF_MONTH, offset>0?1:-1);
+			}
+		}
+		return cal.getTime();
+	}
+	
+	public List<StockSignal> findSignalsByTicker(String tickerSymbol, Date priceDate) {
+		List<StockSignal> signals = signalRepo.findByTickerSymbolOrderByPriceDateDesc(tickerSymbol);
+		Date beginDate = this.calcDate(priceDate, -3), endDate = this.calcDate(priceDate, 3);
+		return signals.stream().filter(
+			(signal)->{return (signal.getPriceDate().compareTo(beginDate) > 0 
+				&& signal.getPriceDate().compareTo(endDate) < 0);}).collect(Collectors.toList());
 	}
 }
