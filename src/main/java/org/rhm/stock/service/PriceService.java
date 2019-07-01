@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.rhm.stock.domain.StockPrice;
@@ -16,7 +17,6 @@ import org.rhm.stock.repository.PriceRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
@@ -74,8 +74,8 @@ public class PriceService {
 	}
 	
 	public StockPrice findStockPrice(String priceId) {
-		return priceRepo.findById(priceId).get();
-				
+		Optional<StockPrice> opt = priceRepo.findById(priceId);
+		return opt.isPresent()?opt.get():null;
 	}
 	
 	public long deleteOlderThan(Date deleteBefore) {

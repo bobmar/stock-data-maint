@@ -39,7 +39,8 @@ public class PriceTrend implements SignalScanner {
 	private static final String PRICE_DNTREND_SIGNAL = "DNTREND";
 	private static final String VOL_UPTREND_SIGNAL = "VOLUPTREND";
 	private static final String RR_TRACKS = "RRTRK";
-
+	private static final String AVG_VOL_500K = "AVGVOL500K";
+	
 	private Logger logger = LoggerFactory.getLogger(PriceTrend.class);
 	
 	private void detectConsecutiveUpWeeks(List<StockStatistic> weeklyPriceChgList) {
@@ -177,6 +178,22 @@ public class PriceTrend implements SignalScanner {
  		}
 	}
 
+	private void minVolumeSignal(StockAveragePrice avgPrice) {
+		List<AveragePrice> avgList = avgPrice.getAvgList();
+		logger.debug("minVolumeSignal - get price for " + avgPrice.getPriceId());
+		StockPrice price = priceSvc.findStockPrice(avgPrice.getPriceId());
+		for (AveragePrice avg: avgList) {
+			if (avg.getDaysCnt().equals(50)) {
+				if (avg.getAvgVolume().compareTo(500000) > 0) {
+					if (price != null) {
+	 	 	 			signalSvc.createSignal(new StockSignal(price, AVG_VOL_500K));
+					}
+				}
+				break;
+			}
+		}
+	}
+	
 	@Override
 	public void scan(String tickerSymbol) {
 		List<StockStatistic> wkPrcChgList = statSvc.retrieveStatList(tickerSymbol, WEEKLY_CLOSE_STAT);
@@ -191,6 +208,7 @@ public class PriceTrend implements SignalScanner {
 		for (StockAveragePrice avgPrice: avgPriceList) {
 			this.detectTrend(avgPrice, PRICE_UPTREND_SIGNAL);
 			this.detectTrend(avgPrice, PRICE_DNTREND_SIGNAL);
+			this.minVolumeSignal(avgPrice);
 		}
 	}
 
