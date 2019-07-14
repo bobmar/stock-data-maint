@@ -2,7 +2,7 @@ package org.rhm.stock.repository;
 
 import java.util.Date;
 
-import org.rhm.stock.domain.AveragePrice;
+import org.rhm.stock.domain.StockAveragePrice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -19,7 +19,7 @@ public class AveragePriceCustomRepoImpl implements AveragePriceCustomRepo {
 	@Override
 	public long deleteOlderThan(Date deleteBefore) {
 		CriteriaDefinition crit = Criteria.where("priceDate").lt(deleteBefore);
-		DeleteResult result = mongoTemplate.remove(Query.query(crit), AveragePrice.class);
+		DeleteResult result = mongoTemplate.remove(Query.query(crit), StockAveragePrice.class);
 		return result.getDeletedCount();
 	}
 
