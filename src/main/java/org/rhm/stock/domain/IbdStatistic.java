@@ -1,5 +1,6 @@
 package org.rhm.stock.domain;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import org.springframework.data.annotation.Id;
@@ -18,6 +19,7 @@ public class IbdStatistic {
 	private String accumDist = null;
 	private String salesMarginRoe = null;
 	private String industryRank = null;
+	private Date createDate = Calendar.getInstance().getTime();
 	
 	public String getStatId() {
 		return statId;
@@ -95,6 +97,12 @@ public class IbdStatistic {
 	}
 	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
+	}
+	public Date getCreateDate() {
+		return createDate;
+	}
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
 	}
 	
 }
