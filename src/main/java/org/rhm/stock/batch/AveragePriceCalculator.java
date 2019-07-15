@@ -43,7 +43,7 @@ public class AveragePriceCalculator implements BatchJob {
 	
 	private boolean processPriceList(List<StockPrice> priceList) {
 		boolean success = false;
-		int[] days = {10, 50, 200};
+		int[] days = {10, 20, 50, 200};
 		StockPrice firstPrice = priceList.get(0);
 		StockAveragePrice avgPrice = new StockAveragePrice();
 		avgPrice.setPriceId(firstPrice.getPriceId());
