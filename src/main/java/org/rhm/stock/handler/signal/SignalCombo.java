@@ -21,7 +21,7 @@ public class SignalCombo implements SignalScanner {
 	private SignalService signalSvc = null;
 	private static final String CONFIRM_BUY_SETUP = "SEQUENTIAL";
 	private static final String MOMENTUM_CANDIDATE = "MOMENTUM";
-	private static final String SIGNAL_MATCH = "|UPTREND|UPDNVOLINCR|AVGVOL500K|";
+	private static final String SIGNAL_MATCH = "|UPTREND|UPDNVOLINCR|AVGVOL500K|AVG20ABV200|";
 	private Logger logger = LoggerFactory.getLogger(SignalCombo.class);
 
 	private StockSignal cloneSignal(StockSignal signal) {

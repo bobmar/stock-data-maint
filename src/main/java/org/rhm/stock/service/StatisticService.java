@@ -73,6 +73,15 @@ public class StatisticService {
 				.collect(Collectors.toList());
 	}
 	
+	public StockStatistic retrieveStat(String tickerSymbol, String statisticType, Date priceDate) {
+		List<StockStatistic> statList = statRepo.findByTickerSymbolAndStatisticTypeAndPriceDate(tickerSymbol, statisticType, priceDate);
+		StockStatistic stat = null;
+		if (statList.size() > 0) {
+			stat = statList.get(0);
+		}
+		return stat;
+	}
+	
 	public Map<String, List<StockStatistic>> retrieveStatMap(String tickerSymbol) {
 		Map<String, List<StockStatistic>> statMap = new HashMap<String, List<StockStatistic>>();
 		List<StockStatistic> fullStatList = this.retrieveStatList(tickerSymbol), currStatList = null;

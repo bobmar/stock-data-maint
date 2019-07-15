@@ -22,6 +22,7 @@ public class DailyPriceVsAvg implements StatisticCalculator {
 	private static final String DLY_PRC_VS_50_DAY_AVG = "DYPRCV50A";
 	private static final String DLY_PRC_VS_200_DAY_AVG = "DYPRCV200A";
 	private static final String NET_ABV_BLW_50_DAY_AVG = "NETABVBLW50";
+	public static final String AVG_PRC_20_VS_200 = "AVG20V200";
 
 	@Autowired
 	private AveragePriceService avgSvc = null;
@@ -80,6 +81,35 @@ public class DailyPriceVsAvg implements StatisticCalculator {
 		}
 	}
 	
+	private void calcAvg20Vs200(StockPrice price) {
+		StockAveragePrice avgPrice = this.findStockAvgPrice(price.getPriceId());
+		if (avgPrice != null) {
+			AveragePrice avgPrice20 = null, avgPrice200 = null;
+			for (AveragePrice ap: avgPrice.getAvgList()) {
+				switch (ap.getDaysCnt()) {
+				case 20:
+					avgPrice20 = ap;
+					break;
+				case 200:
+					avgPrice200 = ap;
+					break;
+				}
+			}
+			double avg20Vs200 = 0.0;
+			if (avgPrice20 != null && avgPrice200 != null) {
+				avg20Vs200 = avgPrice20.getAvgPrice().doubleValue() / avgPrice200.getAvgPrice().doubleValue();
+				statSvc.createStatistic(
+					new StockStatistic(price.getPriceId(), AVG_PRC_20_VS_200, BigDecimal.valueOf(avg20Vs200), price.getTickerSymbol(), price.getPriceDate())
+					,false);
+			}
+			else {
+				if (avgPrice200 == null) {
+					logger.warn("calcAvg20Vs200 - 200-day avg price not available; cannot calculate " + AVG_PRC_20_VS_200 + " for " + price.getPriceId()); 
+				}
+			}
+		}
+	}
+	
 	private void netAvbBlwStat(List<StockStatistic> statList) {
 		long daysAbove = 0, daysBelow = 0;
 		StockStatistic firstStat = statList.get(0);
@@ -116,6 +146,7 @@ public class DailyPriceVsAvg implements StatisticCalculator {
 		for (StockPrice price: priceList) {
 			this.calcPriceVsAvg(price, 50, DLY_PRC_VS_50_DAY_AVG);
 			this.calcPriceVsAvg(price, 200, DLY_PRC_VS_200_DAY_AVG);
+			this.calcAvg20Vs200(price);
 		}
 		this.calcNetAbvBlw(firstPrice.getTickerSymbol());
 	}
