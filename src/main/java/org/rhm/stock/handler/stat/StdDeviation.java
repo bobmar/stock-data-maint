@@ -19,7 +19,7 @@ public class StdDeviation implements StatisticCalculator {
 	@Autowired
 	private StatisticService statSvc = null;
 	private static final String STD_DEV_2WK = "STDDEV2WK";
-	private static final String STD_DEV_10WK = "STDDEV10WK";
+	public static final String STD_DEV_10WK = "STDDEV10WK";
 	
 	private Logger logger = LoggerFactory.getLogger(StdDeviation.class);
 	

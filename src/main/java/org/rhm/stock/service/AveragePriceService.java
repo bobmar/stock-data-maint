@@ -20,8 +20,12 @@ public class AveragePriceService {
 	}
 	
 	public StockAveragePrice findAvgPrice(String priceId) {
-		Optional<StockAveragePrice> avgPrice = avgPriceRepo.findById(priceId);
-		return avgPrice.get();
+		Optional<StockAveragePrice> avgPriceResult = avgPriceRepo.findById(priceId);
+		StockAveragePrice avgPrice = null;
+		if (avgPriceResult.isPresent()) {
+			avgPrice = avgPriceResult.get();
+		}
+		return avgPrice;
 	}
 	
 	public List<StockAveragePrice> findAvgPriceList(String tickerSymbol) {

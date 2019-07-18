@@ -34,15 +34,19 @@ public class StatisticsCalcJob implements BatchJob {
 	
 	@Autowired
 	@Qualifier("upDownVolCalc")
-	private UpDownVolume upDownVolCalc = null;
+	private StatisticCalculator upDownVolCalc = null;
 	
 	@Autowired
 	@Qualifier("stdDeviation")
-	private StdDeviation stdDeviation = null;
+	private StatisticCalculator stdDeviation = null;
 	
 	@Autowired
 	@Qualifier("dailyPriceVsAvg")
-	private DailyPriceVsAvg dailyPriceVsAvg = null;
+	private StatisticCalculator dailyPriceVsAvg = null;
+	
+	@Autowired
+	@Qualifier("momentum")
+	private StatisticCalculator momentum = null;
 	
 	@Autowired
 	private PriceService priceSvc = null;
@@ -64,6 +68,7 @@ public class StatisticsCalcJob implements BatchJob {
 		calcList.add(upDownVolCalc);
 		calcList.add(stdDeviation);
 		calcList.add(dailyPriceVsAvg);
+		calcList.add(momentum);
 		return calcList;
 	}
 
