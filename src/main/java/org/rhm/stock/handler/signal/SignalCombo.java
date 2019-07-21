@@ -68,7 +68,7 @@ public class SignalCombo implements SignalScanner {
 				matchCnt++;
 			}
 		}
-		return matchCnt == 3;
+		return matchCnt == 4;
 	}
 	
 	private void findMomentumCandidate(List<StockSignal> signalList) {
