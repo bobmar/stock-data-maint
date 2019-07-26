@@ -1,6 +1,8 @@
 package org.rhm.stock.handler.signal;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.rhm.stock.domain.StockPrice;
 import org.rhm.stock.domain.StockSignal;
@@ -29,9 +31,20 @@ public class DailyVsAvgScanner implements SignalScanner {
 	private static final String SIGNAL_DLYV200X_UP = "DYV200XUP";
 	private static final String SIGNAL_DLYV200X_DN = "DYV200XDN";
 	private static final String SIGNAL_20ABV200 = "AVG20ABV200";
+	private static final String SIGNAL_DLYV50_0507 = "DLYV500507";
 	private static final String STAT_DYV50 = "DYPRCV50A";
 	private static final String STAT_DYV200 = "DYPRCV200A";
 	private Logger logger = LoggerFactory.getLogger(DailyVsAvgScanner.class);
+	private Map<String, StockPrice> priceMap = new HashMap<String, StockPrice>();
+	
+	private StockPrice findStockPrice(String priceId) {
+		StockPrice price = priceMap.get(priceId);
+		if (price == null) {
+			price = priceSvc.findStockPrice(priceId);
+			priceMap.put(price.getPriceId(), price);
+		}
+		return price;
+	}
 	
 	private void evaluateCrossUp(List<StockStatistic> statList, String signalType) {
 		StockPrice price = null;
@@ -39,7 +52,7 @@ public class DailyVsAvgScanner implements SignalScanner {
 		if (statList.size() == 4) {
 			if (statList.get(0).getStatisticValue().doubleValue() > 1 && statList.get(1).getStatisticValue().doubleValue() > 1) {
 				if (statList.get(2).getStatisticValue().doubleValue() < 1 && statList.get(3).getStatisticValue().doubleValue() < 1) {
-					price = priceSvc.findStockPrice(statList.get(1).getPriceId());
+					price = this.findStockPrice(statList.get(1).getPriceId());
 					signal = new StockSignal(price, signalType);
 					signalSvc.createSignal(signal);
 					logger.debug("evaluateCrossUp - created " + signalType + " signal for " + signal.getPriceId());
@@ -54,7 +67,7 @@ public class DailyVsAvgScanner implements SignalScanner {
 		if (statList.size() == 4) {
 			if (statList.get(0).getStatisticValue().doubleValue() < 1 && statList.get(1).getStatisticValue().doubleValue() < 1) {
 				if (statList.get(2).getStatisticValue().doubleValue() > 1 && statList.get(3).getStatisticValue().doubleValue() > 1) {
-					price = priceSvc.findStockPrice(statList.get(1).getPriceId());
+					price = this.findStockPrice(statList.get(1).getPriceId());
 					signal = new StockSignal(price, signalType);
 					signalSvc.createSignal(signal);
 					logger.debug("evaluateCrossDown - created " + signalType + " signal for " + signal.getPriceId());
@@ -67,10 +80,19 @@ public class DailyVsAvgScanner implements SignalScanner {
 		StockPrice price = null;
 		StockSignal signal = null;
 		if (stat.getStatisticValue().doubleValue() > 1) {
-			price = priceSvc.findStockPrice(stat.getPriceId());
+			price = this.findStockPrice(stat.getPriceId());
 			signal = new StockSignal(price, SIGNAL_20ABV200);
 			signalSvc.createSignal(signal);
 			logger.debug("evaluate20Above200 - created " + SIGNAL_20ABV200 + " signal for " + signal.getPriceId());
+		}
+	}
+	
+	private void evaluateCloseVs50(StockStatistic stat) {
+		StockPrice price = null;
+		if (stat.getStatisticValue().doubleValue() > 1.04 && stat.getStatisticValue().doubleValue() < 1.08) {
+			price = this.findStockPrice(stat.getPriceId());
+			signalSvc.createSignal(new StockSignal(price, SIGNAL_DLYV50_0507));
+			logger.debug("evaluateCloseVs50 - created " + SIGNAL_DLYV50_0507 + " signal for " + stat.getPriceId());
 		}
 	}
 	
@@ -81,6 +103,7 @@ public class DailyVsAvgScanner implements SignalScanner {
 		while (statList.size() > 4) {
 			this.evaluateCrossUp(statList.subList(0, 4), SIGNAL_DLYV50X_UP);
 			this.evaluateCrossDown(statList.subList(0, 4), SIGNAL_DLYV50X_DN);
+			this.evaluateCloseVs50(statList.get(0));
 			statList.remove(0);
 		}
 		statList = statSvc.retrieveStatList(tickerSymbol, STAT_DYV200);
