@@ -82,6 +82,10 @@ public class PriceService {
 		return priceRepo.deleteOlderThan(deleteBefore);
 	}
 	
+	public long deleteByTickerSymbol(String tickerSymbol) { 
+		return priceRepo.deleteByTickerSymbol(tickerSymbol);
+	}
+	
 	public List<StockPrice> findByTickerAndPriceDate(String tickerSymbol, Date priceDate) {
 		return priceRepo.findTop30ByTickerSymbolAndPriceDateGreaterThanOrderByPriceDateDesc(tickerSymbol, priceDate);
 	}
@@ -91,6 +95,17 @@ public class PriceService {
 		price.setTickerSymbol(tickerSymbol);
 		Example<StockPrice> example = Example.of(price);
 		return priceRepo.count(example);
+	}
+	
+	public List<String> findPriceTickers(Date priceDate) {
+		List<String> tickerList = new ArrayList<String>();
+		List<StockPrice> priceList = priceRepo.findByPriceDateGreaterThan(priceDate);
+		for (StockPrice price: priceList) {
+			if (!tickerList.contains(price.getTickerSymbol())) {
+				tickerList.add(price.getTickerSymbol());
+			}
+		}
+		return tickerList;
 	}
 	
 }

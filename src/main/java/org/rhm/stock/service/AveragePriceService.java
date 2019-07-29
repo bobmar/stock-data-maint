@@ -1,5 +1,6 @@
 package org.rhm.stock.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -48,5 +49,20 @@ public class AveragePriceService {
 	
 	public long deleteOlderThan(Date deleteBefore) {
 		return avgPriceRepo.deleteOlderThan(deleteBefore);
+	}
+	
+	public long deleteByTickerSymbol(String tickerSymbol) {
+		return avgPriceRepo.deleteByTickerSymbol(tickerSymbol);
+	}
+	
+	public List<String> findAvgPriceTickers(Date priceDate) {
+		List<String> tickerSymbolList = new ArrayList<String>();
+		List<StockAveragePrice> avgPriceList = avgPriceRepo.findByPriceDateGreaterThan(priceDate);
+		for (StockAveragePrice avg: avgPriceList) {
+			if (!tickerSymbolList.contains(avg.getTickerSymbol())) {
+				tickerSymbolList.add(avg.getTickerSymbol());
+			}
+		}
+		return tickerSymbolList;
 	}
 }

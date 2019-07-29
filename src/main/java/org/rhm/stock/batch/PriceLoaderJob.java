@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.rhm.stock.domain.StockPrice;
 import org.rhm.stock.domain.StockTicker;
@@ -31,18 +32,8 @@ public class PriceLoaderJob implements BatchJob {
 	}
 	
 	private Date findMostRecentPriceDate(List<StockPrice> priceList) {
-		Date priceDate = null;
-		for (StockPrice price: priceList) {
-			if (priceDate == null) {
-				priceDate = price.getPriceDate();
-			}
-			else {
-				if (price.getPriceDate().compareTo(priceDate) == 1) {
-					priceDate = price.getPriceDate();
-				}
-			}
-		}
-		return priceDate;
+		Date mostRecentDate = priceList.stream().sorted((o1,o2)->{return o1.getPriceDate().compareTo(o2.getPriceDate()) * -1;}).collect(Collectors.toList()).get(0).getPriceDate();
+		return mostRecentDate;
 	}
 	
 	private boolean processTicker(String tickerSymbol) {

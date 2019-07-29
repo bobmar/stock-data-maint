@@ -1,6 +1,7 @@
 package org.rhm.stock.repository;
 
 import java.util.Date;
+import java.util.List;
 
 import org.rhm.stock.domain.StockPrice;
 import org.springframework.beans.factory.annotation.Autowired;

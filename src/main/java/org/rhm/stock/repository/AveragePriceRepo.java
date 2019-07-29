@@ -12,4 +12,6 @@ public interface AveragePriceRepo extends MongoRepository<StockAveragePrice, Str
 	public List<StockAveragePrice> findTop10ByTickerSymbolOrderByPriceDateDesc(String tickerSymbol);
 	public List<StockAveragePrice> findByPriceDate(Date priceDate);
 	public List<StockAveragePrice> findByPriceId(String priceId);
+	public List<StockAveragePrice> findByPriceDateGreaterThan(Date priceDate);
+	public int deleteByTickerSymbol(String tickerSymbol);
 }

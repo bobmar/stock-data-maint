@@ -13,4 +13,6 @@ public interface PriceRepo extends MongoRepository<StockPrice, String>, PriceCus
 	public StockPrice findTopByTickerSymbolOrderByPriceDateDesc(String tickerSymbol);
 	public List<StockPrice> findTop60ByTickerSymbolOrderByPriceDateDesc(String tickerSymbol);
 	public List<StockPrice> findTop30ByTickerSymbolAndPriceDateGreaterThanOrderByPriceDateDesc(String tickerSymbol, Date priceDate);
+	public List<StockPrice> findByPriceDateGreaterThan(Date priceDate);
+	public int deleteByTickerSymbol(String tickerSymbol);
 }

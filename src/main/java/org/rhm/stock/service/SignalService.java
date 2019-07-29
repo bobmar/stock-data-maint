@@ -230,4 +230,19 @@ public class SignalService {
 			(signal)->{return (signal.getPriceDate().compareTo(beginDate) > 0 
 				&& signal.getPriceDate().compareTo(endDate) < 0);}).collect(Collectors.toList());
 	}
+	
+	public long deleteByTickerSymbol(String tickerSymbol) {
+		return signalRepo.deleteByTickerSymbol(tickerSymbol);
+	}
+	
+	public List<String> findSignalTickers(Date priceDate) {
+		List<String> tickerSymbolList = new ArrayList<String>();
+		List<StockSignal> signals = signalRepo.findByPriceDateGreaterThan(priceDate);
+		for (StockSignal signal: signals) {
+			if (!tickerSymbolList.contains(signal.getTickerSymbol())) {
+				tickerSymbolList.add(signal.getTickerSymbol());
+			}
+		}
+		return tickerSymbolList;
+	}
 }
