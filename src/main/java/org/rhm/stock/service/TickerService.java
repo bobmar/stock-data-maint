@@ -1,6 +1,7 @@
 package org.rhm.stock.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -207,4 +208,7 @@ public class TickerService {
 		return ibdList.stream().sorted((o1,o2)->{return o1.getPriceDate().compareTo(o2.getPriceDate()) * -1;}).collect(Collectors.toList());
 	}
 	
+	public int deleteIbdStatsOlderThan(Date deleteBefore) {
+		return ibdRepo.deleteByPriceDateBefore(deleteBefore);
+	}
 }

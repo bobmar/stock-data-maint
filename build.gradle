@@ -1,6 +1,6 @@
 buildscript {
 	ext {
-		springBootVersion = '2.0.0.RELEASE'
+		springBootVersion = '2.1.6.RELEASE'
 	}
 	repositories {
 		mavenCentral()
@@ -10,9 +10,9 @@ buildscript {
 	}
 }
 
-bootJar {
-	mainClassName : "org.rhm.stock.StockDataMaintApplication"
-}
+//bootJar {
+//	mainClassName : "org.rhm.stock.StockDataMaintApplication"
+//}
 
 apply plugin: 'java'
 apply plugin: 'eclipse'

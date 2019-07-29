@@ -29,6 +29,9 @@ public class PrunerJob implements BatchJob {
 	@Qualifier("pruneStat")
 	private MaintHandler stat = null;
 	@Autowired
+	@Qualifier("pruneIbdStat")
+	private MaintHandler ibdStat = null;
+	@Autowired
 	@Qualifier("pruneOrphan")
 	private MaintHandler orphan = null;
 	private Logger logger = LoggerFactory.getLogger(PrunerJob.class);
@@ -40,6 +43,7 @@ public class PrunerJob implements BatchJob {
 		prunerList.add(price);
 		prunerList.add(signal);
 		prunerList.add(stat);
+		prunerList.add(ibdStat);
 		prunerList.add(orphan);
 		return prunerList;
 	}

@@ -172,17 +172,7 @@ public class StatisticService {
 
 	public List<String> findStatTickers(Date priceDate) {
 		List<String> tickerSymbols = new ArrayList<String>();
-		List<StockStatistic> statList = statRepo.findByPriceDateGreaterThan(priceDate);
-		int statCnt = 0;
-		for (StockStatistic stat: statList) {
-			if (!tickerSymbols.contains(stat.getTickerSymbol())) {
-				tickerSymbols.add(stat.getTickerSymbol());
-			}
-			if (++statCnt%100000 == 0) {
-				logger.info("findStatTickers - scanned " + statCnt + " statistic records");
-//				System.gc();
-			}
-		}
+		tickerSymbols = statRepo.findUniqueTickerSymbols(priceDate);
 		return tickerSymbols;
 	}
 }

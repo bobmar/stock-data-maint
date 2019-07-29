@@ -1,6 +1,7 @@
 package org.rhm.stock.repository;
 
 import java.util.Date;
+import java.util.List;
 
 import org.rhm.stock.domain.StockStatistic;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,14 @@ public class StatisticCustomRepoImpl implements StatisticCustomRepo {
 		CriteriaDefinition crit = Criteria.where("priceDate").lt(deleteBefore);
 		DeleteResult result = mongoTemplate.remove(Query.query(crit), StockStatistic.class);
 		return result.getDeletedCount();
+	}
+
+	@Override
+	public List<String> findUniqueTickerSymbols(Date deleteBefore) {
+		List<String> tickerSymbolList = null;
+		CriteriaDefinition crit = Criteria.where("priceDate").gte(deleteBefore);
+		tickerSymbolList = mongoTemplate.findDistinct(Query.query(crit), "tickerSymbol", StockStatistic.class, String.class);
+		return tickerSymbolList;
 	}
 
 }

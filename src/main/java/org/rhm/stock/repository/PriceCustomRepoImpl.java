@@ -23,4 +23,12 @@ public class PriceCustomRepoImpl implements PriceCustomRepo {
 		return result.getDeletedCount();
 	}
 
+	@Override
+	public List<String> findUniqueTickerSymbols(Date deleteBefore) {
+		List<String> tickerSymbolList = null;
+		CriteriaDefinition crit = Criteria.where("priceDate").gte(deleteBefore);
+		tickerSymbolList = mongoTemplate.findDistinct(Query.query(crit), "tickerSymbol", StockPrice.class, String.class);
+		return tickerSymbolList;
+	}
+
 }

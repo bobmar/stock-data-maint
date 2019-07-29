@@ -37,4 +37,12 @@ public class SignalCustomRepoImpl implements SignalCustomRepo {
 		return result.getDeletedCount();
 	}
 
+	@Override
+	public List<String> findUniqueTickerSymbols(Date deleteBefore) {
+		List<String> tickerSymbolList = null;
+		CriteriaDefinition crit = Criteria.where("priceDate").gte(deleteBefore);
+		tickerSymbolList = mongoTemplate.findDistinct(Query.query(crit), "tickerSymbol", StockSignal.class, String.class);
+		return tickerSymbolList;
+	}
+
 }

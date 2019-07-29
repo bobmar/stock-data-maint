@@ -236,13 +236,7 @@ public class SignalService {
 	}
 	
 	public List<String> findSignalTickers(Date priceDate) {
-		List<String> tickerSymbolList = new ArrayList<String>();
-		List<StockSignal> signals = signalRepo.findByPriceDateGreaterThan(priceDate);
-		for (StockSignal signal: signals) {
-			if (!tickerSymbolList.contains(signal.getTickerSymbol())) {
-				tickerSymbolList.add(signal.getTickerSymbol());
-			}
-		}
+		List<String> tickerSymbolList = signalRepo.findUniqueTickerSymbols(priceDate);
 		return tickerSymbolList;
 	}
 }

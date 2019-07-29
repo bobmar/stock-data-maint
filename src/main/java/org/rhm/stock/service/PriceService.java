@@ -98,13 +98,7 @@ public class PriceService {
 	}
 	
 	public List<String> findPriceTickers(Date priceDate) {
-		List<String> tickerList = new ArrayList<String>();
-		List<StockPrice> priceList = priceRepo.findByPriceDateGreaterThan(priceDate);
-		for (StockPrice price: priceList) {
-			if (!tickerList.contains(price.getTickerSymbol())) {
-				tickerList.add(price.getTickerSymbol());
-			}
-		}
+		List<String> tickerList = priceRepo.findUniqueTickerSymbols(priceDate);
 		return tickerList;
 	}
 	

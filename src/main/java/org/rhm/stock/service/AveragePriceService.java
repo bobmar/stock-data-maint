@@ -56,13 +56,7 @@ public class AveragePriceService {
 	}
 	
 	public List<String> findAvgPriceTickers(Date priceDate) {
-		List<String> tickerSymbolList = new ArrayList<String>();
-		List<StockAveragePrice> avgPriceList = avgPriceRepo.findByPriceDateGreaterThan(priceDate);
-		for (StockAveragePrice avg: avgPriceList) {
-			if (!tickerSymbolList.contains(avg.getTickerSymbol())) {
-				tickerSymbolList.add(avg.getTickerSymbol());
-			}
-		}
+		List<String> tickerSymbolList = avgPriceRepo.findUniqueTickerSymbols(priceDate);
 		return tickerSymbolList;
 	}
 }
