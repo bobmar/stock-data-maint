@@ -26,7 +26,13 @@ public class Momentum implements StatisticCalculator {
 
 	private static final String STAT_Z_SCORE = "ZSCORE";
 	private static final String STAT_TR_MOM = "TRMOM";
+	private List<StockAveragePrice> avgPriceList = null;
+	
 	private Logger logger = LoggerFactory.getLogger(Momentum.class);
+	
+	private void init(String tickerSymbol) {
+		avgPriceList = avgPriceSvc.findAvgPriceList(tickerSymbol);
+	}
 	
 	private void calcTotalReturnMomentum(List<StockPrice> priceList) {
 		StockPrice todayPrice = null, oldPrice = null;
@@ -42,13 +48,25 @@ public class Momentum implements StatisticCalculator {
 		}
 	}
 	
+	private StockAveragePrice findAvgPrice(String priceId) {
+		StockAveragePrice avgPrice = null;
+		for (StockAveragePrice avg: avgPriceList) {
+			if (avg.getPriceId().equals(priceId)) {
+				avgPrice = avg;
+				break;
+			}
+		}
+		return avgPrice;
+	}
+	
+	
 	private void calcZScore(List<StockPrice> priceList) {
 		StockAveragePrice avgPrice = null;
 		AveragePrice avg50Day = null;
 		StockStatistic stdDev = null;
 		double zScore = 0.0;
 		for (StockPrice price: priceList) {
-			avgPrice = avgPriceSvc.findAvgPrice(price.getPriceId());
+			avgPrice = this.findAvgPrice(price.getPriceId());
 			if (avgPrice != null) {
 				for (AveragePrice avg: avgPrice.getAvgList()) {
 					if (avg.getDaysCnt() == 50) {
@@ -56,9 +74,10 @@ public class Momentum implements StatisticCalculator {
 						break;
 					}
 				}
-				stdDev = statSvc.retrieveStat(price.getTickerSymbol(), StdDeviation.STD_DEV_10WK, price.getPriceDate());
+//				stdDev = statSvc.retrieveStat(price.getTickerSymbol(), StdDeviation.STD_DEV_10WK, price.getPriceDate());
+				stdDev = statSvc.retrieveStat(price.getPriceId() + ":" + StdDeviation.STD_DEV_10WK);
 				if (avg50Day != null && (stdDev != null && stdDev.getStatisticValue().doubleValue() > 0)) {
-					logger.info("calcZScore - priceID=" + price.getPriceId() + "50-Day avg price=" + avg50Day.getAvgPrice() + "; closing price=" + price.getClosePrice() + "; std dev=" + stdDev.getStatisticValue());
+					logger.debug("calcZScore - priceID=" + price.getPriceId() + " 50-Day avg price=" + avg50Day.getAvgPrice() + "; closing price=" + price.getClosePrice() + "; std dev=" + stdDev.getStatisticValue());
 					zScore = ((price.getClosePrice().doubleValue() - avg50Day.getAvgPrice().doubleValue())
 						/stdDev.getStatisticValue().doubleValue());
 					statSvc.createStatistic(
@@ -74,6 +93,8 @@ public class Momentum implements StatisticCalculator {
 	@Override
 	public void calculate(List<StockPrice> priceList) {
 		List<StockPrice> workList = new ArrayList<StockPrice>();
+		logger.info("calculate - processing " + priceList.size() + " prices for " + priceList.get(0).getTickerSymbol());
+		this.init(priceList.get(0).getTickerSymbol());
 		this.calcZScore(priceList);
 		workList.addAll(priceList);
 		while (workList.size() > 50) {

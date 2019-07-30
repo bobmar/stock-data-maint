@@ -76,7 +76,8 @@ public class StatisticsCalcJob implements BatchJob {
 		List<StockPrice> workingList = new ArrayList<StockPrice>();
 		for (StatisticCalculator calc: calcList) {
 			workingList.clear();
-			priceList.forEach(workingList::add);
+//			priceList.forEach(workingList::add);
+			workingList.addAll(priceList);
 			calc.calculate(workingList);
 		}
 	}

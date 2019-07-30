@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.TimeZone;
 import java.util.stream.Collectors;
 
@@ -79,6 +80,12 @@ public class StatisticService {
 		if (statList.size() > 0) {
 			stat = statList.get(0);
 		}
+		return stat;
+	}
+	
+	public StockStatistic retrieveStat(String statId) {
+		Optional<StockStatistic> optStat = statRepo.findById(statId);
+		StockStatistic stat = optStat.isPresent()?optStat.get():null;
 		return stat;
 	}
 	

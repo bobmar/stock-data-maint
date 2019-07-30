@@ -104,7 +104,7 @@ public class DailyPriceVsAvg implements StatisticCalculator {
 			}
 			else {
 				if (avgPrice200 == null) {
-					logger.warn("calcAvg20Vs200 - 200-day avg price not available; cannot calculate " + AVG_PRC_20_VS_200 + " for " + price.getPriceId()); 
+					logger.debug("calcAvg20Vs200 - 200-day avg price not available; cannot calculate " + AVG_PRC_20_VS_200 + " for " + price.getPriceId()); 
 				}
 			}
 		}
