@@ -27,11 +27,13 @@ public class Momentum implements StatisticCalculator {
 	private static final String STAT_Z_SCORE = "ZSCORE";
 	private static final String STAT_TR_MOM = "TRMOM";
 	private List<StockAveragePrice> avgPriceList = null;
+	private List<StockStatistic> statList = null;
 	
 	private Logger logger = LoggerFactory.getLogger(Momentum.class);
 	
 	private void init(String tickerSymbol) {
 		avgPriceList = avgPriceSvc.findAvgPriceList(tickerSymbol);
+		statList = statSvc.retrieveStatList(tickerSymbol, StdDeviation.STD_DEV_10WK);
 	}
 	
 	private void calcTotalReturnMomentum(List<StockPrice> priceList) {
@@ -59,6 +61,16 @@ public class Momentum implements StatisticCalculator {
 		return avgPrice;
 	}
 	
+	private StockStatistic findStdDev(String priceId) {
+		StockStatistic stdDev = null;
+		for (StockStatistic stat: statList) {
+			if (stat.getPriceId().equals(priceId)) {
+				stdDev = stat;
+				break;
+			}
+		}
+		return stdDev;
+	}
 	
 	private void calcZScore(List<StockPrice> priceList) {
 		StockAveragePrice avgPrice = null;
@@ -75,13 +87,17 @@ public class Momentum implements StatisticCalculator {
 					}
 				}
 //				stdDev = statSvc.retrieveStat(price.getTickerSymbol(), StdDeviation.STD_DEV_10WK, price.getPriceDate());
-				stdDev = statSvc.retrieveStat(price.getPriceId() + ":" + StdDeviation.STD_DEV_10WK);
+//				stdDev = statSvc.retrieveStat(price.getPriceId() + ":" + StdDeviation.STD_DEV_10WK);
+				stdDev = this.findStdDev(price.getPriceId());
 				if (avg50Day != null && (stdDev != null && stdDev.getStatisticValue().doubleValue() > 0)) {
 					logger.debug("calcZScore - priceID=" + price.getPriceId() + " 50-Day avg price=" + avg50Day.getAvgPrice() + "; closing price=" + price.getClosePrice() + "; std dev=" + stdDev.getStatisticValue());
 					zScore = ((price.getClosePrice().doubleValue() - avg50Day.getAvgPrice().doubleValue())
 						/stdDev.getStatisticValue().doubleValue());
 					statSvc.createStatistic(
 						new StockStatistic(price.getPriceId(), STAT_Z_SCORE, BigDecimal.valueOf(zScore), price.getTickerSymbol(), price.getPriceDate()));
+				}
+				else {
+					logger.warn("calcZScore - unable to find standard deviation for " + price.getPriceId());
 				}
 			}
 			else {
