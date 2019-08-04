@@ -30,6 +30,9 @@ public class SignalCustomRepoImpl implements SignalCustomRepo {
 		return signalList;
 	}
 	
+	/**
+	 * @deprecated Use deleteByPriceDateBefore method.
+	 */
 	@Override
 	public long deleteOlderThan(Date deleteBefore) {
 		CriteriaDefinition crit = Criteria.where("priceDate").lt(deleteBefore);

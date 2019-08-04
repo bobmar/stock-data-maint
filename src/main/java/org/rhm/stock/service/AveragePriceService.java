@@ -1,6 +1,5 @@
 package org.rhm.stock.service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -48,7 +47,8 @@ public class AveragePriceService {
 	}
 	
 	public long deleteOlderThan(Date deleteBefore) {
-		return avgPriceRepo.deleteOlderThan(deleteBefore);
+//		return avgPriceRepo.deleteOlderThan(deleteBefore);
+		return avgPriceRepo.deleteByPriceDateBefore(deleteBefore);
 	}
 	
 	public long deleteByTickerSymbol(String tickerSymbol) {

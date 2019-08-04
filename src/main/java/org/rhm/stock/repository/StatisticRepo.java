@@ -15,4 +15,5 @@ public interface StatisticRepo extends MongoRepository<StockStatistic, String>, 
 	public StockStatistic findTopByOrderByPriceDateDesc();
 	public List<StockStatistic> findByPriceDateGreaterThan(Date priceDate);
 	public int deleteByTickerSymbol(String tickerSymbol);
+	public int deleteByPriceDateBefore(Date priceDate);
 }

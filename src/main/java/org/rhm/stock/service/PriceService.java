@@ -79,7 +79,8 @@ public class PriceService {
 	}
 	
 	public long deleteOlderThan(Date deleteBefore) {
-		return priceRepo.deleteOlderThan(deleteBefore);
+//		return priceRepo.deleteOlderThan(deleteBefore);
+		return priceRepo.deleteByPriceDateBefore(deleteBefore);
 	}
 	
 	public long deleteByTickerSymbol(String tickerSymbol) { 

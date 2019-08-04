@@ -170,7 +170,8 @@ public class StatisticService {
 	}
 	
 	public long deleteOlderThan(Date deleteBefore) {
-		return statRepo.deleteOlderThan(deleteBefore);
+//		return statRepo.deleteOlderThan(deleteBefore);
+		return statRepo.deleteByPriceDateBefore(deleteBefore);
 	}
 	
 	public long deleteByTickerSymbol(String tickerSymbol) {

@@ -17,6 +17,9 @@ public class AveragePriceCustomRepoImpl implements AveragePriceCustomRepo {
 	@Autowired
 	private MongoTemplate mongoTemplate = null;
 	
+	/**
+	 * @deprecated Use deleteByPriceDateBefore method.
+	 */
 	@Override
 	public long deleteOlderThan(Date deleteBefore) {
 		CriteriaDefinition crit = Criteria.where("priceDate").lt(deleteBefore);

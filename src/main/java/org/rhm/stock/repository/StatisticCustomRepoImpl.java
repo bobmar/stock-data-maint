@@ -16,6 +16,9 @@ public class StatisticCustomRepoImpl implements StatisticCustomRepo {
 	@Autowired
 	private MongoTemplate mongoTemplate = null;
 
+	/**
+	 * @deprecated Use JPA deleteByPriceDateBefore method.
+	 */
 	@Override
 	public long deleteOlderThan(Date deleteBefore) {
 		CriteriaDefinition crit = Criteria.where("priceDate").lt(deleteBefore);

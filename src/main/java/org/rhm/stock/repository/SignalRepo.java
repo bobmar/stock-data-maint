@@ -16,4 +16,5 @@ public interface SignalRepo extends MongoRepository<StockSignal, String>, Signal
 	public List<StockSignal> findByTickerSymbolOrderByPriceDateDesc(String tickerSymbol);
 	public List<StockSignal> findByPriceDateGreaterThan(Date priceDate);
 	public int deleteByTickerSymbol(String tickerSymbol);
+	public int deleteByPriceDateBefore(Date priceDate);
 }
