@@ -211,4 +211,5 @@ public class TickerService {
 	public int deleteIbdStatsOlderThan(Date deleteBefore) {
 		return ibdRepo.deleteByPriceDateBefore(deleteBefore);
 	}
+	
 }
