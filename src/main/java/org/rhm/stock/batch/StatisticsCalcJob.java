@@ -1,17 +1,15 @@
 package org.rhm.stock.batch;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 
 import org.rhm.stock.domain.StockPrice;
 import org.rhm.stock.domain.StockTicker;
-import org.rhm.stock.handler.stat.DailyPriceVsAvg;
 import org.rhm.stock.handler.stat.StatisticCalculator;
-import org.rhm.stock.handler.stat.StdDeviation;
-import org.rhm.stock.handler.stat.UpDownVolume;
+import org.rhm.stock.service.BatchStatusService;
 import org.rhm.stock.service.PriceService;
 import org.rhm.stock.service.TickerService;
 import org.slf4j.Logger;
@@ -52,6 +50,8 @@ public class StatisticsCalcJob implements BatchJob {
 	private PriceService priceSvc = null;
 	@Autowired
 	private TickerService tickerSvc = null;
+	@Autowired
+	private BatchStatusService batchStatSvc = null;
 	
 	private List<StatisticCalculator> calcList = null;
 	private Logger logger = LoggerFactory.getLogger(StatisticsCalcJob.class);
@@ -101,10 +101,9 @@ public class StatisticsCalcJob implements BatchJob {
 			logger.info("run - " + processedCnt + ") " + ticker.getTickerSymbol() + " processed" );
 		}
 		status.setCompletionMsg("Processed " + processedCnt + " tickers");
-		status.setJobClass(this.getClass().getName());
-		status.setStatusDate(new Date());
-		status.setFinishDate(new Date());
+		status.setFinishDate(LocalDateTime.now());
 		status.setSuccess(true);
+		batchStatSvc.saveBatchStatus(status);
 		return status;
 	}
 

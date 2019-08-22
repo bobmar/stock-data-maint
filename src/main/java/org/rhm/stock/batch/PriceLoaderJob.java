@@ -1,6 +1,6 @@
 package org.rhm.stock.batch;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.rhm.stock.domain.StockPrice;
 import org.rhm.stock.domain.StockTicker;
+import org.rhm.stock.service.BatchStatusService;
 import org.rhm.stock.service.PriceService;
 import org.rhm.stock.service.TickerService;
 import org.slf4j.Logger;
@@ -23,6 +24,8 @@ public class PriceLoaderJob implements BatchJob {
 	private TickerService tickerSvc = null;
 	@Autowired
 	private PriceService priceSvc = null;
+	@Autowired
+	private BatchStatusService batchStatSvc = null;
 	private Logger logger = LoggerFactory.getLogger(PriceLoaderJob.class);
 	private Date oldestAcceptableDate = null;
 	public PriceLoaderJob() {
@@ -93,7 +96,8 @@ public class PriceLoaderJob implements BatchJob {
 			status.setCompletionMsg("Price loading failed");
 			status.setSuccess(false);
 		}
-		status.setFinishDate(new Date());
+		status.setFinishDate(LocalDateTime.now());
+		batchStatSvc.saveBatchStatus(status);
 		return status;
 	}
 

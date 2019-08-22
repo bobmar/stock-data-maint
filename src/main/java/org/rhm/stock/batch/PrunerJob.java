@@ -1,5 +1,6 @@
 package org.rhm.stock.batch;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -7,6 +8,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.rhm.stock.handler.maint.MaintHandler;
+import org.rhm.stock.service.BatchStatusService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +34,13 @@ public class PrunerJob implements BatchJob {
 	@Qualifier("pruneIbdStat")
 	private MaintHandler ibdStat = null;
 	@Autowired
+	@Qualifier("pruneKeyStat")
+	private MaintHandler keyStat = null;
+	@Autowired
 	@Qualifier("pruneOrphan")
 	private MaintHandler orphan = null;
+	@Autowired
+	private BatchStatusService batchStatSvc = null;
 	private Logger logger = LoggerFactory.getLogger(PrunerJob.class);
 	private List<MaintHandler> prunerList = null;
 	
@@ -44,6 +51,7 @@ public class PrunerJob implements BatchJob {
 		prunerList.add(signal);
 		prunerList.add(stat);
 		prunerList.add(ibdStat);
+		prunerList.add(keyStat);
 		prunerList.add(orphan);
 		return prunerList;
 	}
@@ -57,18 +65,16 @@ public class PrunerJob implements BatchJob {
 	@Override
 	public BatchStatus run() {
 		BatchStatus status = new BatchStatus(PrunerJob.class);
-		status.setStartDate(new Date());
 		this.prunerList = this.createPrunerList();
 		Date deleteBefore = calcDeleteBefore(365);
 		for (MaintHandler pruner: prunerList) {
 			logger.info("run - delete records older than " + deleteBefore.toString());
 			pruner.prune(deleteBefore);
 		}
-		status.setJobClass(this.getClass().getName());
 		status.setCompletionMsg("Successfully pruned collections");
-		status.setStatusDate(new Date());
-		status.setFinishDate(new Date());
+		status.setFinishDate(LocalDateTime.now());
 		status.setSuccess(true);
+		batchStatSvc.saveBatchStatus(status);
 		return status;
 	}
 

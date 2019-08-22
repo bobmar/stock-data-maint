@@ -1,14 +1,14 @@
 package org.rhm.stock.batch;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 
 import org.rhm.stock.domain.StockTicker;
-import org.rhm.stock.handler.signal.DailyVsAvgScanner;
 import org.rhm.stock.handler.signal.SignalScanner;
+import org.rhm.stock.service.BatchStatusService;
 import org.rhm.stock.service.TickerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,6 +58,8 @@ public class SignalScanJob implements BatchJob {
 	
 	@Autowired
 	private TickerService tickerSvc = null;
+	@Autowired
+	private BatchStatusService batchStatSvc = null;
 	private Logger logger = LoggerFactory.getLogger(SignalScanJob.class);
 	private List<SignalScanner> scannerList = null;
 	
@@ -95,9 +97,10 @@ public class SignalScanJob implements BatchJob {
 				scanner.scan(ticker.getTickerSymbol());
 			}
 		}
-		batchStatus.setCompletionMsg("Successful completion");
+		batchStatus.setCompletionMsg("Successful completion - processed " + tickerList.size() + " tickers");
 		batchStatus.setSuccess(true);
-		batchStatus.setFinishDate(new Date());
+		batchStatus.setFinishDate(LocalDateTime.now());
+		batchStatSvc.saveBatchStatus(batchStatus);
 		return batchStatus;
 	}
 

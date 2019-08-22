@@ -37,7 +37,9 @@ public class StockDataLoader implements CommandLineRunner {
 	@Autowired
 	@Qualifier("signalCount")
 	private BatchJob signalCount = null;
-	
+	@Autowired
+	@Qualifier("keyStatLoader")
+	private BatchJob keyStatLoader = null;
 	private Logger logger = LoggerFactory.getLogger(StockDataLoader.class);
 	
 	public static void main(String...args) {
@@ -68,6 +70,9 @@ public class StockDataLoader implements CommandLineRunner {
 				break;
 			case "SIGNALCNT":
 				jobList.add(signalCount);
+				break;
+			case "KEYSTAT":
+				jobList.add(keyStatLoader);
 				break;
 			}
 		}

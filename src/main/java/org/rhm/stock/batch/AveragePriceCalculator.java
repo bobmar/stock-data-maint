@@ -1,6 +1,6 @@
 package org.rhm.stock.batch;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.rhm.stock.domain.AveragePrice;
@@ -9,6 +9,7 @@ import org.rhm.stock.domain.StockPrice;
 import org.rhm.stock.domain.StockTicker;
 import org.rhm.stock.handler.AvgPriceFactory;
 import org.rhm.stock.service.AveragePriceService;
+import org.rhm.stock.service.BatchStatusService;
 import org.rhm.stock.service.PriceService;
 import org.rhm.stock.service.TickerService;
 import org.slf4j.Logger;
@@ -26,6 +27,10 @@ public class AveragePriceCalculator implements BatchJob {
 	private PriceService priceSvc = null;
 	@Autowired
 	private AveragePriceService avgPriceSvc = null;
+	@Autowired
+	private BatchStatusService batchStatSvc = null;
+	
+			
 	private Logger logger = LoggerFactory.getLogger(AveragePriceCalculator.class);
 	
 	private int processTicker(StockTicker ticker) {
@@ -77,7 +82,8 @@ public class AveragePriceCalculator implements BatchJob {
 		BatchStatus status = new BatchStatus(this.getClass());
 		List<StockTicker> tickerList = tickerSvc.retrieveTickerList();
 		this.processTickers(tickerList);
-		status.setFinishDate(new Date());
+		status.setFinishDate(LocalDateTime.now());
+		batchStatSvc.saveBatchStatus(status);
 		return status;
 	}
 

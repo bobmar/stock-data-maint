@@ -25,7 +25,7 @@ public class YahooDownload {
 	private String profilePrefix = "/quoteSummary/";
 	private String profileSuffix = "?formatted=true&lang=en-US&region=US&modules=assetProfile%2Cprice&corsDomain=finance.yahoo.com";
 	private String keyStatPrefix = "/quoteSummary/";
-	private String keyStatSuffix = "?formatted=true&crumb=%2FsTY4E5V.U%2&lang=en-US&region=US&modules=defaultKeyStatistics%2CfinancialData%2CcalendarEvents&corsDomain=finance.yahoo.com";
+	private String keyStatSuffix = "?formatted=true&crumb=3nWgOD%2FN%2FCO&lang=en-US&region=US&modules=defaultKeyStatistics%2CfinancialData%2CcalendarEvents&corsDomain=finance.yahoo.com";
 	private final static String COOKIE1 = "B=2lico8pd96qcb&b=4&d=_09VHXZpYEJmYiUgG46_2HOCqgEawdWqgjrGyg--&s=t9&i=WKz4Av5hXR7g5v01_V0C";
 	private final static String COOKIE2 = "T=S501bBSNc6bBHrupEDVexpTNDU0MQYxNE42NTcyTzQ-&a=QAE&sk=DAAXydChIIgmtG&ks=EAAx_l5dFx_A7R3oh1cA0QYmw--~G&kt=EAAK5LcgfkdrQu7VhGYbsH1AQ--~I&ku=FAAcVTpOTiUpGHXRSoe_81ELFrXFRFHwRcEoMupfuhxmzHFamGa5iHVLabRwFuF1UlWNWuI9J5WuPJ0PQFTg8KFYiSs9bJJvJCrfiGLnwlpmzYSnJ35noby5RWNkFFZTcz0cmGDDEKv2.yFYSbw.tQROEa9RNroh09oKNhsTvLZTh4-~A&d=bnMBeWFob28BZwEyUjVNU1hOU1A1RVFGRFVDNE1OWlVLV0ZGQQFzbAFNekl6TmdFMk16a3hNakExT0RNLQFhAVFBRQFhYwFBQm5sajMxXwFjcwEBc2MBZGVza3RvcF93ZWIBZnMBQTJZWmdEVmIxMDVTAXp6AVM1MDFiQkE3RQ--&af=JnRzPTE1NDA4MzY5NDYmcHM9YnZqekpxSjlDWUUzaWxqcGtTeHdLUS0t";
 	private final static String COOKIE = COOKIE1 + ";" + COOKIE2;
