@@ -81,8 +81,8 @@ public class AveragePriceCalculator implements BatchJob {
 	public BatchStatus run() {
 		BatchStatus status = new BatchStatus(this.getClass());
 		List<StockTicker> tickerList = tickerSvc.retrieveTickerList();
-		this.processTickers(tickerList);
-		status.setSuccess(true);
+		Boolean success = this.processTickers(tickerList) == 100;
+		status.setSuccess(success);
 		status.setCompletionMsg("Calculated average prices for " + tickerList.size() + " tickers");
 		status.setFinishDate(LocalDateTime.now());
 		batchStatSvc.saveBatchStatus(status);
