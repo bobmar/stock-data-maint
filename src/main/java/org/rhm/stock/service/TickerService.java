@@ -20,6 +20,7 @@ import org.rhm.stock.repository.TickerRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -70,7 +71,7 @@ public class TickerService {
 		}
 		return message;
 	}
-	
+	@Cacheable("tickerList")
 	public List<StockTicker> retrieveTickerList() {
 		return tickerRepo.findAll().stream()
 				.sorted((o1,o2)->{return o1.getTickerSymbol().compareTo(o2.getTickerSymbol());})

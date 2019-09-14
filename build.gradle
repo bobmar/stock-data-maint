@@ -32,6 +32,7 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-actuator')
 	compile('org.springframework.boot:spring-boot-starter-data-mongodb')
 	compile('org.springframework.boot:spring-boot-starter-web')
+	compile('org.springframework.boot:spring-boot-starter-cache')
 	compile group: 'org.apache.poi', name: 'poi', version: '3.17'
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
