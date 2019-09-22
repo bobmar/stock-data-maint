@@ -50,7 +50,6 @@ public class PriceService {
 		return priceList;
 	}
 	
-	@Cacheable("priceList")
 	public List<StockPrice> retrievePrices(String tickerSymbol) {
 		List<StockPrice> priceList = priceRepo.findByTickerSymbol(tickerSymbol);
 		return priceList.stream()
@@ -78,6 +77,11 @@ public class PriceService {
 	public StockPrice findStockPrice(String priceId) {
 		Optional<StockPrice> opt = priceRepo.findById(priceId);
 		return opt.isPresent()?opt.get():null;
+	}
+	
+	public StockPrice findLatestStockPrice(String tickerSymbol) {
+		StockPrice price = priceRepo.findTopByTickerSymbolOrderByPriceDateDesc(tickerSymbol);
+		return price;
 	}
 	
 	public long deleteOlderThan(Date deleteBefore) {
