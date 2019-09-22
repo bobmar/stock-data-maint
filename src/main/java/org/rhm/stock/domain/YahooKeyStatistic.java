@@ -10,6 +10,7 @@ public class YahooKeyStatistic {
 	@Id
 	private String keyStatId;
 	private String tickerSymbol;
+	private LocalDate priceDate;
     private BigDecimal enterpriseValue;
     private BigDecimal forwardPE;
     private BigDecimal profitMargins;
@@ -581,6 +582,12 @@ public class YahooKeyStatistic {
 	}
 	public void setOperatingCashflow(BigDecimal operatingCashflow) {
 		this.operatingCashflow = operatingCashflow;
+	}
+	public LocalDate getPriceDate() {
+		return priceDate;
+	}
+	public void setPriceDate(LocalDate priceDate) {
+		this.priceDate = priceDate;
 	}
 
 }

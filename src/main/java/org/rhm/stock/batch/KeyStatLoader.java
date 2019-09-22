@@ -1,15 +1,18 @@
 package org.rhm.stock.batch;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;
 
+import org.rhm.stock.domain.StockPrice;
 import org.rhm.stock.domain.StockTicker;
 import org.rhm.stock.domain.YahooKeyStatistic;
 import org.rhm.stock.io.YahooDownload;
 import org.rhm.stock.io.YahooKeyStatFactory;
 import org.rhm.stock.service.BatchStatusService;
 import org.rhm.stock.service.KeyStatService;
+import org.rhm.stock.service.PriceService;
 import org.rhm.stock.service.TickerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,13 +31,17 @@ public class KeyStatLoader implements BatchJob {
 	private KeyStatService keyStatSvc = null;
 	@Autowired
 	private BatchStatusService batchStatSvc = null;
+	@Autowired
+	private PriceService priceSvc = null;
 	
 	private Logger logger = LoggerFactory.getLogger(KeyStatLoader.class);
 	
 	private void processTicker(String tickerSymbol) {
+		StockPrice latestPrice = priceSvc.findLatestStockPrice(tickerSymbol);
 		YahooKeyStatistic keyStat = null;
 		Map<String,Object> keyStatMap = yahoo.retrieveKeyStat(tickerSymbol);
 		keyStat = YahooKeyStatFactory.createKeyStat(tickerSymbol, keyStatMap);
+		keyStat.setPriceDate(latestPrice.getPriceDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 		keyStatSvc.saveStatistic(keyStat);
 	}
 	
