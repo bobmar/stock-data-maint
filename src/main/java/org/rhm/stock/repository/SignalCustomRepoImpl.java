@@ -21,10 +21,8 @@ public class SignalCustomRepoImpl implements SignalCustomRepo {
 	
 	private Logger logger = LoggerFactory.getLogger(SignalCustomRepoImpl.class);
 	@Override
-	public List<StockSignal> findSignalsByType(List<String> signalTypeList, int lookBackDays) {
-		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.DAY_OF_MONTH, lookBackDays * -1);
-		CriteriaDefinition crit = Criteria.where("signalType").in(signalTypeList).and("priceDate").gt(cal.getTime());
+	public List<StockSignal> findSignalsByType(List<String> signalTypeList, Date priceDate) {
+		CriteriaDefinition crit = Criteria.where("signalType").in(signalTypeList).and("priceDate").gt(priceDate);
 		logger.debug("findSignalsByType - " + crit.getCriteriaObject().toJson());
 		List<StockSignal> signalList = mongoTemplate.find(Query.query(crit), StockSignal.class);
 		return signalList;

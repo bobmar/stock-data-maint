@@ -84,7 +84,11 @@ public class SignalService {
 	
 	public List<StockSignal> findSignalsByType(List<String> signalTypes, int lookBackDays) {
 		logger.debug("findSignalsByType - signalTypes: " + signalTypes.toString() + "; lookBackDays: " + lookBackDays);
-		return signalRepo.findSignalsByType(signalTypes, lookBackDays);
+		StockSignal latestSignal = this.findMaxDate();
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(latestSignal.getPriceDate());
+		cal.add(Calendar.DAY_OF_MONTH, lookBackDays * -1);
+		return signalRepo.findSignalsByType(signalTypes, cal.getTime());
 	}
 	
 	public StockSignal findMaxDate() {
@@ -93,7 +97,6 @@ public class SignalService {
 	
 	public List<StockSignalDisplay> findSignalsByTypeAndDate(String signalType, String priceDateStr) {
 		List<StockSignal> signalList = null;
-		List<StockSignalDisplay> sigDisplayList = new ArrayList<StockSignalDisplay>();
 		Date priceDate = null;
 		try {
 			priceDate = StockUtil.stringToDate(priceDateStr);
@@ -101,19 +104,44 @@ public class SignalService {
 		catch (ParseException e) {
 			logger.warn("findSignalsByTypeAndDate - " + e.getMessage());
 		}
+		signalList = this.findSignalsByTypeAndDate(signalType, priceDate);
+		return this.transformSignalList(signalList, priceDate);
+	}
+	
+	public List<StockSignalDisplay> transformSignalList(List<StockSignal> signalList, Date priceDate) {
 		Map<String, IbdStatistic> ibdStatMap = this.latestIbdStats();
 		Map<String, StockAveragePrice> avgPriceMap = this.avgPricesByDate(priceDate);
-		signalList = this.findSignalsByTypeAndDate(signalType, priceDate);
+		List<StockSignalDisplay> sigDisplayList = new ArrayList<StockSignalDisplay>();
 		if (avgPriceMap != null) {
 			signalList.forEach((signal)->{
 				StockSignalDisplay sigDisp = new StockSignalDisplay(signal);
 				sigDisp.setAvgPrice(avgPriceMap.get(signal.getTickerSymbol()));
 				sigDisp.setIbdLatestStat(ibdStatMap.get(signal.getTickerSymbol()));
 				sigDisplayList.add(sigDisp);
-				
 			});
 		}
 		return sigDisplayList;
+	}
+	
+	public List<StockSignalDisplay> summarizeSignals(List<StockSignal> signalList, Date priceDate, int criteriaCnt) {
+		Map<String,List<StockSignal>> signalMap = new HashMap<String,List<StockSignal>>();
+		List<StockSignal> matchingSignals = new ArrayList<StockSignal>();
+		List<StockSignal> tickerSignals = null;
+		for (StockSignal signal: signalList) {
+			tickerSignals = signalMap.get(signal.getTickerSymbol());
+			if (tickerSignals == null) {
+				tickerSignals = new ArrayList<StockSignal>();
+				signalMap.put(signal.getTickerSymbol(), tickerSignals);
+			}
+			tickerSignals.add(signal);
+		}
+		for (String ticker: signalMap.keySet()) {
+			tickerSignals = signalMap.get(ticker);
+			if (tickerSignals.size() == criteriaCnt) {
+				matchingSignals.add(tickerSignals.get(0));
+			}
+		}
+		return this.transformSignalList(matchingSignals, priceDate);
 	}
 	
 	private List<String> extractTickerFromSignal(List<StockSignal> signalList) {

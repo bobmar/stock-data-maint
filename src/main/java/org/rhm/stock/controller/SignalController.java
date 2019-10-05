@@ -72,9 +72,11 @@ public class SignalController {
 	}
 	
 	@RequestMapping(value="/stocks/signal/list/multi", method=RequestMethod.POST, consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
-	public List<CompositePrice> findSignals(@RequestBody SignalRequest request) {
+	public List<StockSignalDisplay> findSignals(@RequestBody SignalRequest request) {
 		List<StockSignal> signalList = sigSvc.findSignalsByType(request.getSignalTypeList(), request.getLookBackDays());
-		return cPriceSvc.transformSignalList(signalList);
+		Date priceDate = sigSvc.findMaxDate().getPriceDate();
+		List<StockSignalDisplay> signals = sigSvc.summarizeSignals(signalList, priceDate, request.getSignalTypeList().size());
+		return signals;
 	}
 
 	@PostMapping(value="/stocks/signal/cprice")
