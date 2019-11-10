@@ -120,7 +120,8 @@ public class SignalService {
 				sigDisplayList.add(sigDisp);
 			});
 		}
-		return sigDisplayList;
+		return sigDisplayList.stream().sorted((o1,o2)->{
+			return o1.getTickerSymbol().compareTo(o2.getTickerSymbol());}).collect(Collectors.toList());
 	}
 	
 	public List<StockSignalDisplay> summarizeSignals(List<StockSignal> signalList, Date priceDate, int criteriaCnt) {
@@ -155,12 +156,14 @@ public class SignalService {
 	
 	private Map<String, IbdStatistic> latestIbdStats() {
 		Map<String, IbdStatistic> ibdStatMap = new HashMap<String, IbdStatistic>();
-		IbdStatistic latestStat = ibdRepo.findTopByOrderByPriceDateDesc();
+//		IbdStatistic latestStat = ibdRepo.findTopByOrderByPriceDateDesc();
 		List<IbdStatistic> latestStats = null;
-		if (latestStat != null) {
-			latestStats = ibdRepo.findByPriceDate(latestStat.getPriceDate());
-			latestStats.forEach((stat)->{ibdStatMap.put(stat.getTickerSymbol(), stat);});
-		}
+		latestStats = ibdRepo.findByOrderByPriceDateDesc();
+		latestStats.forEach((stat)->{
+			if (ibdStatMap.get(stat.getTickerSymbol()) == null) {
+				ibdStatMap.put(stat.getTickerSymbol(), stat);
+			}
+		});
 		return ibdStatMap;
 	}
 	
