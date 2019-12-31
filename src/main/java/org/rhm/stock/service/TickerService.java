@@ -213,4 +213,8 @@ public class TickerService {
 		return ibdRepo.deleteByPriceDateBefore(deleteBefore);
 	}
 	
+	public int deleteIbdStatsByTicker(String tickerSymbol) {
+		return ibdRepo.deleteByTickerSymbol(tickerSymbol);
+	}
+	
 }

@@ -70,7 +70,10 @@ public class PriceService {
 	
 	public CompositePrice retrieveCurrentPrice(String tickerSymbol) {
 		StockPrice price = priceRepo.findTopByTickerSymbolOrderByPriceDateDesc(tickerSymbol);
-		CompositePrice cPrice = cpSvc.compositePriceFactory(price.getPriceId());
+		CompositePrice cPrice = null;
+		if (price != null) {
+			cpSvc.compositePriceFactory(price.getPriceId());
+		}
 		return cPrice;
 	}
 	

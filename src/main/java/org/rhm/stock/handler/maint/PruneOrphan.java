@@ -38,6 +38,8 @@ public class PruneOrphan implements MaintHandler {
 		logger.info("removeOrphans - deleted " + signals + " signal records for ticker " + tickerSymbol);
 		long stats = statSvc.deleteByTickerSymbol(tickerSymbol);
 		logger.info("removeOrphans - deleted " + stats + " statistic records for ticker " + tickerSymbol);
+		long ibdStats = tickerSvc.deleteIbdStatsByTicker(tickerSymbol);
+		logger.info("removeOrphans - deleted " + ibdStats + " IBD stat records for ticker " + tickerSymbol);
 	}
 	
 	private void processTickers(List<String> tickerSymbolList) {
