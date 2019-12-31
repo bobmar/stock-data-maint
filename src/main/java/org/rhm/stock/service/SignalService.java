@@ -129,15 +129,15 @@ public class SignalService {
 		List<StockSignal> matchingSignals = new ArrayList<StockSignal>();
 		List<StockSignal> tickerSignals = null;
 		for (StockSignal signal: signalList) {
-			tickerSignals = signalMap.get(signal.getTickerSymbol());
+			tickerSignals = signalMap.get(signal.getPriceId());
 			if (tickerSignals == null) {
 				tickerSignals = new ArrayList<StockSignal>();
-				signalMap.put(signal.getTickerSymbol(), tickerSignals);
+				signalMap.put(signal.getPriceId(), tickerSignals);
 			}
 			tickerSignals.add(signal);
 		}
-		for (String ticker: signalMap.keySet()) {
-			tickerSignals = signalMap.get(ticker);
+		for (String priceId: signalMap.keySet()) {
+			tickerSignals = signalMap.get(priceId);
 			if (tickerSignals.size() == criteriaCnt) {
 				matchingSignals.add(tickerSignals.get(0));
 			}
