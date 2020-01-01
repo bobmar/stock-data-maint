@@ -167,15 +167,38 @@ public class TickerService {
 	}
 	
 	private void loadIbdStatistics(List<IbdStatistic> ibdStatList) {
-		StockPrice price = null;
+		List<StockPrice> priceList = null;
+		IbdStatistic mrIbdStat = null;
 		for (IbdStatistic ibdStat: ibdStatList) {
-			price = priceRepo.findTopByTickerSymbolOrderByPriceDateDesc(ibdStat.getTickerSymbol());
-			if (price != null) {
-				ibdStat.setStatId(price.getPriceId());
-				ibdStat.setPriceDate(price.getPriceDate());
-				ibdRepo.save(ibdStat);
+			mrIbdStat = ibdRepo.findTopByTickerSymbolOrderByPriceDateDesc(ibdStat.getTickerSymbol());
+			if (mrIbdStat != null) {
+				priceList = priceRepo.findByTickerSymbolAndPriceDateGreaterThan(mrIbdStat.getTickerSymbol(), mrIbdStat.getPriceDate());
+				if (priceList != null) {
+					priceList.forEach(price->{
+						this.createIbdStat(ibdStat, price.getPriceId(), price.getPriceDate());
+					}); 
+				}
+				else {
+					StockPrice price = priceRepo.findTopByTickerSymbolOrderByPriceDateDesc(ibdStat.getTickerSymbol());
+					this.createIbdStat(ibdStat, price.getPriceId(), price.getPriceDate());
+				}
+			}
+			else {
+				StockPrice price = priceRepo.findTopByTickerSymbolOrderByPriceDateDesc(ibdStat.getTickerSymbol());
+				if (price != null) {
+					this.createIbdStat(ibdStat, price.getPriceId(), price.getPriceDate());
+				}
+				else {
+					logger.info("loadIbdStatistics - new IBD stat ticker: " + ibdStat.getTickerSymbol());
+				}
 			}
 		}
+	}
+
+	private void createIbdStat(IbdStatistic ibdStat, String priceId, Date priceDate) {
+		ibdStat.setStatId(priceId);
+		ibdStat.setPriceDate(priceDate);
+		ibdRepo.save(ibdStat);
 	}
 	
 	public boolean tickerExists(String tickerSymbol) {

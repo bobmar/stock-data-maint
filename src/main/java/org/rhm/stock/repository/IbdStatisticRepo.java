@@ -12,6 +12,7 @@ public interface IbdStatisticRepo extends MongoRepository<IbdStatistic, String> 
 	public List<IbdStatistic> findByTickerSymbol(String tickerSymbol);
 	public List<IbdStatistic> findByPriceDate(Date priceDate);
 	public IbdStatistic findTopByOrderByPriceDateDesc();
+	public IbdStatistic findTopByTickerSymbolOrderByPriceDateDesc(String tickerSymbol);
 	public List<IbdStatistic> findByOrderByPriceDateDesc();
 	public int deleteByPriceDateBefore(Date priceDate);
 	public int deleteByTickerSymbol(String tickerSymbol);
