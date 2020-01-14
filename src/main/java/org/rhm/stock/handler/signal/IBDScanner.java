@@ -25,6 +25,9 @@ public class IBDScanner implements SignalScanner {
 	private static final String SIGNAL_RS_INC = "IBDRSINC";
 	// IBD Relative Strength crossed above 90
 	private static final String SIGNAL_RS_X90 = "IBDRSX90";
+	// IBD Accum/Dist is A or B
+	private static final String SIGNAL_AD_AB = "IBDADAB";
+
 	@Autowired
 	private TickerService tickerSvc = null;
 	@Autowired
@@ -67,6 +70,10 @@ public class IBDScanner implements SignalScanner {
 		}
 		catch (NumberFormatException e) {
 			logger.error("detectSignals - " + SIGNAL_RS_X90 + ":" + e.getMessage());
+		}
+		String accumDist = currStat.getAccumDist()==null?"":currStat.getAccumDist();
+		if (accumDist.startsWith("A") || accumDist.startsWith("B")) {
+			this.createSignal(currStat, SIGNAL_AD_AB);
 		}
 	}
 	
