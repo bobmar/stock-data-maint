@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.rhm.stock.service.AveragePriceService;
+import org.rhm.stock.service.KeyStatService;
 import org.rhm.stock.service.PriceService;
 import org.rhm.stock.service.SignalService;
 import org.rhm.stock.service.StatisticService;
@@ -27,6 +28,8 @@ public class PruneOrphan implements MaintHandler {
 	private SignalService signalSvc = null;
 	@Autowired
 	private StatisticService statSvc = null;
+	@Autowired
+	private KeyStatService keyStatSvc = null;
 	private Logger logger = LoggerFactory.getLogger(PruneOrphan.class);
 
 	private void removeOrphans(String tickerSymbol) {
@@ -40,6 +43,8 @@ public class PruneOrphan implements MaintHandler {
 		logger.info("removeOrphans - deleted " + stats + " statistic records for ticker " + tickerSymbol);
 		long ibdStats = tickerSvc.deleteIbdStatsByTicker(tickerSymbol);
 		logger.info("removeOrphans - deleted " + ibdStats + " IBD stat records for ticker " + tickerSymbol);
+		long keyStats = keyStatSvc.deleteByTickerSymbol(tickerSymbol);
+		logger.info("removeOrphans - deleted " + keyStats + " Yahoo key stat records for ticker " + tickerSymbol);
 	}
 	
 	private void processTickers(List<String> tickerSymbolList) {

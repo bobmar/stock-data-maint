@@ -18,4 +18,8 @@ public class KeyStatService {
 	public int deleteOlderThan(Date deleteBefore) {
 		return repo.deleteByCreateDateBefore(deleteBefore);
 	}
+	
+	public int deleteByTickerSymbol(String tickerSymbol) {
+		return repo.deleteByTickerSymbol(tickerSymbol);
+	}
 }
