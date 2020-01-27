@@ -72,7 +72,7 @@ public class PriceService {
 		StockPrice price = priceRepo.findTopByTickerSymbolOrderByPriceDateDesc(tickerSymbol);
 		CompositePrice cPrice = null;
 		if (price != null) {
-			cpSvc.compositePriceFactory(price.getPriceId());
+			cPrice = cpSvc.compositePriceFactory(price.getPriceId());
 		}
 		return cPrice;
 	}
