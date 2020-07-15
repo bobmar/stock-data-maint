@@ -1,6 +1,7 @@
 package org.rhm.stock.service;
 
 import java.util.Date;
+import java.util.List;
 
 import org.rhm.stock.domain.YahooKeyStatistic;
 import org.rhm.stock.repository.YahooKeyStatisticRepo;
@@ -21,5 +22,10 @@ public class KeyStatService {
 	
 	public int deleteByTickerSymbol(String tickerSymbol) {
 		return repo.deleteByTickerSymbol(tickerSymbol);
+	}
+	
+	public List<YahooKeyStatistic> retrieveStats() {
+		List<YahooKeyStatistic> ksList = repo.findAll();
+		return ksList;
 	}
 }

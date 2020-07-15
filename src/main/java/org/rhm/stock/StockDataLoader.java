@@ -40,6 +40,10 @@ public class StockDataLoader implements CommandLineRunner {
 	@Autowired
 	@Qualifier("keyStatLoader")
 	private BatchJob keyStatLoader = null;
+	@Autowired
+	@Qualifier("aggregatorJob")
+	private BatchJob aggregatorJob = null;
+	
 	private Logger logger = LoggerFactory.getLogger(StockDataLoader.class);
 	
 	public static void main(String...args) {
@@ -73,6 +77,9 @@ public class StockDataLoader implements CommandLineRunner {
 				break;
 			case "KEYSTAT":
 				jobList.add(keyStatLoader);
+				break;
+			case "AGGREGATOR":
+				jobList.add(aggregatorJob);
 				break;
 			}
 		}

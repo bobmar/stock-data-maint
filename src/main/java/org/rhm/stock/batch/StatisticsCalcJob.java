@@ -78,7 +78,9 @@ public class StatisticsCalcJob implements BatchJob {
 			workingList.clear();
 //			priceList.forEach(workingList::add);
 			workingList.addAll(priceList);
-			calc.calculate(workingList);
+			if (workingList.size() > 0) {
+				calc.calculate(workingList);
+			}
 		}
 	}
 	

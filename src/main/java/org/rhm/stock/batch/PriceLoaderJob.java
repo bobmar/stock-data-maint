@@ -41,10 +41,10 @@ public class PriceLoaderJob implements BatchJob {
 	
 	private boolean processTicker(String tickerSymbol) {
 		boolean success = false;
-		int days = 90;
+		int days = 366;
 		long cnt = priceSvc.priceCount(tickerSymbol);
 		if (cnt < days) {
-			days = 365;
+			days = 540;
 		}
 		logger.info("processTicker - retrieve prices for " + tickerSymbol);
 		List<StockPrice> priceList = priceSvc.retrieveSourcePrices(tickerSymbol, days);
