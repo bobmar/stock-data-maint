@@ -21,6 +21,7 @@ public class PriceGap implements SignalScanner {
 	
 	private static final String GAP_UP_SIGNAL = "GAPUP";
 	private static final String GAP_DN_SIGNAL = "GAPDN";
+	private static final String INSIDE_DAY_SIGNAL = "INSIDE";
 	private Logger logger = LoggerFactory.getLogger(PriceGap.class);
 	
 	private boolean gapUp(StockPrice currPrice, StockPrice prevPrice) {
@@ -62,12 +63,27 @@ public class PriceGap implements SignalScanner {
 		}
 	}
 	
+	private void detectInsideDay(List<StockPrice> priceList) {
+		if (priceList.size() < 2) {
+			logger.warn("detectInsideDay - need 2 prices for evaluation");
+		}
+		else {
+			StockPrice currPrice = priceList.get(0), prevPrice = priceList.get(1);
+			if (currPrice.getHighPrice().doubleValue() < prevPrice.getHighPrice().doubleValue()) {
+				if (currPrice.getLowPrice().doubleValue() > prevPrice.getLowPrice().doubleValue()) {
+					signalSvc.createSignal(new StockSignal(currPrice, INSIDE_DAY_SIGNAL));
+				}
+			}
+		}
+	}
+	
 	@Override
 	public void scan(String tickerSymbol) {
 		List<StockPrice> priceList = priceSvc.retrievePrices(tickerSymbol);
 		logger.info("scan - found " + priceList.size() + " prices for " + tickerSymbol);
 		while (priceList.size() >= 2) {
 			this.detectPriceGap(priceList.subList(0, 2));
+			this.detectInsideDay(priceList.subList(0, 2));
 			priceList.remove(0);
 			logger.debug("scan - " + priceList.size() + " prices remaining");
 		}
