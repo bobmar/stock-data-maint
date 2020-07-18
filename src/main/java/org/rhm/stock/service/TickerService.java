@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.rhm.stock.controller.dto.TickerInfo;
@@ -160,17 +161,18 @@ public class TickerService {
 			tickerInfoList.add(ticker);
 			logger.info("retrieveTickerInfo - " + ticker.getTickerSymbol() + ":" + ticker.getStatus());
 		}
-		this.loadIbdStatistics(response.getIbdStatList());
+		this.loadIbdStatistics(response.getIbdStatList(), response.getListName());
 		return tickerInfoList.stream()
 				.sorted((o1,o2)->{return o1.getTickerSymbol().compareTo(o2.getTickerSymbol());})
 				.collect(Collectors.toList());
 	}
 	
-	private void loadIbdStatistics(List<IbdStatistic> ibdStatList) {
+	private void loadIbdStatistics(List<IbdStatistic> ibdStatList, String listName) {
 		List<StockPrice> priceList = null;
 		IbdStatistic mrIbdStat = null;
 		for (IbdStatistic ibdStat: ibdStatList) {
 			mrIbdStat = ibdRepo.findTopByTickerSymbolOrderByPriceDateDesc(ibdStat.getTickerSymbol());
+			ibdStat.getListName().add(listName);
 			if (mrIbdStat != null) {
 				priceList = priceRepo.findByTickerSymbolAndPriceDateGreaterThan(mrIbdStat.getTickerSymbol(), mrIbdStat.getPriceDate());
 				if (priceList != null) {
@@ -196,6 +198,15 @@ public class TickerService {
 	}
 
 	private void createIbdStat(IbdStatistic ibdStat, String priceId, Date priceDate) {
+		Optional<IbdStatistic> existingStat = ibdRepo.findById(priceId);
+		if (existingStat.isPresent()) {
+			List<String> newListNames = ibdStat.getListName();
+			newListNames.addAll(existingStat.get().getListName());
+			ibdStat.setListName(newListNames);
+			if (ibdStat.getListName().size() > 1) {
+				logger.info("createIbdStat - " + priceId + " is on multiple IBD lists");
+			}
+		}
 		ibdStat.setStatId(priceId);
 		ibdStat.setPriceDate(priceDate);
 		ibdRepo.save(ibdStat);

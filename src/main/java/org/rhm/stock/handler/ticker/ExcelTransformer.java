@@ -26,10 +26,11 @@ public class ExcelTransformer {
 		Workbook workbook = this.transformBytes(workbookBytes);
 		Sheet sheet = workbook.getSheetAt(0);
 		logger.info("extractTickerSymbols - first row=" + sheet.getFirstRowNum() + "; last row=" + sheet.getLastRowNum());
-		this.processIbdRows(tickerSymbols, ibdStatList, sheet);
+		String listName = this.processIbdRows(tickerSymbols, ibdStatList, sheet);
 		ExcelTransformerResponse response = new ExcelTransformerResponse();
 		response.setIbdStatList(ibdStatList);
 		response.setTickerSymbols(tickerSymbols);
+		response.setListName(listName);
 		return response;
 	}
 
@@ -45,13 +46,14 @@ public class ExcelTransformer {
 		return workbook;
 	}
 	
-	private void processIbdRows(List<String> tickerList, List<IbdStatistic> ibdStatList, Sheet sheet) {
+	private String processIbdRows(List<String> tickerList, List<IbdStatistic> ibdStatList, Sheet sheet) {
 		Row row = null;
 		IbdStatRowExtractor extractor = new IbdStatRowExtractor();
 		IbdStatistic ibd = null;
 		List<String> columnNames = new ArrayList<String>();
 		boolean foundSymbolHdr = false;
 		String tickerSymbol = null;
+		String listName = null;
 		for (int i = sheet.getFirstRowNum(); i < sheet.getLastRowNum(); i++) {
 			row = sheet.getRow(i);
 			if (row != null && row.getCell(0) != null) {
@@ -78,6 +80,12 @@ public class ExcelTransformer {
 							}
 						}
 					}
+					else {
+						if (row.getCell(0).getStringCellValue().trim().contains("Stock List:")) {
+							listName = row.getCell(1).getStringCellValue();
+							logger.info("processIbdRows - list: " + listName);
+						}
+					}
 				}
 			}
 			else {
@@ -86,5 +94,6 @@ public class ExcelTransformer {
 				}
 			}
 		}
+		return listName;
 	}
 }
