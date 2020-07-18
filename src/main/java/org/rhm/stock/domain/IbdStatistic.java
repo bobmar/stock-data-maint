@@ -1,7 +1,9 @@
 package org.rhm.stock.domain;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.data.annotation.Id;
 
@@ -20,6 +22,7 @@ public class IbdStatistic {
 	private String salesMarginRoe = null;
 	private String industryRank = null;
 	private Date createDate = Calendar.getInstance().getTime();
+	private List<String> listName = null;
 	
 	public String getStatId() {
 		return statId;
@@ -103,6 +106,15 @@ public class IbdStatistic {
 	}
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
+	}
+	public List<String> getListName() {
+		if (listName == null) {
+			listName = new ArrayList<String>();
+		}
+		return listName;
+	}
+	public void setListName(List<String> listName) {
+		this.listName = listName;
 	}
 	
 }
