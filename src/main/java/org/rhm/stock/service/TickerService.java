@@ -169,13 +169,14 @@ public class TickerService {
 	
 	private void loadIbdStatistics(List<IbdStatistic> ibdStatList, String listName) {
 		List<StockPrice> priceList = null;
+		logger.info(String.format("loadIbdStatistics - loading %s IBD stats", ibdStatList.size()) );
 		IbdStatistic mrIbdStat = null;
 		for (IbdStatistic ibdStat: ibdStatList) {
 			mrIbdStat = ibdRepo.findTopByTickerSymbolOrderByPriceDateDesc(ibdStat.getTickerSymbol());
 			ibdStat.getListName().add(listName);
 			if (mrIbdStat != null) {
 				priceList = priceRepo.findByTickerSymbolAndPriceDateGreaterThan(mrIbdStat.getTickerSymbol(), mrIbdStat.getPriceDate());
-				if (priceList != null) {
+				if (priceList != null && priceList.size() > 0) {
 					priceList.forEach(price->{
 						this.createIbdStat(ibdStat, price.getPriceId(), price.getPriceDate());
 					}); 
@@ -198,14 +199,21 @@ public class TickerService {
 	}
 
 	private void createIbdStat(IbdStatistic ibdStat, String priceId, Date priceDate) {
+		logger.info("createIbdStat - priceId: " + priceId);
 		Optional<IbdStatistic> existingStat = ibdRepo.findById(priceId);
 		if (existingStat.isPresent()) {
+			logger.info("createIbdStat - found existing IBD stat");
 			List<String> newListNames = ibdStat.getListName();
+			logger.info("createIbdStat - list count: " + newListNames.size());
 			newListNames.addAll(existingStat.get().getListName());
+			logger.info("createIbdStat - list count after adding existing: " + newListNames.size());
 			ibdStat.setListName(newListNames);
 			if (ibdStat.getListName().size() > 1) {
 				logger.info("createIbdStat - " + priceId + " is on multiple IBD lists");
 			}
+		}
+		else {
+			logger.info("createIbdStat - no existing IBD stat for " + priceId);
 		}
 		ibdStat.setStatId(priceId);
 		ibdStat.setPriceDate(priceDate);
