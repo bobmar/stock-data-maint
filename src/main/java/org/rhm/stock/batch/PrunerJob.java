@@ -66,7 +66,7 @@ public class PrunerJob implements BatchJob {
 	public BatchStatus run() {
 		BatchStatus status = new BatchStatus(PrunerJob.class);
 		this.prunerList = this.createPrunerList();
-		Date deleteBefore = calcDeleteBefore(730);
+		Date deleteBefore = calcDeleteBefore(1095);
 		for (MaintHandler pruner: prunerList) {
 			logger.info("run - delete records older than " + deleteBefore.toString());
 			pruner.prune(deleteBefore);
