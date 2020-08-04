@@ -27,6 +27,8 @@ public class IBDScanner implements SignalScanner {
 	private static final String SIGNAL_RS_X90 = "IBDRSX90";
 	// IBD Accum/Dist is A or B
 	private static final String SIGNAL_AD_AB = "IBDADAB";
+	// Stock on 3 or more IBD lists
+	private static final String SIGNAL_3PLUS = "IBD3PLUS";
 
 	@Autowired
 	private TickerService tickerSvc = null;
@@ -74,6 +76,9 @@ public class IBDScanner implements SignalScanner {
 		String accumDist = currStat.getAccumDist()==null?"":currStat.getAccumDist();
 		if (accumDist.startsWith("A") || accumDist.startsWith("B")) {
 			this.createSignal(currStat, SIGNAL_AD_AB);
+		}
+		if (currStat.getListName().size() >= 3) {
+			this.createSignal(currStat, SIGNAL_3PLUS);
 		}
 	}
 	
