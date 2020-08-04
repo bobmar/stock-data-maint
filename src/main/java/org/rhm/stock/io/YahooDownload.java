@@ -169,7 +169,7 @@ public class YahooDownload {
 	}
 	
 	private Map<String,Object> jsonToMap(String jsonStr) throws JsonParseException {
-		logger.info("jsonToMap - \n" + jsonStr);
+		logger.debug("jsonToMap - \n" + jsonStr);
 		ObjectMapper mapper = new ObjectMapper();
 		Map<String,Object> map = null;
 		try {
