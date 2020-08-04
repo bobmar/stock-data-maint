@@ -111,7 +111,7 @@ public class DailyPriceVsAvg implements StatisticCalculator {
 	}
 	
 	private void netAvbBlwStat(List<StockStatistic> statList) {
-		long daysAbove = 0, daysBelow = 0;
+		double daysAbove = 0, daysBelow = 0;
 		StockStatistic firstStat = statList.get(0);
 		for (StockStatistic stat: statList) {
 			if (stat.getStatisticValue().doubleValue() < 1) {
@@ -124,7 +124,7 @@ public class DailyPriceVsAvg implements StatisticCalculator {
 		statSvc.createStatistic(new StockStatistic(
 			firstStat.getPriceId()
 			, NET_ABV_BLW_50_DAY_AVG
-			, BigDecimal.valueOf(daysAbove - daysBelow)
+			, BigDecimal.valueOf(daysAbove / (daysAbove + daysBelow))
 			, firstStat.getTickerSymbol()
 			, firstStat.getPriceDate())
 		);
