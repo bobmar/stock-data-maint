@@ -32,7 +32,8 @@ public class MomentumScanner implements SignalScanner {
 	private static final String SIGNAL_ZSNEG_5DAYS = "ZSNEG5DY";
 	private static final String SIGNAL_TRMPOS_5DAYS = "TRMPOS5DY";
 	private static final String SIGNAL_TRMNEG_5DAYS = "TRMNEG5DY";
-	private static final String SIGNAL_ZSGT1_5DAYS = "ZSGT15DY";
+	private static final String SIGNAL_ZS_XOVER = "ZSXOVER";
+	private static final String SIGNAL_TR_XOVER = "TRXOVER";
 	private static final int DAYS_TO_CONSIDER = 5;
 	private Map<String,StockPrice> priceMap = new HashMap<String,StockPrice>();
 	private Logger logger = LoggerFactory.getLogger(MomentumScanner.class);
@@ -74,6 +75,14 @@ public class MomentumScanner implements SignalScanner {
 		}
 	}
 	
+	private void evaluateCrossOver(StockStatistic currStat, StockStatistic prevStat) {
+		if (prevStat.getStatisticValue().doubleValue() < 0) {
+			if (currStat.getStatisticValue().doubleValue() > 0) {
+				signalSvc.createSignal(new StockSignal(this.findStockPrice(currStat.getPriceId()), currStat.getStatisticType().equals(STAT_ZSCORE)?SIGNAL_ZS_XOVER:SIGNAL_TR_XOVER));				
+			}
+		}
+	}
+	
 	@Override
 	public void scan(String tickerSymbol) {
 		List<StockStatistic> zScoreList = statSvc.retrieveStatList(tickerSymbol, STAT_ZSCORE);
@@ -81,10 +90,12 @@ public class MomentumScanner implements SignalScanner {
 		logger.info("scan - scanning momentum scores for " + tickerSymbol);
 		while (zScoreList.size() > DAYS_TO_CONSIDER) {
 			this.evaluateMomentum(zScoreList);
+			this.evaluateCrossOver(zScoreList.get(0), zScoreList.get(1));
 			zScoreList.remove(0);
 		}
 		while (trMomList.size() > DAYS_TO_CONSIDER) {
 			this.evaluateMomentum(trMomList);
+			this.evaluateCrossOver(trMomList.get(0), trMomList.get(1));
 			trMomList.remove(0);
 		}
 	}
