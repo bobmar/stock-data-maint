@@ -229,7 +229,10 @@ public class SignalService {
 	}
 	
 	public void saveSignalCounts(List<SignalTypeCount> sigCntList) {
-		sigCntRepo.saveAll(sigCntList);
+//		sigCntRepo.saveAll(sigCntList);
+		for (SignalTypeCount cnt: sigCntList) {
+			sigCntRepo.save(cnt);
+		}
 	}
 	
 	public List<SignalTypeCount> findSignalCounts() {
