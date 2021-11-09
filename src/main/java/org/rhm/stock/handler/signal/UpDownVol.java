@@ -27,6 +27,7 @@ public class UpDownVol implements SignalScanner {
 	private static final String UPD_3_4_SIGNAL = "UPDNVOL3_4";
 	private static final String UPD_4_5_SIGNAL = "UPDNVOL4_5";
 	private static final String UPD_5_6_SIGNAL = "UPDNVOL5_6";
+	private static final String UPD_GT1_SIGNAL = "UPDNVOLGT1";
 	
 	private void detectIncrease(List<StockStatistic> statList) {
 		StockStatistic currStat = null, prevStat = null;
@@ -42,6 +43,9 @@ public class UpDownVol implements SignalScanner {
 	
 	private void checkRange(StockStatistic stat) {
 		StockSignal signal = null;
+		if (stat.getStatisticValue().doubleValue() > 1.0) {
+			signal = new StockSignal(priceSvc.findStockPrice(stat.getPriceId()), UPD_GT1_SIGNAL);
+		}
 		if (stat.getStatisticValue().doubleValue() >= 3.0 && stat.getStatisticValue().doubleValue() < 4.0) {
 			signal = new StockSignal(priceSvc.findStockPrice(stat.getPriceId()), UPD_3_4_SIGNAL);
 		}
