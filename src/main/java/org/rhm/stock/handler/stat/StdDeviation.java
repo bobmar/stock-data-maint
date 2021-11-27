@@ -1,6 +1,5 @@
 package org.rhm.stock.handler.stat;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import org.rhm.stock.domain.StockPrice;
@@ -37,7 +36,7 @@ public class StdDeviation implements StatisticCalculator {
 		stdDev = Math.sqrt(sumDiffSquared / (priceList.size()-1));
 		logger.debug("calcStdDeviation - " + firstPrice.getTickerSymbol() + "| Standard deviation: " + stdDev);
 		statSvc.createStatistic(
-			new StockStatistic(firstPrice.getPriceId(), statType, BigDecimal.valueOf(stdDev), firstPrice.getTickerSymbol(), firstPrice.getPriceDate())
+			new StockStatistic(firstPrice.getPriceId(), statType, stdDev, firstPrice.getTickerSymbol(), firstPrice.getPriceDate())
 			,false);
 	}
 	

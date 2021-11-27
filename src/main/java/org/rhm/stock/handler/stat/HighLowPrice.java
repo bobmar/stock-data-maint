@@ -42,7 +42,7 @@ public class HighLowPrice implements StatisticCalculator {
 			}
 		}
 		statSvc.createStatistic(
-				new StockStatistic(firstPrice.getPriceId(), statType, highPrice.getHighPrice(), firstPrice.getTickerSymbol(), firstPrice.getPriceDate())
+				new StockStatistic(firstPrice.getPriceId(), statType, highPrice.getHighPrice().doubleValue(), firstPrice.getTickerSymbol(), firstPrice.getPriceDate())
 				,false);
 	}
 	
@@ -61,7 +61,7 @@ public class HighLowPrice implements StatisticCalculator {
 			}
 		}
 		statSvc.createStatistic(
-				new StockStatistic(firstPrice.getPriceId(), statType, lowPrice.getLowPrice(), firstPrice.getTickerSymbol(), firstPrice.getPriceDate())
+				new StockStatistic(firstPrice.getPriceId(), statType, lowPrice.getLowPrice().doubleValue(), firstPrice.getTickerSymbol(), firstPrice.getPriceDate())
 				,false);
 	}
 	

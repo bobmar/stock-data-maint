@@ -1,6 +1,5 @@
 package org.rhm.stock.domain;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 import org.springframework.data.annotation.Id;
@@ -10,7 +9,7 @@ public class StockStatistic {
 	private String statId = null;
 	private String priceId = null;
 	private String statisticType = null;
-	private BigDecimal statisticValue = null;
+	private Double statisticValue = null;
 	private String tickerSymbol = null;
 	private Date priceDate = null;
 	
@@ -18,7 +17,7 @@ public class StockStatistic {
 		
 	}
 	
-	public StockStatistic(String priceId, String statisticType, BigDecimal statisticValue, String tickerSymbol, Date priceDate) {
+	public StockStatistic(String priceId, String statisticType, Double statisticValue, String tickerSymbol, Date priceDate) {
 		this.priceId = priceId;
 		this.statisticType = statisticType;
 		this.statId = priceId + ":" + statisticType;
@@ -39,10 +38,10 @@ public class StockStatistic {
 	public void setStatisticType(String statisticType) {
 		this.statisticType = statisticType;
 	}
-	public BigDecimal getStatisticValue() {
+	public Double getStatisticValue() {
 		return statisticValue;
 	}
-	public void setStatisticValue(BigDecimal statisticValue) {
+	public void setStatisticValue(Double statisticValue) {
 		this.statisticValue = statisticValue;
 	}
 	public String getTickerSymbol() {

@@ -1,6 +1,5 @@
 package org.rhm.stock.handler.stat;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import org.rhm.stock.domain.StockPrice;
@@ -29,7 +28,7 @@ public class UpDownVolume implements StatisticCalculator {
 		for (int i = 0; i < 49; i++) {
 			currPrice = priceList.get(i);
 			prevPrice = priceList.get(i+1);
-			priceDiff = currPrice.getClosePrice().subtract(prevPrice.getClosePrice()).doubleValue();
+			priceDiff = currPrice.getClosePrice() - prevPrice.getClosePrice();
 			logger.debug("calcUpDownRatio - " + currPrice.getTickerSymbol() + " curr price=" + currPrice.getClosePrice() + "; prev price=" + prevPrice.getClosePrice() + "; diff=" + priceDiff);
 			if (priceDiff >= 0) {
 				upVolume += currPrice.getVolume().longValue();
@@ -45,7 +44,7 @@ public class UpDownVolume implements StatisticCalculator {
 			upDownRatio = upVolume / downVolume;
 			logger.debug("calcUpDownRatio - up/down ratio=" + upDownRatio);
 			statSvc.createStatistic(
-				new StockStatistic(firstPrice.getPriceId(), UP_DOWN_VOL_50, BigDecimal.valueOf(upDownRatio), firstPrice.getTickerSymbol(), firstPrice.getPriceDate())
+				new StockStatistic(firstPrice.getPriceId(), UP_DOWN_VOL_50, upDownRatio, firstPrice.getTickerSymbol(), firstPrice.getPriceDate())
 				,false);
 		}
 	}

@@ -41,10 +41,10 @@ public class AvgPriceFactory {
 					break;
 				}
 			}
-			avgPrice.setAvgPrice(BigDecimal.valueOf(totalPrice / days));
-			avgPrice.setAvgVolume(Integer.valueOf(totalVolume) / days);
-			avgPrice.setAvgHighLowRange(BigDecimal.valueOf(totalHighLowRange / days));
-			avgPrice.setAvgOpenCloseRange(BigDecimal.valueOf(totalOpenCloseRange / days));
+			avgPrice.setAvgPrice(totalPrice / days);
+			avgPrice.setAvgVolume(totalVolume / days);
+			avgPrice.setAvgHighLowRange(totalHighLowRange / days);
+			avgPrice.setAvgOpenCloseRange(totalOpenCloseRange / days);
 			logger.debug("calculateAvgPrice - " + days + " average price/volume=" + avgPrice.getAvgPrice() + "/" + avgPrice.getAvgVolume());
 		}
 		else {

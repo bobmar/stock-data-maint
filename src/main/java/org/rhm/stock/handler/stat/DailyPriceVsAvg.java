@@ -1,6 +1,5 @@
 package org.rhm.stock.handler.stat;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import org.rhm.stock.domain.AveragePrice;
@@ -73,7 +72,7 @@ public class DailyPriceVsAvg implements StatisticCalculator {
 			double priceVsAvg = (price.getClosePrice().doubleValue() / avgPrice.getAvgPrice().doubleValue());
 			logger.debug("calcPriceVsAvg - " + price.getPriceId() + " price vs. " + days + " day average=" + priceVsAvg);
 			statSvc.createStatistic(
-				new StockStatistic(price.getPriceId(), statType, BigDecimal.valueOf(priceVsAvg), price.getTickerSymbol(), price.getPriceDate())
+				new StockStatistic(price.getPriceId(), statType, priceVsAvg, price.getTickerSymbol(), price.getPriceDate())
 				,false);
 		}
 		else {
@@ -99,7 +98,7 @@ public class DailyPriceVsAvg implements StatisticCalculator {
 			if (avgPrice20 != null && avgPrice200 != null) {
 				avg20Vs200 = avgPrice20.getAvgPrice().doubleValue() / avgPrice200.getAvgPrice().doubleValue();
 				statSvc.createStatistic(
-					new StockStatistic(price.getPriceId(), AVG_PRC_20_VS_200, BigDecimal.valueOf(avg20Vs200), price.getTickerSymbol(), price.getPriceDate())
+					new StockStatistic(price.getPriceId(), AVG_PRC_20_VS_200, avg20Vs200, price.getTickerSymbol(), price.getPriceDate())
 					,false);
 			}
 			else {
@@ -124,7 +123,7 @@ public class DailyPriceVsAvg implements StatisticCalculator {
 		statSvc.createStatistic(new StockStatistic(
 			firstStat.getPriceId()
 			, NET_ABV_BLW_50_DAY_AVG
-			, BigDecimal.valueOf(daysAbove / (daysAbove + daysBelow))
+			, daysAbove / (daysAbove + daysBelow)
 			, firstStat.getTickerSymbol()
 			, firstStat.getPriceDate())
 		);

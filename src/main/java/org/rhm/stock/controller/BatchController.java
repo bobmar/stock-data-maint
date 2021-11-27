@@ -5,7 +5,6 @@ import java.util.Date;
 import org.rhm.stock.batch.BatchJob;
 import org.rhm.stock.batch.BatchStatus;
 import org.rhm.stock.controller.dto.GeneralResponse;
-import org.rhm.stock.service.BatchStatusService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,5 @@
 package org.rhm.stock.handler.stat;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +44,7 @@ public class Momentum implements StatisticCalculator {
 			if (todayPrice != null && oldPrice != null) {
 				trMomentum = ((todayPrice.getClosePrice().doubleValue() / oldPrice.getClosePrice().doubleValue()) - 1);
 				statSvc.createStatistic(
-					new StockStatistic(todayPrice.getPriceId(), STAT_TR_MOM, BigDecimal.valueOf(trMomentum), todayPrice.getTickerSymbol(), todayPrice.getPriceDate()));
+					new StockStatistic(todayPrice.getPriceId(), STAT_TR_MOM, trMomentum, todayPrice.getTickerSymbol(), todayPrice.getPriceDate()));
 			}
 		}
 	}
@@ -86,15 +85,13 @@ public class Momentum implements StatisticCalculator {
 						break;
 					}
 				}
-//				stdDev = statSvc.retrieveStat(price.getTickerSymbol(), StdDeviation.STD_DEV_10WK, price.getPriceDate());
-//				stdDev = statSvc.retrieveStat(price.getPriceId() + ":" + StdDeviation.STD_DEV_10WK);
 				stdDev = this.findStdDev(price.getPriceId());
 				if (avg50Day != null && (stdDev != null && stdDev.getStatisticValue().doubleValue() > 0)) {
 					logger.debug("calcZScore - priceID=" + price.getPriceId() + " 50-Day avg price=" + avg50Day.getAvgPrice() + "; closing price=" + price.getClosePrice() + "; std dev=" + stdDev.getStatisticValue());
 					zScore = ((price.getClosePrice().doubleValue() - avg50Day.getAvgPrice().doubleValue())
 						/stdDev.getStatisticValue().doubleValue());
 					statSvc.createStatistic(
-						new StockStatistic(price.getPriceId(), STAT_Z_SCORE, BigDecimal.valueOf(zScore), price.getTickerSymbol(), price.getPriceDate()));
+						new StockStatistic(price.getPriceId(), STAT_Z_SCORE, zScore, price.getTickerSymbol(), price.getPriceDate()));
 				}
 				else {
 					logger.warn("calcZScore - unable to find standard deviation for " + price.getPriceId());

@@ -1,7 +1,5 @@
 package org.rhm.stock.service;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -95,7 +93,6 @@ public class CompositePriceService {
 		List<StockPrice> histPriceList = priceRepo.findTop60ByTickerSymbolOrderByPriceDateDesc(price.getTickerSymbol());
 		StockPrice workingPrice = null;
 		List<StockSignal> workingSignals = null;
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		Integer[] lookbackDays = {20,40,60};
 		String mapKey = null;
 		for (Integer lookbackDay: lookbackDays) {

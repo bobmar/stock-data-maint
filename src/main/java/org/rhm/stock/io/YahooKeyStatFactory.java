@@ -7,14 +7,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
-import org.rhm.stock.domain.StockPrice;
 import org.rhm.stock.domain.YahooKeyStatistic;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class YahooKeyStatFactory {
 
-	private static Logger logger = LoggerFactory.getLogger(YahooKeyStatFactory.class);
 	private static BigDecimal extractRaw(String key, Map<String,Object> value ) {
 		BigDecimal rawValue = null;
 		if (value != null) {

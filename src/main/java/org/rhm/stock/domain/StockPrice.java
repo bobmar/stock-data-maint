@@ -11,10 +11,10 @@ public class StockPrice {
 	private String priceId = null;
 	private String tickerSymbol = null;
 	private Date priceDate = null;
-	private BigDecimal closePrice = null;
-	private BigDecimal openPrice = null;
-	private BigDecimal lowPrice = null;
-	private BigDecimal highPrice = null;
+	private Double closePrice = null;
+	private Double openPrice = null;
+	private Double lowPrice = null;
+	private Double highPrice = null;
 	private Long volume = null;
 	public StockPrice() {}
 	
@@ -30,28 +30,28 @@ public class StockPrice {
 	public void setPriceDate(Date priceDate) {
 		this.priceDate = priceDate;
 	}
-	public BigDecimal getClosePrice() {
+	public Double getClosePrice() {
 		return closePrice;
 	}
-	public void setClosePrice(BigDecimal closePrice) {
+	public void setClosePrice(Double closePrice) {
 		this.closePrice = closePrice;
 	}
-	public BigDecimal getOpenPrice() {
+	public Double getOpenPrice() {
 		return openPrice;
 	}
-	public void setOpenPrice(BigDecimal openPrice) {
+	public void setOpenPrice(Double openPrice) {
 		this.openPrice = openPrice;
 	}
-	public BigDecimal getLowPrice() {
+	public Double getLowPrice() {
 		return lowPrice;
 	}
-	public void setLowPrice(BigDecimal lowPrice) {
+	public void setLowPrice(Double lowPrice) {
 		this.lowPrice = lowPrice;
 	}
-	public BigDecimal getHighPrice() {
+	public Double getHighPrice() {
 		return highPrice;
 	}
-	public void setHighPrice(BigDecimal highPrice) {
+	public void setHighPrice(Double highPrice) {
 		this.highPrice = highPrice;
 	}
 	public Long getVolume() {

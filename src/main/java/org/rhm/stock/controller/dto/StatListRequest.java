@@ -1,7 +1,5 @@
 package org.rhm.stock.controller.dto;
 
-import java.util.Date;
-
 public class StatListRequest {
 	private String statDate = null;
 	private String statCode = null;

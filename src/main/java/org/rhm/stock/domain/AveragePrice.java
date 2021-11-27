@@ -5,9 +5,9 @@ import java.math.BigDecimal;
 public class AveragePrice {
 	private Integer daysCnt = null;
 	private Integer avgVolume = null;
-	private BigDecimal avgPrice = null;
-	private BigDecimal avgHighLowRange = null;
-	private BigDecimal avgOpenCloseRange = null;
+	private Double avgPrice = null;
+	private Double avgHighLowRange = null;
+	private Double avgOpenCloseRange = null;
 	public Integer getDaysCnt() {
 		return daysCnt;
 	}
@@ -20,22 +20,22 @@ public class AveragePrice {
 	public void setAvgVolume(Integer avgVolume) {
 		this.avgVolume = avgVolume;
 	}
-	public BigDecimal getAvgPrice() {
+	public Double getAvgPrice() {
 		return avgPrice;
 	}
-	public void setAvgPrice(BigDecimal avgPrice) {
+	public void setAvgPrice(Double avgPrice) {
 		this.avgPrice = avgPrice;
 	}
-	public BigDecimal getAvgHighLowRange() {
+	public Double getAvgHighLowRange() {
 		return avgHighLowRange;
 	}
-	public void setAvgHighLowRange(BigDecimal avgHighLowRange) {
+	public void setAvgHighLowRange(Double avgHighLowRange) {
 		this.avgHighLowRange = avgHighLowRange;
 	}
-	public BigDecimal getAvgOpenCloseRange() {
+	public Double getAvgOpenCloseRange() {
 		return avgOpenCloseRange;
 	}
-	public void setAvgOpenCloseRange(BigDecimal avgOpenCloseRange) {
+	public void setAvgOpenCloseRange(Double avgOpenCloseRange) {
 		this.avgOpenCloseRange = avgOpenCloseRange;
 	}
 }

@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.rhm.stock.domain.IbdStatistic;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.mongodb.repository.Query;
 
 public interface IbdStatisticRepo extends MongoRepository<IbdStatistic, String> {
 

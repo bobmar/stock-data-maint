@@ -1,7 +1,6 @@
 package org.rhm.stock.handler.maint;
 
 import java.util.Date;
-import java.util.List;
 
 import org.rhm.stock.service.TickerService;
 import org.slf4j.Logger;

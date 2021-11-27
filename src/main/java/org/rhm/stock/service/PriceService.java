@@ -1,6 +1,5 @@
 package org.rhm.stock.service;
 
-import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,7 +16,6 @@ import org.rhm.stock.repository.PriceRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
@@ -38,10 +36,10 @@ public class PriceService {
 		for (PriceBean bean: priceBeanList) {
 			StockPrice price = new StockPrice();
 			price.setPriceId(tickerSymbol + ":" + dtFmt.format(bean.getDate()));
-			price.setClosePrice(BigDecimal.valueOf(bean.getClosePrice()));
-			price.setHighPrice(BigDecimal.valueOf(bean.getHighPrice()));
-			price.setLowPrice(BigDecimal.valueOf(bean.getLowPrice()));
-			price.setOpenPrice(BigDecimal.valueOf(bean.getOpenPrice()));
+			price.setClosePrice(bean.getClosePrice());
+			price.setHighPrice(bean.getHighPrice());
+			price.setLowPrice(bean.getLowPrice());
+			price.setOpenPrice(bean.getOpenPrice());
 			price.setPriceDate(bean.getDate());
 			price.setTickerSymbol(tickerSymbol);
 			price.setVolume(bean.getVolume());

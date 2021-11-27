@@ -1,6 +1,5 @@
 package org.rhm.stock.handler.stat;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import org.rhm.stock.domain.StockPrice;
@@ -28,12 +27,12 @@ public class PriceChg implements StatisticCalculator {
 	private Logger logger = LoggerFactory.getLogger(StatisticService.class);
 	
 	private void calcChange(StockPrice currPrice, StockPrice prevPrice, String statPctChgCode, String statPrcChgCode) {
-		BigDecimal priceChg = currPrice.getClosePrice().subtract(prevPrice.getClosePrice());
+		Double priceChg = (currPrice.getClosePrice().doubleValue() - prevPrice.getClosePrice().doubleValue());
 		logger.debug("calcChange - price change amt for " + currPrice.getPriceId() + " is " + priceChg.doubleValue());
 		logger.debug("calcChange - " + prevPrice.getPriceId() + " closing price=" + prevPrice.getClosePrice());
 		logger.debug("calcChange - " + currPrice.getPriceId() + " closing price=" + currPrice.getClosePrice());
 		double quotient = priceChg.doubleValue() / prevPrice.getClosePrice().doubleValue();
-		BigDecimal pctChg = BigDecimal.valueOf(quotient * 100);
+		Double pctChg = (quotient * 100);
 		statSvc.createStatistic(
 			new StockStatistic(currPrice.getPriceId(), statPctChgCode, pctChg, currPrice.getTickerSymbol(), currPrice.getPriceDate())
 			,false);
