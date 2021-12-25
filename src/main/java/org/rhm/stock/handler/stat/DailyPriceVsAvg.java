@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 @Qualifier("dailyPriceVsAvg")
 public class DailyPriceVsAvg implements StatisticCalculator {
 
+	private static final String DLY_PRC_VS_20_DAY_AVG = "DYPRCV20A";
 	private static final String DLY_PRC_VS_50_DAY_AVG = "DYPRCV50A";
 	private static final String DLY_PRC_VS_200_DAY_AVG = "DYPRCV200A";
 	private static final String NET_ABV_BLW_50_DAY_AVG = "NETABVBLW50";
@@ -143,6 +144,7 @@ public class DailyPriceVsAvg implements StatisticCalculator {
 		this.init(firstPrice.getTickerSymbol());
 		logger.info("calculate - processing " + priceList.size() + " prices for " + firstPrice.getTickerSymbol());
 		for (StockPrice price: priceList) {
+			this.calcPriceVsAvg(price, 20, DLY_PRC_VS_20_DAY_AVG);
 			this.calcPriceVsAvg(price, 50, DLY_PRC_VS_50_DAY_AVG);
 			this.calcPriceVsAvg(price, 200, DLY_PRC_VS_200_DAY_AVG);
 			this.calcAvg20Vs200(price);
