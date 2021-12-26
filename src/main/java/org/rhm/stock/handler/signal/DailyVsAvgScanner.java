@@ -43,7 +43,12 @@ public class DailyVsAvgScanner implements SignalScanner {
 		StockPrice price = priceMap.get(priceId);
 		if (price == null) {
 			price = priceSvc.findStockPrice(priceId);
-			priceMap.put(price.getPriceId(), price);
+			if (price != null) {
+				priceMap.put(price.getPriceId(), price);
+			}
+			else {
+				logger.warn("findStockPrice - priceId: " + priceId + " was not found");
+			}
 		}
 		return price;
 	}

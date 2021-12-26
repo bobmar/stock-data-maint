@@ -19,6 +19,8 @@ public class IbdStatRowExtractor {
 	private static final String STAT_ACC_DIS = "Acc/Dis Rating";
 	private static final String STAT_GRP = "Group Rel Str Rating";
 	private static final String STAT_CO_NAME = "Company Name";
+	private static final String STAT_MGMT_OWN_PCT = "Mgmt Own %";
+	private static final int EXPECTED_FOUND_CNT = 8;
 	
 	private int columnIndex(List<String> columnNames, String columnName) {
 		int col = -1;
@@ -40,7 +42,8 @@ public class IbdStatRowExtractor {
 		foundCnt += (this.columnIndex(columnNames, STAT_RS) > -1)?1:0;
 		foundCnt += (this.columnIndex(columnNames, STAT_SMR) > -1)?1:0;
 		foundCnt += (this.columnIndex(columnNames, STAT_CO_NAME) > -1)?1:0;
-		return foundCnt == 7;
+		foundCnt += (this.columnIndex(columnNames, STAT_MGMT_OWN_PCT) > -1)?1:0;
+		return foundCnt == EXPECTED_FOUND_CNT;
 	}
 	
 	public IbdStatistic transformRow(Row row, List<String> columnNames) {
@@ -55,6 +58,7 @@ public class IbdStatRowExtractor {
 			ibdStat.setSalesMarginRoe(row.getCell(columnIndex(columnNames, STAT_SMR)).getStringCellValue());
 			ibdStat.setTickerSymbol(row.getCell(columnIndex(columnNames, STAT_SYMBOL)).getStringCellValue());
 			ibdStat.setCompanyName(row.getCell(columnIndex(columnNames, STAT_CO_NAME)).getStringCellValue());
+			ibdStat.setMgmtOwnPct(Double.valueOf(row.getCell(columnIndex(columnNames, STAT_MGMT_OWN_PCT)).getStringCellValue()));
 		}
 		return ibdStat;
 	}

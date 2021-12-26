@@ -21,6 +21,7 @@ public class IbdStatistic {
 	private String accumDist = null;
 	private String salesMarginRoe = null;
 	private String industryRank = null;
+	private Double mgmtOwnPct = null;
 	private Date createDate = Calendar.getInstance().getTime();
 	private List<String> listName = null;
 	
@@ -115,6 +116,12 @@ public class IbdStatistic {
 	}
 	public void setListName(List<String> listName) {
 		this.listName = listName;
+	}
+	public Double getMgmtOwnPct() {
+		return mgmtOwnPct;
+	}
+	public void setMgmtOwnPct(Double mgmtOwnPct) {
+		this.mgmtOwnPct = mgmtOwnPct;
 	}
 	
 }

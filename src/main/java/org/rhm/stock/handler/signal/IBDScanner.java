@@ -29,6 +29,8 @@ public class IBDScanner implements SignalScanner {
 	private static final String SIGNAL_AD_AB = "IBDADAB";
 	// Stock on 3 or more IBD lists
 	private static final String SIGNAL_3PLUS = "IBD3PLUS";
+	// IBD Management Ownership pct 5 or higher
+	private static final String SIGNAL_MGMT_GE5 = "IBDMGMT5";
 
 	@Autowired
 	private TickerService tickerSvc = null;
@@ -73,6 +75,9 @@ public class IBDScanner implements SignalScanner {
 		catch (NumberFormatException e) {
 			logger.error("detectSignals - " + SIGNAL_RS_X90 + ":" + e.getMessage());
 		}
+	}
+	
+	private void detectCurrSignal(IbdStatistic currStat) {
 		String accumDist = currStat.getAccumDist()==null?"":currStat.getAccumDist();
 		if (accumDist.startsWith("A") || accumDist.startsWith("B")) {
 			this.createSignal(currStat, SIGNAL_AD_AB);
@@ -80,13 +85,17 @@ public class IBDScanner implements SignalScanner {
 		if (currStat.getListName().size() >= 3) {
 			this.createSignal(currStat, SIGNAL_3PLUS);
 		}
+		if (currStat.getMgmtOwnPct().intValue() >= 5) {
+			this.createSignal(currStat, SIGNAL_MGMT_GE5);
+		}
 	}
 	
 	@Override
 	public void scan(String tickerSymbol) {
 		List<IbdStatistic> ibdStatList = tickerSvc.findIbdStats(tickerSymbol);
 		logger.info("scan - found " + ibdStatList.size() + " IBD stats for " + tickerSymbol);
-		while (ibdStatList.size() > 2) {
+		while (ibdStatList.size() >= 2) {
+			this.detectCurrSignal(ibdStatList.get(0));
 			this.detectSignals(ibdStatList.subList(0, 2));
 			ibdStatList.remove(0);
 		}
