@@ -11,20 +11,20 @@ import org.rhm.stock.domain.YahooKeyStatistic;
 
 public class YahooKeyStatFactory {
 
-	private static BigDecimal extractRaw(String key, Map<String,Object> value ) {
-		BigDecimal rawValue = null;
+	private static Double extractRaw(String key, Map<String,Object> value ) {
+		Double rawValue = null;
 		if (value != null) {
 			Map<String,Object> valueMap = (Map<String,Object>) value.get(key);
 			if (valueMap != null) {
 				if (valueMap.get("raw") != null) {
 					if (valueMap.get("raw") instanceof Long) {
-						rawValue = BigDecimal.valueOf(((Long)valueMap.get("raw")).doubleValue());
+						rawValue = Double.valueOf(((Long)valueMap.get("raw")).doubleValue());
 					}
 					else if (valueMap.get("raw") instanceof Integer) {
-						rawValue = BigDecimal.valueOf(((Integer)valueMap.get("raw")).doubleValue());
+						rawValue = Double.valueOf(((Integer)valueMap.get("raw")).doubleValue());
 					}
 					else if (valueMap.get("raw") instanceof Double) {
-						rawValue = BigDecimal.valueOf(((Double)valueMap.get("raw")).doubleValue());
+						rawValue = Double.valueOf(((Double)valueMap.get("raw")).doubleValue());
 					}
 				}
 			}
@@ -48,12 +48,12 @@ public class YahooKeyStatFactory {
 		return date;
 	}
 	
-	private static BigDecimal extractPct(String key, Map<String,Object> value) {
-		BigDecimal pctValue = null;
+	private static Double extractPct(String key, Map<String,Object> value) {
+		Double pctValue = null;
 		if (value != null) {
-			BigDecimal rawValue = extractRaw(key, value);
+			Double rawValue = extractRaw(key, value);
 			if (rawValue != null) {
-				pctValue = rawValue.multiply(BigDecimal.valueOf(100));
+				pctValue = rawValue * 100;
 			}
 		}
 		return pctValue;

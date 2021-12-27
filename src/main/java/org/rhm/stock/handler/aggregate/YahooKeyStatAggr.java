@@ -149,7 +149,7 @@ public class YahooKeyStatAggr implements AggregatorHandler {
 	
 	private KeyStatAggregate calcAggrStats(KeyStatAggregate ksAggr) {
 		KeyStatAggregate agg = ksAggr;
-		List<BigDecimal> statValueList = ksAggr.getValueList().stream().sorted().collect(Collectors.toList());
+		List<Double> statValueList = ksAggr.getValueList().stream().sorted().collect(Collectors.toList());
 		ksAggr.setLowValue(statValueList.get(0).doubleValue());
 		ksAggr.setHighValue(statValueList.get(statValueList.size()-1).doubleValue());
 		int medianIndex = statValueList.size() / 2;

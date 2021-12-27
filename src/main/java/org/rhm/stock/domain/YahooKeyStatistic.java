@@ -1,6 +1,5 @@
 package org.rhm.stock.domain;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import org.springframework.data.annotation.Id;
@@ -10,126 +9,126 @@ public class YahooKeyStatistic {
 	private String keyStatId;
 	private String tickerSymbol;
 	private LocalDate priceDate;
-    private BigDecimal enterpriseValue;
-    private BigDecimal forwardPE;
-    private BigDecimal profitMargins;
-    private BigDecimal floatShares;
-    private BigDecimal sharesOutstanding;
-    private BigDecimal sharesShort;
-    private BigDecimal sharesShortPriorMonth;
+    private Double enterpriseValue;
+    private Double forwardPE;
+    private Double profitMargins;
+    private Double floatShares;
+    private Double sharesOutstanding;
+    private Double sharesShort;
+    private Double sharesShortPriorMonth;
     private LocalDate sharesShortPreviousMonthDate;
     private LocalDate dateShortInterest;
-    private BigDecimal sharesPercentSharesOut;
-    private BigDecimal heldPercentInsiders;
-    private BigDecimal heldPercentInstitutions;
-    private BigDecimal shortRatio;
-    private BigDecimal shortPercentOfFloat;
-    private BigDecimal beta;
-    private BigDecimal morningStarOverallRating;
-    private BigDecimal morningStarRiskRating;
+    private Double sharesPercentSharesOut;
+    private Double heldPercentInsiders;
+    private Double heldPercentInstitutions;
+    private Double shortRatio;
+    private Double shortPercentOfFloat;
+    private Double beta;
+    private Double morningStarOverallRating;
+    private Double morningStarRiskRating;
     private String category;
-    private BigDecimal bookValue;
-    private BigDecimal priceToBook;
-    private BigDecimal annualReportExpenseRatio;
-    private BigDecimal ytdReturn;
-    private BigDecimal beta3Year;
-    private BigDecimal totalAssets;
-    private BigDecimal yield;
+    private Double bookValue;
+    private Double priceToBook;
+    private Double annualReportExpenseRatio;
+    private Double ytdReturn;
+    private Double beta3Year;
+    private Double totalAssets;
+    private Double yield;
     private String fundFamily;
     private LocalDate fundInceptionDate;
     private String legalType;
-    private BigDecimal threeYearAverageReturn;
-    private BigDecimal fiveYearAverageReturn;
-    private BigDecimal priceToSalesTrailing12Months;
+    private Double threeYearAverageReturn;
+    private Double fiveYearAverageReturn;
+    private Double priceToSalesTrailing12Months;
     private LocalDate lastFiscalYearEnd;
     private LocalDate nextFiscalYearEnd;
     private LocalDate mostRecentQuarter;
-    private BigDecimal earningsQuarterlyGrowth;
-    private BigDecimal revenueQuarterlyGrowth;
-    private BigDecimal netIncomeToCommon;
-    private BigDecimal trailingEps;
-    private BigDecimal forwardEps;
-    private BigDecimal pegRatio;
+    private Double earningsQuarterlyGrowth;
+    private Double revenueQuarterlyGrowth;
+    private Double netIncomeToCommon;
+    private Double trailingEps;
+    private Double forwardEps;
+    private Double pegRatio;
     private String lastSplitFactor;
     private LocalDate lastSplitDate;
-    private BigDecimal enterpriseToRevenue;
-    private BigDecimal enterpriseToEbitda;
-    private BigDecimal s52WeekChange;
-    private BigDecimal SandP52WeekChange;
-    private BigDecimal lastDividendValue;
-    private BigDecimal lastCapGain;
-    private BigDecimal annualHoldingsTurnover;
+    private Double enterpriseToRevenue;
+    private Double enterpriseToEbitda;
+    private Double s52WeekChange;
+    private Double SandP52WeekChange;
+    private Double lastDividendValue;
+    private Double lastCapGain;
+    private Double annualHoldingsTurnover;
     private String maxAge;
-    private BigDecimal currentPrice;
-    private BigDecimal targetHighPrice;
-    private BigDecimal targetLowPrice;
-    private BigDecimal targetMeanPrice;
-    private BigDecimal targetMedianPrice;
-    private BigDecimal recommendationMean;
+    private Double currentPrice;
+    private Double targetHighPrice;
+    private Double targetLowPrice;
+    private Double targetMeanPrice;
+    private Double targetMedianPrice;
+    private Double recommendationMean;
     private String recommendationKey;
-    private BigDecimal numberOfAnalystOpinions;
-    private BigDecimal totalCash;
-    private BigDecimal totalCashPerShare;
-    private BigDecimal ebitda;
-    private BigDecimal totalDebt;
-    private BigDecimal quickRatio;
-    private BigDecimal currentRatio;
-    private BigDecimal totalRevenue;
-    private BigDecimal debtToEquity;
-    private BigDecimal revenuePerShare;
-    private BigDecimal returnOnAssets;
-    private BigDecimal returnOnEquity;
-    private BigDecimal grossProfits;
-    private BigDecimal freeCashflow;
-    private BigDecimal operatingCashflow;
-    private BigDecimal earningsGrowth;
-    private BigDecimal revenueGrowth;
-    private BigDecimal grossMargins;
-    private BigDecimal ebitdaMargins;
-    private BigDecimal operatingMargins;
-    private BigDecimal profitMargins2;
+    private Double numberOfAnalystOpinions;
+    private Double totalCash;
+    private Double totalCashPerShare;
+    private Double ebitda;
+    private Double totalDebt;
+    private Double quickRatio;
+    private Double currentRatio;
+    private Double totalRevenue;
+    private Double debtToEquity;
+    private Double revenuePerShare;
+    private Double returnOnAssets;
+    private Double returnOnEquity;
+    private Double grossProfits;
+    private Double freeCashflow;
+    private Double operatingCashflow;
+    private Double earningsGrowth;
+    private Double revenueGrowth;
+    private Double grossMargins;
+    private Double ebitdaMargins;
+    private Double operatingMargins;
+    private Double profitMargins2;
     private String financialCurrency;
     private LocalDate createDate;
-	public BigDecimal getEnterpriseValue() {
+	public Double getEnterpriseValue() {
 		return enterpriseValue;
 	}
-	public void setEnterpriseValue(BigDecimal enterpriseValue) {
+	public void setEnterpriseValue(Double enterpriseValue) {
 		this.enterpriseValue = enterpriseValue;
 	}
-	public BigDecimal getForwardPE() {
+	public Double getForwardPE() {
 		return forwardPE;
 	}
-	public void setForwardPE(BigDecimal forwardPE) {
+	public void setForwardPE(Double forwardPE) {
 		this.forwardPE = forwardPE;
 	}
-	public BigDecimal getProfitMargins() {
+	public Double getProfitMargins() {
 		return profitMargins;
 	}
-	public void setProfitMargins(BigDecimal profitMargins) {
+	public void setProfitMargins(Double profitMargins) {
 		this.profitMargins = profitMargins;
 	}
-	public BigDecimal getFloatShares() {
+	public Double getFloatShares() {
 		return floatShares;
 	}
-	public void setFloatShares(BigDecimal floatShares) {
+	public void setFloatShares(Double floatShares) {
 		this.floatShares = floatShares;
 	}
-	public BigDecimal getSharesOutstanding() {
+	public Double getSharesOutstanding() {
 		return sharesOutstanding;
 	}
-	public void setSharesOutstanding(BigDecimal sharesOutstanding) {
+	public void setSharesOutstanding(Double sharesOutstanding) {
 		this.sharesOutstanding = sharesOutstanding;
 	}
-	public BigDecimal getSharesShort() {
+	public Double getSharesShort() {
 		return sharesShort;
 	}
-	public void setSharesShort(BigDecimal sharesShort) {
+	public void setSharesShort(Double sharesShort) {
 		this.sharesShort = sharesShort;
 	}
-	public BigDecimal getSharesShortPriorMonth() {
+	public Double getSharesShortPriorMonth() {
 		return sharesShortPriorMonth;
 	}
-	public void setSharesShortPriorMonth(BigDecimal sharesShortPriorMonth) {
+	public void setSharesShortPriorMonth(Double sharesShortPriorMonth) {
 		this.sharesShortPriorMonth = sharesShortPriorMonth;
 	}
 	public LocalDate getSharesShortPreviousMonthDate() {
@@ -144,52 +143,52 @@ public class YahooKeyStatistic {
 	public void setDateShortInterest(LocalDate dateShortInterest) {
 		this.dateShortInterest = dateShortInterest;
 	}
-	public BigDecimal getSharesPercentSharesOut() {
+	public Double getSharesPercentSharesOut() {
 		return sharesPercentSharesOut;
 	}
-	public void setSharesPercentSharesOut(BigDecimal sharesPercentSharesOut) {
+	public void setSharesPercentSharesOut(Double sharesPercentSharesOut) {
 		this.sharesPercentSharesOut = sharesPercentSharesOut;
 	}
-	public BigDecimal getHeldPercentInsiders() {
+	public Double getHeldPercentInsiders() {
 		return heldPercentInsiders;
 	}
-	public void setHeldPercentInsiders(BigDecimal heldPercentInsiders) {
+	public void setHeldPercentInsiders(Double heldPercentInsiders) {
 		this.heldPercentInsiders = heldPercentInsiders;
 	}
-	public BigDecimal getHeldPercentInstitutions() {
+	public Double getHeldPercentInstitutions() {
 		return heldPercentInstitutions;
 	}
-	public void setHeldPercentInstitutions(BigDecimal heldPercentInstitutions) {
+	public void setHeldPercentInstitutions(Double heldPercentInstitutions) {
 		this.heldPercentInstitutions = heldPercentInstitutions;
 	}
-	public BigDecimal getShortRatio() {
+	public Double getShortRatio() {
 		return shortRatio;
 	}
-	public void setShortRatio(BigDecimal shortRatio) {
+	public void setShortRatio(Double shortRatio) {
 		this.shortRatio = shortRatio;
 	}
-	public BigDecimal getShortPercentOfFloat() {
+	public Double getShortPercentOfFloat() {
 		return shortPercentOfFloat;
 	}
-	public void setShortPercentOfFloat(BigDecimal shortPercentOfFloat) {
+	public void setShortPercentOfFloat(Double shortPercentOfFloat) {
 		this.shortPercentOfFloat = shortPercentOfFloat;
 	}
-	public BigDecimal getBeta() {
+	public Double getBeta() {
 		return beta;
 	}
-	public void setBeta(BigDecimal beta) {
+	public void setBeta(Double beta) {
 		this.beta = beta;
 	}
-	public BigDecimal getMorningStarOverallRating() {
+	public Double getMorningStarOverallRating() {
 		return morningStarOverallRating;
 	}
-	public void setMorningStarOverallRating(BigDecimal morningStarOverallRating) {
+	public void setMorningStarOverallRating(Double morningStarOverallRating) {
 		this.morningStarOverallRating = morningStarOverallRating;
 	}
-	public BigDecimal getMorningStarRiskRating() {
+	public Double getMorningStarRiskRating() {
 		return morningStarRiskRating;
 	}
-	public void setMorningStarRiskRating(BigDecimal morningStarRiskRating) {
+	public void setMorningStarRiskRating(Double morningStarRiskRating) {
 		this.morningStarRiskRating = morningStarRiskRating;
 	}
 	public String getCategory() {
@@ -198,46 +197,46 @@ public class YahooKeyStatistic {
 	public void setCategory(String category) {
 		this.category = category;
 	}
-	public BigDecimal getBookValue() {
+	public Double getBookValue() {
 		return bookValue;
 	}
-	public void setBookValue(BigDecimal bookValue) {
+	public void setBookValue(Double bookValue) {
 		this.bookValue = bookValue;
 	}
-	public BigDecimal getPriceToBook() {
+	public Double getPriceToBook() {
 		return priceToBook;
 	}
-	public void setPriceToBook(BigDecimal priceToBook) {
+	public void setPriceToBook(Double priceToBook) {
 		this.priceToBook = priceToBook;
 	}
-	public BigDecimal getAnnualReportExpenseRatio() {
+	public Double getAnnualReportExpenseRatio() {
 		return annualReportExpenseRatio;
 	}
-	public void setAnnualReportExpenseRatio(BigDecimal annualReportExpenseRatio) {
+	public void setAnnualReportExpenseRatio(Double annualReportExpenseRatio) {
 		this.annualReportExpenseRatio = annualReportExpenseRatio;
 	}
-	public BigDecimal getYtdReturn() {
+	public Double getYtdReturn() {
 		return ytdReturn;
 	}
-	public void setYtdReturn(BigDecimal ytdReturn) {
+	public void setYtdReturn(Double ytdReturn) {
 		this.ytdReturn = ytdReturn;
 	}
-	public BigDecimal getBeta3Year() {
+	public Double getBeta3Year() {
 		return beta3Year;
 	}
-	public void setBeta3Year(BigDecimal beta3Year) {
+	public void setBeta3Year(Double beta3Year) {
 		this.beta3Year = beta3Year;
 	}
-	public BigDecimal getTotalAssets() {
+	public Double getTotalAssets() {
 		return totalAssets;
 	}
-	public void setTotalAssets(BigDecimal totalAssets) {
+	public void setTotalAssets(Double totalAssets) {
 		this.totalAssets = totalAssets;
 	}
-	public BigDecimal getYield() {
+	public Double getYield() {
 		return yield;
 	}
-	public void setYield(BigDecimal yield) {
+	public void setYield(Double yield) {
 		this.yield = yield;
 	}
 	public String getFundFamily() {
@@ -258,22 +257,22 @@ public class YahooKeyStatistic {
 	public void setLegalType(String legalType) {
 		this.legalType = legalType;
 	}
-	public BigDecimal getThreeYearAverageReturn() {
+	public Double getThreeYearAverageReturn() {
 		return threeYearAverageReturn;
 	}
-	public void setThreeYearAverageReturn(BigDecimal threeYearAverageReturn) {
+	public void setThreeYearAverageReturn(Double threeYearAverageReturn) {
 		this.threeYearAverageReturn = threeYearAverageReturn;
 	}
-	public BigDecimal getFiveYearAverageReturn() {
+	public Double getFiveYearAverageReturn() {
 		return fiveYearAverageReturn;
 	}
-	public void setFiveYearAverageReturn(BigDecimal fiveYearAverageReturn) {
+	public void setFiveYearAverageReturn(Double fiveYearAverageReturn) {
 		this.fiveYearAverageReturn = fiveYearAverageReturn;
 	}
-	public BigDecimal getPriceToSalesTrailing12Months() {
+	public Double getPriceToSalesTrailing12Months() {
 		return priceToSalesTrailing12Months;
 	}
-	public void setPriceToSalesTrailing12Months(BigDecimal priceToSalesTrailing12Months) {
+	public void setPriceToSalesTrailing12Months(Double priceToSalesTrailing12Months) {
 		this.priceToSalesTrailing12Months = priceToSalesTrailing12Months;
 	}
 	public LocalDate getLastFiscalYearEnd() {
@@ -294,34 +293,34 @@ public class YahooKeyStatistic {
 	public void setMostRecentQuarter(LocalDate mostRecentQuarter) {
 		this.mostRecentQuarter = mostRecentQuarter;
 	}
-	public BigDecimal getEarningsQuarterlyGrowth() {
+	public Double getEarningsQuarterlyGrowth() {
 		return earningsQuarterlyGrowth;
 	}
-	public void setEarningsQuarterlyGrowth(BigDecimal earningsQuarterlyGrowth) {
+	public void setEarningsQuarterlyGrowth(Double earningsQuarterlyGrowth) {
 		this.earningsQuarterlyGrowth = earningsQuarterlyGrowth;
 	}
-	public BigDecimal getRevenueQuarterlyGrowth() {
+	public Double getRevenueQuarterlyGrowth() {
 		return revenueQuarterlyGrowth;
 	}
-	public void setRevenueQuarterlyGrowth(BigDecimal revenueQuarterlyGrowth) {
+	public void setRevenueQuarterlyGrowth(Double revenueQuarterlyGrowth) {
 		this.revenueQuarterlyGrowth = revenueQuarterlyGrowth;
 	}
-	public BigDecimal getTrailingEps() {
+	public Double getTrailingEps() {
 		return trailingEps;
 	}
-	public void setTrailingEps(BigDecimal trailingEps) {
+	public void setTrailingEps(Double trailingEps) {
 		this.trailingEps = trailingEps;
 	}
-	public BigDecimal getForwardEps() {
+	public Double getForwardEps() {
 		return forwardEps;
 	}
-	public void setForwardEps(BigDecimal forwardEps) {
+	public void setForwardEps(Double forwardEps) {
 		this.forwardEps = forwardEps;
 	}
-	public BigDecimal getPegRatio() {
+	public Double getPegRatio() {
 		return pegRatio;
 	}
-	public void setPegRatio(BigDecimal pegRatio) {
+	public void setPegRatio(Double pegRatio) {
 		this.pegRatio = pegRatio;
 	}
 	public String getLastSplitFactor() {
@@ -336,40 +335,40 @@ public class YahooKeyStatistic {
 	public void setLastSplitDate(LocalDate lastSplitDate) {
 		this.lastSplitDate = lastSplitDate;
 	}
-	public BigDecimal getEnterpriseToRevenue() {
+	public Double getEnterpriseToRevenue() {
 		return enterpriseToRevenue;
 	}
-	public void setEnterpriseToRevenue(BigDecimal enterpriseToRevenue) {
+	public void setEnterpriseToRevenue(Double enterpriseToRevenue) {
 		this.enterpriseToRevenue = enterpriseToRevenue;
 	}
-	public BigDecimal getEnterpriseToEbitda() {
+	public Double getEnterpriseToEbitda() {
 		return enterpriseToEbitda;
 	}
-	public void setEnterpriseToEbitda(BigDecimal enterpriseToEbitda) {
+	public void setEnterpriseToEbitda(Double enterpriseToEbitda) {
 		this.enterpriseToEbitda = enterpriseToEbitda;
 	}
-	public BigDecimal getSandP52WeekChange() {
+	public Double getSandP52WeekChange() {
 		return SandP52WeekChange;
 	}
-	public void setSandP52WeekChange(BigDecimal sandP52WeekChange) {
+	public void setSandP52WeekChange(Double sandP52WeekChange) {
 		SandP52WeekChange = sandP52WeekChange;
 	}
-	public BigDecimal getLastDividendValue() {
+	public Double getLastDividendValue() {
 		return lastDividendValue;
 	}
-	public void setLastDividendValue(BigDecimal lastDividendValue) {
+	public void setLastDividendValue(Double lastDividendValue) {
 		this.lastDividendValue = lastDividendValue;
 	}
-	public BigDecimal getLastCapGain() {
+	public Double getLastCapGain() {
 		return lastCapGain;
 	}
-	public void setLastCapGain(BigDecimal lastCapGain) {
+	public void setLastCapGain(Double lastCapGain) {
 		this.lastCapGain = lastCapGain;
 	}
-	public BigDecimal getAnnualHoldingsTurnover() {
+	public Double getAnnualHoldingsTurnover() {
 		return annualHoldingsTurnover;
 	}
-	public void setAnnualHoldingsTurnover(BigDecimal annualHoldingsTurnover) {
+	public void setAnnualHoldingsTurnover(Double annualHoldingsTurnover) {
 		this.annualHoldingsTurnover = annualHoldingsTurnover;
 	}
 	public String getMaxAge() {
@@ -378,40 +377,40 @@ public class YahooKeyStatistic {
 	public void setMaxAge(String maxAge) {
 		this.maxAge = maxAge;
 	}
-	public BigDecimal getCurrentPrice() {
+	public Double getCurrentPrice() {
 		return currentPrice;
 	}
-	public void setCurrentPrice(BigDecimal currentPrice) {
+	public void setCurrentPrice(Double currentPrice) {
 		this.currentPrice = currentPrice;
 	}
-	public BigDecimal getTargetHighPrice() {
+	public Double getTargetHighPrice() {
 		return targetHighPrice;
 	}
-	public void setTargetHighPrice(BigDecimal targetHighPrice) {
+	public void setTargetHighPrice(Double targetHighPrice) {
 		this.targetHighPrice = targetHighPrice;
 	}
-	public BigDecimal getTargetLowPrice() {
+	public Double getTargetLowPrice() {
 		return targetLowPrice;
 	}
-	public void setTargetLowPrice(BigDecimal targetLowPrice) {
+	public void setTargetLowPrice(Double targetLowPrice) {
 		this.targetLowPrice = targetLowPrice;
 	}
-	public BigDecimal getTargetMeanPrice() {
+	public Double getTargetMeanPrice() {
 		return targetMeanPrice;
 	}
-	public void setTargetMeanPrice(BigDecimal targetMeanPrice) {
+	public void setTargetMeanPrice(Double targetMeanPrice) {
 		this.targetMeanPrice = targetMeanPrice;
 	}
-	public BigDecimal getTargetMedianPrice() {
+	public Double getTargetMedianPrice() {
 		return targetMedianPrice;
 	}
-	public void setTargetMedianPrice(BigDecimal targetMedianPrice) {
+	public void setTargetMedianPrice(Double targetMedianPrice) {
 		this.targetMedianPrice = targetMedianPrice;
 	}
-	public BigDecimal getRecommendationMean() {
+	public Double getRecommendationMean() {
 		return recommendationMean;
 	}
-	public void setRecommendationMean(BigDecimal recommendationMean) {
+	public void setRecommendationMean(Double recommendationMean) {
 		this.recommendationMean = recommendationMean;
 	}
 	public String getRecommendationKey() {
@@ -420,124 +419,124 @@ public class YahooKeyStatistic {
 	public void setRecommendationKey(String recommendationKey) {
 		this.recommendationKey = recommendationKey;
 	}
-	public BigDecimal getNumberOfAnalystOpinions() {
+	public Double getNumberOfAnalystOpinions() {
 		return numberOfAnalystOpinions;
 	}
-	public void setNumberOfAnalystOpinions(BigDecimal numberOfAnalystOpinions) {
+	public void setNumberOfAnalystOpinions(Double numberOfAnalystOpinions) {
 		this.numberOfAnalystOpinions = numberOfAnalystOpinions;
 	}
-	public BigDecimal getTotalCash() {
+	public Double getTotalCash() {
 		return totalCash;
 	}
-	public void setTotalCash(BigDecimal totalCash) {
+	public void setTotalCash(Double totalCash) {
 		this.totalCash = totalCash;
 	}
-	public BigDecimal getTotalCashPerShare() {
+	public Double getTotalCashPerShare() {
 		return totalCashPerShare;
 	}
-	public void setTotalCashPerShare(BigDecimal totalCashPerShare) {
+	public void setTotalCashPerShare(Double totalCashPerShare) {
 		this.totalCashPerShare = totalCashPerShare;
 	}
-	public BigDecimal getEbitda() {
+	public Double getEbitda() {
 		return ebitda;
 	}
-	public void setEbitda(BigDecimal ebitda) {
+	public void setEbitda(Double ebitda) {
 		this.ebitda = ebitda;
 	}
-	public BigDecimal getTotalDebt() {
+	public Double getTotalDebt() {
 		return totalDebt;
 	}
-	public void setTotalDebt(BigDecimal totalDebt) {
+	public void setTotalDebt(Double totalDebt) {
 		this.totalDebt = totalDebt;
 	}
-	public BigDecimal getQuickRatio() {
+	public Double getQuickRatio() {
 		return quickRatio;
 	}
-	public void setQuickRatio(BigDecimal quickRatio) {
+	public void setQuickRatio(Double quickRatio) {
 		this.quickRatio = quickRatio;
 	}
-	public BigDecimal getCurrentRatio() {
+	public Double getCurrentRatio() {
 		return currentRatio;
 	}
-	public void setCurrentRatio(BigDecimal currentRatio) {
+	public void setCurrentRatio(Double currentRatio) {
 		this.currentRatio = currentRatio;
 	}
-	public BigDecimal getTotalRevenue() {
+	public Double getTotalRevenue() {
 		return totalRevenue;
 	}
-	public void setTotalRevenue(BigDecimal totalRevenue) {
+	public void setTotalRevenue(Double totalRevenue) {
 		this.totalRevenue = totalRevenue;
 	}
-	public BigDecimal getDebtToEquity() {
+	public Double getDebtToEquity() {
 		return debtToEquity;
 	}
-	public void setDebtToEquity(BigDecimal debtToEquity) {
+	public void setDebtToEquity(Double debtToEquity) {
 		this.debtToEquity = debtToEquity;
 	}
-	public BigDecimal getRevenuePerShare() {
+	public Double getRevenuePerShare() {
 		return revenuePerShare;
 	}
-	public void setRevenuePerShare(BigDecimal revenuePerShare) {
+	public void setRevenuePerShare(Double revenuePerShare) {
 		this.revenuePerShare = revenuePerShare;
 	}
-	public BigDecimal getReturnOnAssets() {
+	public Double getReturnOnAssets() {
 		return returnOnAssets;
 	}
-	public void setReturnOnAssets(BigDecimal returnOnAssets) {
+	public void setReturnOnAssets(Double returnOnAssets) {
 		this.returnOnAssets = returnOnAssets;
 	}
-	public BigDecimal getReturnOnEquity() {
+	public Double getReturnOnEquity() {
 		return returnOnEquity;
 	}
-	public void setReturnOnEquity(BigDecimal returnOnEquity) {
+	public void setReturnOnEquity(Double returnOnEquity) {
 		this.returnOnEquity = returnOnEquity;
 	}
-	public BigDecimal getGrossProfits() {
+	public Double getGrossProfits() {
 		return grossProfits;
 	}
-	public void setGrossProfits(BigDecimal grossProfits) {
+	public void setGrossProfits(Double grossProfits) {
 		this.grossProfits = grossProfits;
 	}
-	public BigDecimal getFreeCashflow() {
+	public Double getFreeCashflow() {
 		return freeCashflow;
 	}
-	public void setFreeCashflow(BigDecimal freeCashflow) {
+	public void setFreeCashflow(Double freeCashflow) {
 		this.freeCashflow = freeCashflow;
 	}
-	public BigDecimal getEarningsGrowth() {
+	public Double getEarningsGrowth() {
 		return earningsGrowth;
 	}
-	public void setEarningsGrowth(BigDecimal earningsGrowth) {
+	public void setEarningsGrowth(Double earningsGrowth) {
 		this.earningsGrowth = earningsGrowth;
 	}
-	public BigDecimal getRevenueGrowth() {
+	public Double getRevenueGrowth() {
 		return revenueGrowth;
 	}
-	public void setRevenueGrowth(BigDecimal revenueGrowth) {
+	public void setRevenueGrowth(Double revenueGrowth) {
 		this.revenueGrowth = revenueGrowth;
 	}
-	public BigDecimal getGrossMargins() {
+	public Double getGrossMargins() {
 		return grossMargins;
 	}
-	public void setGrossMargins(BigDecimal grossMargins) {
+	public void setGrossMargins(Double grossMargins) {
 		this.grossMargins = grossMargins;
 	}
-	public BigDecimal getEbitdaMargins() {
+	public Double getEbitdaMargins() {
 		return ebitdaMargins;
 	}
-	public void setEbitdaMargins(BigDecimal ebitdaMargins) {
+	public void setEbitdaMargins(Double ebitdaMargins) {
 		this.ebitdaMargins = ebitdaMargins;
 	}
-	public BigDecimal getOperatingMargins() {
+	public Double getOperatingMargins() {
 		return operatingMargins;
 	}
-	public void setOperatingMargins(BigDecimal operatingMargins) {
+	public void setOperatingMargins(Double operatingMargins) {
 		this.operatingMargins = operatingMargins;
 	}
-	public BigDecimal getProfitMargins2() {
+	public Double getProfitMargins2() {
 		return profitMargins2;
 	}
-	public void setProfitMargins2(BigDecimal profitMargins2) {
+	public void setProfitMargins2(Double profitMargins2) {
 		this.profitMargins2 = profitMargins2;
 	}
 	public String getFinancialCurrency() {
@@ -564,22 +563,22 @@ public class YahooKeyStatistic {
 	public void setTickerSymbol(String tickerSymbol) {
 		this.tickerSymbol = tickerSymbol;
 	}
-	public BigDecimal getNetIncomeToCommon() {
+	public Double getNetIncomeToCommon() {
 		return netIncomeToCommon;
 	}
-	public void setNetIncomeToCommon(BigDecimal netIncomeToCommon) {
+	public void setNetIncomeToCommon(Double netIncomeToCommon) {
 		this.netIncomeToCommon = netIncomeToCommon;
 	}
-	public BigDecimal getS52WeekChange() {
+	public Double getS52WeekChange() {
 		return s52WeekChange;
 	}
-	public void setS52WeekChange(BigDecimal s52WeekChange) {
+	public void setS52WeekChange(Double s52WeekChange) {
 		this.s52WeekChange = s52WeekChange;
 	}
-	public BigDecimal getOperatingCashflow() {
+	public Double getOperatingCashflow() {
 		return operatingCashflow;
 	}
-	public void setOperatingCashflow(BigDecimal operatingCashflow) {
+	public void setOperatingCashflow(Double operatingCashflow) {
 		this.operatingCashflow = operatingCashflow;
 	}
 	public LocalDate getPriceDate() {

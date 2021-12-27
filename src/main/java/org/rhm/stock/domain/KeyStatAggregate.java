@@ -1,6 +1,5 @@
 package org.rhm.stock.domain;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +18,7 @@ public class KeyStatAggregate {
 	private long belowMedianCnt = 0l;
 	private long sampleCnt = 0l;
 	private double sumValue = 0.0;
-	private List<BigDecimal> valueList = new ArrayList<BigDecimal>();
+	private List<Double> valueList = new ArrayList<Double>();
 
 	public String getPriceDate() {
 		return priceDate;
@@ -117,13 +116,13 @@ public class KeyStatAggregate {
 	public void incSumValue(double value) {
 		sumValue += value;
 	}
-	public List<BigDecimal> getValueList() {
+	public List<Double> getValueList() {
 		return valueList;
 	}
-	public void setValueList(List<BigDecimal> valueList) {
+	public void setValueList(List<Double> valueList) {
 		this.valueList = valueList;
 	}
-	public void addValue(BigDecimal value) {
+	public void addValue(Double value) {
 		this.valueList.add(value);
 	}
 }
