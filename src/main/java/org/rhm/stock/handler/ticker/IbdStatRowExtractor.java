@@ -58,7 +58,12 @@ public class IbdStatRowExtractor {
 			ibdStat.setSalesMarginRoe(row.getCell(columnIndex(columnNames, STAT_SMR)).getStringCellValue());
 			ibdStat.setTickerSymbol(row.getCell(columnIndex(columnNames, STAT_SYMBOL)).getStringCellValue());
 			ibdStat.setCompanyName(row.getCell(columnIndex(columnNames, STAT_CO_NAME)).getStringCellValue());
-			ibdStat.setMgmtOwnPct(Double.valueOf(row.getCell(columnIndex(columnNames, STAT_MGMT_OWN_PCT)).getStringCellValue()));
+			try {
+				ibdStat.setMgmtOwnPct(Double.valueOf(row.getCell(columnIndex(columnNames, STAT_MGMT_OWN_PCT)).getStringCellValue()));
+			}
+			catch (NumberFormatException e) {
+				ibdStat.setMgmtOwnPct(0.0);
+			}
 		}
 		return ibdStat;
 	}
