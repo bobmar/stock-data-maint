@@ -21,6 +21,9 @@ public class DailyPriceVsAvg implements StatisticCalculator {
 	private static final String DLY_PRC_VS_20_DAY_AVG = "DYPRCV20A";
 	private static final String DLY_PRC_VS_50_DAY_AVG = "DYPRCV50A";
 	private static final String DLY_PRC_VS_200_DAY_AVG = "DYPRCV200A";
+	private static final String DLY_VOL_VS_20_DAY_AVG = "DYVOLV20A";
+	private static final String DLY_VOL_VS_50_DAY_AVG = "DYVOLV50A";
+	private static final String DLY_VOL_VS_200_DAY_AVG = "DYVOLV200A";
 	private static final String NET_ABV_BLW_50_DAY_AVG = "NETABVBLW50";
 	public static final String AVG_PRC_20_VS_200 = "AVG20V200";
 
@@ -66,8 +69,13 @@ public class DailyPriceVsAvg implements StatisticCalculator {
 		return avgPrice;
 	}
 	
-	private void calcPriceVsAvg(StockPrice price, int days, String statType) {
+	private void calcCurrVsAvg(StockPrice price, int days, String priceType, String volType) {
 		AveragePrice avgPrice = this.findAvgPrice(price.getPriceId(), days);
+		calcPriceVsAvg(price, days, priceType, avgPrice);
+		calcVolVsAvg(price, days, volType, avgPrice);
+	}
+	
+	private void calcPriceVsAvg(StockPrice price, int days, String statType, AveragePrice avgPrice) {
 		if (avgPrice != null) {
 			logger.debug("calcPriceVsAvg - average price " + avgPrice.getDaysCnt() + ":" + avgPrice.getAvgPrice());
 			double priceVsAvg = (price.getClosePrice().doubleValue() / avgPrice.getAvgPrice().doubleValue());
@@ -80,6 +88,21 @@ public class DailyPriceVsAvg implements StatisticCalculator {
 			logger.debug("calcPriceVsAvg - unable to find " + days + " average price for " + price.getPriceId());
 		}
 	}
+	
+	private void calcVolVsAvg(StockPrice price, int days, String statType, AveragePrice avgPrice) {
+		if (avgPrice != null) {
+			logger.debug("calcVolVsAvg - average volume " + avgPrice.getDaysCnt() + ":" + avgPrice.getAvgVolume());
+			double volVsAvg = (price.getVolume().doubleValue() / avgPrice.getAvgVolume().doubleValue());
+			logger.debug("calcVolVsAvg - " + price.getPriceId() + " volume vs. " + days + " day average=" + volVsAvg);
+			statSvc.createStatistic(
+				new StockStatistic(price.getPriceId(), statType, volVsAvg, price.getTickerSymbol(), price.getPriceDate())
+				,false);
+		}
+		else {
+			logger.debug("calcVolVsAvg - unable to find " + days + " average volume for " + price.getPriceId());
+		}
+	}
+	
 	
 	private void calcAvg20Vs200(StockPrice price) {
 		StockAveragePrice avgPrice = this.findStockAvgPrice(price.getPriceId());
@@ -144,9 +167,9 @@ public class DailyPriceVsAvg implements StatisticCalculator {
 		this.init(firstPrice.getTickerSymbol());
 		logger.info("calculate - processing " + priceList.size() + " prices for " + firstPrice.getTickerSymbol());
 		for (StockPrice price: priceList) {
-			this.calcPriceVsAvg(price, 20, DLY_PRC_VS_20_DAY_AVG);
-			this.calcPriceVsAvg(price, 50, DLY_PRC_VS_50_DAY_AVG);
-			this.calcPriceVsAvg(price, 200, DLY_PRC_VS_200_DAY_AVG);
+			this.calcCurrVsAvg(price, 20, DLY_PRC_VS_20_DAY_AVG, DLY_VOL_VS_20_DAY_AVG);
+			this.calcCurrVsAvg(price, 50, DLY_PRC_VS_50_DAY_AVG, DLY_VOL_VS_50_DAY_AVG);
+			this.calcCurrVsAvg(price, 200, DLY_PRC_VS_200_DAY_AVG, DLY_VOL_VS_200_DAY_AVG);
 			this.calcAvg20Vs200(price);
 		}
 		this.calcNetAbvBlw(firstPrice.getTickerSymbol());
