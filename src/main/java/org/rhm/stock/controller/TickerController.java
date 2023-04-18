@@ -17,7 +17,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -87,5 +89,13 @@ public class TickerController {
 	@GetMapping(value="/stocks/ibdstat/{tickerSymbol}")
 	public List<IbdStatistic> retrieveIbdStat(@PathVariable String tickerSymbol) {
 		return tickerSvc.findIbdStats(tickerSymbol.toUpperCase());
+	}
+
+	@PostMapping(value = "/stocks/ticker/weeklyoptions", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<GeneralResponse> updateWeeklyOptions() {
+		GeneralResponse response = new GeneralResponse();
+		int weeklyCnt = tickerSvc.updateWeeklyOptions();
+		response.setMessageText(String.format("Found %s tickers having weekly options", weeklyCnt));
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 }

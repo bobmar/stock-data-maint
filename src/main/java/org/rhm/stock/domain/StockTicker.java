@@ -9,6 +9,7 @@ public class StockTicker {
 	private String refreshPrices = null;
 	private String sectorName = null;
 	private String industryName = null;
+	private Boolean weeklyOptions = false;
 	
 	public String getTickerSymbol() {
 		return tickerSymbol;
@@ -39,5 +40,13 @@ public class StockTicker {
 	}
 	public void setIndustryName(String industryName) {
 		this.industryName = industryName;
+	}
+
+	public Boolean getWeeklyOptions() {
+		return weeklyOptions;
+	}
+
+	public void setWeeklyOptions(Boolean weeklyOptions) {
+		this.weeklyOptions = weeklyOptions;
 	}
 }

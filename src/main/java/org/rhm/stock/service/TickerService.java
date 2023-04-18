@@ -14,6 +14,7 @@ import org.rhm.stock.domain.StockTicker;
 import org.rhm.stock.dto.FinanceProfile;
 import org.rhm.stock.handler.ticker.ExcelTransformer;
 import org.rhm.stock.handler.ticker.ExcelTransformerResponse;
+import org.rhm.stock.io.CboeWeekly;
 import org.rhm.stock.io.YahooDownload;
 import org.rhm.stock.repository.IbdStatisticRepo;
 import org.rhm.stock.repository.PriceRepo;
@@ -42,7 +43,8 @@ public class TickerService {
 	private IbdStatisticRepo ibdRepo = null;
 	@Autowired
 	private PriceRepo priceRepo = null;
-	
+	@Autowired
+	private CboeWeekly cboeWeekly;
 	private Logger logger = LoggerFactory.getLogger(TickerService.class);
 	public String createTicker(String tickerSymbol) {
 		StockTicker stockTicker = null;
@@ -258,5 +260,21 @@ public class TickerService {
 	public int deleteIbdStatsByTicker(String tickerSymbol) {
 		return ibdRepo.deleteByTickerSymbol(tickerSymbol);
 	}
-	
+
+	public int updateWeeklyOptions() {
+		List<String> weeklyTickers = cboeWeekly.retrieveWeeklyOptionStocks();
+		int weeklyOptionCnt = 0;
+		List<StockTicker> tickers = this.retrieveTickerList();
+		for (StockTicker ticker: tickers) {
+			if (weeklyTickers.contains(ticker.getTickerSymbol())) {
+				ticker.setWeeklyOptions(true);
+				weeklyOptionCnt++;
+			}
+			else {
+				ticker.setWeeklyOptions(false);
+			}
+		}
+		tickerRepo.saveAll(tickers);
+		return weeklyOptionCnt;
+	}
 }
