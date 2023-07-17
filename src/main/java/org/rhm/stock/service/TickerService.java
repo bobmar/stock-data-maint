@@ -207,7 +207,11 @@ public class TickerService {
 			logger.info("createIbdStat - found existing IBD stat");
 			List<String> newListNames = ibdStat.getListName();
 			logger.info("createIbdStat - list count: " + newListNames.size());
-			newListNames.addAll(existingStat.get().getListName());
+			for (String list: existingStat.get().getListName()) {
+				if (!newListNames.contains(list)) {
+					newListNames.add(list);
+				}
+			}
 			logger.info("createIbdStat - list count after adding existing: " + newListNames.size());
 			ibdStat.setListName(newListNames);
 			if (ibdStat.getListName().size() > 1) {
